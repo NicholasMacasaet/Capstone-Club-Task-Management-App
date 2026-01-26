@@ -14,8 +14,8 @@ type userContextProps = {
 
 const UserContext = createContext<userContextProps|undefined>(undefined)
 
-export const userUserContext = ()=>{
-    const context =  useContext(UserContext)
+export const useUserContext = ()=>{
+    const context = useContext(UserContext)
 
     if (!context) {
         throw new Error("UserContext incorrect usage, trying to access context before its defined")
@@ -24,7 +24,7 @@ export const userUserContext = ()=>{
 }
 
 
-export const CrafterContextProvider: React.FC<{children: ReactNode}> = ({children}) => {
+export const UserContextProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
     const [user,setUser] = useState("")
     const [isLoaded, setIsLoaded] = useState(false);
