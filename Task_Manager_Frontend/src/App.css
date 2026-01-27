@@ -1,8 +1,79 @@
+
+:root {
+  --background: #242424;
+  --midnight_green: #1A1D1E;
+  --slate_green: #85a998;
+  --antares_emerald: #3dd771;
+  --slate_grey: #43504F;
+  --dark_slate_grey: #232D2B;
+  --light_slate_green: #6D977E;
+  /*change red if its too harsh on the eyes*/
+}
+
+.background {
+  background-color: var(--antares_emerald) !important;
+}
+
 #root {
-  max-width: 1280px;
+  /* max-width: 1280px; */
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.5rem;
   text-align: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--midnight_green);
+}
+
+.landing_page_header {
+  color: var(--antares_emerald);
+}
+
+
+.landing_buttons {
+  background-color: var(--slate_grey);
+  border: 2px solid var(--antares_emerald);
+  color: var(--anta);
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+.landing_buttons:hover {
+  border-color: lightblue;
+}
+
+.login_form{
+  border: 2px solid var(--antares_emerald);
+  background-color: var(--dark_slate_grey)
+}
+
+.login_form_desktop_wrapper{
+  border: 2px solid var(--antares_emerald);
+  background-color: var(--dark_slate_grey)
+}
+
+.form_group {
+  /* width: 200px; */
+  height: 30px;
+}
+
+.form_input {
+  border:2px solid var(--antares_emerald);
+  height: 100%;
+}
+
+.form_input_modified{
+  border:2px solid var(--antares_emerald);
+  width: 200px;
+}
+
+.login_submit_button {
+  border: 2px solid var(--antares_emerald);
+  height: 50px;
+  width: 120px;
 }
 
 .logo {
