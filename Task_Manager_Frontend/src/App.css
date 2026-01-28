@@ -47,7 +47,8 @@
 
 .login_form{
   border: 2px solid var(--antares_emerald);
-  background-color: var(--dark_slate_grey)
+  background-color: var(--dark_slate_grey);
+  justify-content: start!important;
 }
 
 .login_form_desktop_wrapper{
@@ -57,7 +58,11 @@
 
 .form_group {
   /* width: 200px; */
-  height: 30px;
+  height: fit-content;
+}
+
+.form_group_password {
+  height: 55px;
 }
 
 .form_input {
@@ -71,6 +76,12 @@
 }
 
 .login_submit_button {
+  border: 2px solid var(--antares_emerald);
+  height: 50px;
+  width: 120px;
+}
+
+.login_submit_disabled {
   border: 2px solid var(--antares_emerald);
   height: 50px;
   width: 120px;
