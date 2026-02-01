@@ -7,6 +7,9 @@ import { UserContextProvider} from './contexts/UserContext';
 import { LandingPage } from './landing_page';
 import { Register } from './pages/login&register/register';
 import { Login } from './pages/login&register/login';
+import { OrgLandingPage } from './pages/org_register/org_landing_page';
+import { CreateOrg } from './pages/org_register/org_create';
+import { OrgJoin } from './pages/org_register/org_join';
 
 function App() {
   return (
@@ -20,6 +23,11 @@ function App() {
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
 
+            <Route path="/orgs">
+              <Route path='/orgs/landing' index element={<OrgLandingPage/>}/>
+              <Route path='/orgs/create' element={<CreateOrg/>}/>
+              <Route path='/orgs/join' element={<OrgJoin/>}/>
+            </Route>
           </Routes>
       </Router>
     </UserContextProvider>

@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent } from "react"
+import { Link, useNavigate } from "react-router-dom"
 // import { Link } from "react-router-dom"
 
 
@@ -16,6 +17,8 @@ export const Login = () => {
         setPassword(event.target.value);
     }
 
+    const navigate = useNavigate()
+
     const handleLogin = async (event:React.FormEvent<HTMLFormElement>)  => {
         event.preventDefault()
 
@@ -24,14 +27,23 @@ export const Login = () => {
             password:password,
         }
 
+        navigate("/orgs/landing")
+
         console.log("test")
     }
 
     return(<>
         <div className="login_page w-full h-full flex flex-col justify-start items-center">
-            <h1 className="landing_page_header w-full hidden sm:block">
-                Login to Streamline
-            </h1>
+            <div className="w-full flex">
+                <Link to="/" className="text-3xl justify-self-start self-start sm:self-center">
+                        <p>←</p>
+                </Link>
+
+                <h1 className="landing_page_header w-full hidden sm:block justify-self-center">
+                    Login to Streamline
+                </h1>
+            </div>
+             
 
             <p className="landing_page_header w-full text-4xl sm:hidden">
                 Login to Streamline

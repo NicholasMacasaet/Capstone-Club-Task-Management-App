@@ -87,6 +87,37 @@
   width: 120px;
 }
 
+.org_landing_page_wrapper{
+  border: 2px solid var(--antares_emerald);
+  background-color: var(--dark_slate_grey)
+}
+
+.org_landing_buttons {
+  border: 2px solid var(--antares_emerald);
+  background-color: var(--midnight_green);
+  width: 200px;
+  height: 25px;
+}
+
+.description {
+  border: 2px solid var(--antares_emerald);
+  background-color: var(--midnight_green);
+  width: full;
+  height: 100px;
+}
+
+.org_join_page_wrapper {
+  border: 2px solid var(--antares_emerald);
+  background-color: var(--dark_slate_grey)
+}
+
+.form_submit_button{
+  border: 2px solid var(--antares_emerald);
+  height: 50px;
+  width: 150px;
+}
+
+
 .logo {
   height: 6em;
   padding: 1.5em;

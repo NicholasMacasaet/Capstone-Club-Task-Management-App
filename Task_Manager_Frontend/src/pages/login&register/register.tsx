@@ -1,5 +1,6 @@
-import { all } from "axios";
+import  axios  from 'axios';
 import { useEffect, useState, type ChangeEvent} from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Register = () => {
 
@@ -80,12 +81,32 @@ export const Register = () => {
     const[error, setError] = useState("")
 
 
-    const handleRegistration = async(event:React.FormEvent<HTMLFormElement>) => {
+    const packaged_data ={
+        username: username,
+        email: email,
+        phone_number: phone_number,
+        password: password,
+        confirm_password: confirm_password
+    }
 
+    let navigate = useNavigate()
+
+
+    const handleRegistration = async(event:React.FormEvent<HTMLFormElement>) => {
+        
         event.preventDefault()
 
         try {
             console.log("hi")
+
+            // const data = await axios({
+            //     method: 'post',
+            //     url: (add api endpoint here when implemented)
+            //     data: JSON.stringify(packaged_data),
+            //     headers: {'Content-Type': 'application/json' }
+            // })
+            alert("Registration Successful! Please log in")
+            navigate("/login")
 
         }catch(error){
             console.error(error)
@@ -103,9 +124,14 @@ export const Register = () => {
 
     return(<>
         <div className="login_page w-full h-full flex flex-col justify-start items-center">
-            <h1 className="landing_page_header w-full hidden sm:block">
-                Register for Streamline
-            </h1>
+            <div className="w-full flex flex-col sm:flex-row justify-center">
+                <Link to="/" className="text-3xl justify-self-start self-start sm:self-center">
+                    <p>←</p>
+                </Link>
+                <h1 className="landing_page_header w-full hidden sm:block justify-self-center">
+                    Register for Streamline
+                </h1>
+            </div>
 
             <p className="landing_page_header w-full text-4xl sm:hidden">
                 Register for Streamline
