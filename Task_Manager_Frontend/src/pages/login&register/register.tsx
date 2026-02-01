@@ -1,6 +1,7 @@
 import  axios  from 'axios';
 import { useEffect, useState, type ChangeEvent} from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { BASEURL } from '../../../api/ constants';
 
 export const Register = () => {
 

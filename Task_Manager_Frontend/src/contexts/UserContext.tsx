@@ -2,8 +2,9 @@ import { createContext,useContext,useState,useEffect, type ReactNode } from "rea
 import axios from "axios";
 
 type userContextProps = {
+    //user data, note to self, replace this with the actual user data interface we need 
     user:string,
-
+    //make sure we are not trying to load uninitialized stuff
     isLoaded:boolean, 
 
     loginUser: (username:string) => void,
