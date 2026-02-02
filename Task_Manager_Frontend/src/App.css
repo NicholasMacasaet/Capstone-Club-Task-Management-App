@@ -8,6 +8,12 @@
   --dark_slate_grey: #232D2B;
   --light_slate_green: #6D977E;
   /*change red if its too harsh on the eyes*/
+
+  --mint_green: #9dc9b9;
+  --really_light_grey: #e4e3df;
+  --olive_but_not_gross: #8fa091;
+  --mint_green_2:	#8dc1aa;
+  --desaturated_blue: #cce4e4;
 }
 
 .background {
@@ -21,17 +27,16 @@
   text-align: center;
   width: 100vw;
   height: 100vh;
-  background-color: var(--midnight_green);
+  background-color: var(--mint_green);
 }
 
 .landing_page_header {
-  color: var(--antares_emerald);
+  color: var(--43504F);
 }
 
-
 .landing_buttons {
-  background-color: var(--slate_grey);
-  border: 2px solid var(--antares_emerald);
+  background-color: var(--desaturated_blue);
+  border: 2px solid var(--midnight_green);
   color: var(--anta);
   padding: 0.6em 1.2em;
   font-size: 1em;
@@ -46,14 +51,14 @@
 }
 
 .login_form{
-  border: 2px solid var(--antares_emerald);
-  background-color: var(--dark_slate_grey);
+  border: 2px solid var(--midnight_green);
+  background-color: var(--mint_green_2);
   justify-content: start!important;
 }
 
 .login_form_desktop_wrapper{
-  border: 2px solid var(--antares_emerald);
-  background-color: var(--dark_slate_grey)
+  border: 2px solid var(--midnight_green);
+  background-color: var(--mint_green_2)
 }
 
 .form_group {
@@ -66,58 +71,72 @@
 }
 
 .form_input {
-  border:2px solid var(--antares_emerald);
+  border:2px solid var(--midnight_green);
+  background: var(--desaturated_blue);
   height: 100%;
 }
 
 .form_input_modified{
-  border:2px solid var(--antares_emerald);
+  border:2px solid var(--midnight_green);
+  background: var(--desaturated_blue);
   width: 200px;
 }
 
 .login_submit_button {
-  border: 2px solid var(--antares_emerald);
+  border: 2px solid var(--midnight_green);
+  background-color: var(--desaturated_blue);
   height: 50px;
   width: 120px;
 }
 
 .login_submit_disabled {
-  border: 2px solid var(--antares_emerald);
+  border: 2px solid var(--midnight_green);
+  background: var(--slate_grey);
   height: 50px;
   width: 120px;
 }
 
 .org_landing_page_wrapper{
-  border: 2px solid var(--antares_emerald);
-  background-color: var(--dark_slate_grey)
+  border: 2px solid var(--midnight_green);
+  background-color: var(--mint_green_2)
 }
 
 .org_landing_buttons {
-  border: 2px solid var(--antares_emerald);
-  background-color: var(--midnight_green);
+  border: 2px solid var(--midnight_green);
+  background-color: var(--desaturated_blue);
   width: 200px;
   height: 25px;
 }
 
 .description {
-  border: 2px solid var(--antares_emerald);
-  background-color: var(--midnight_green);
+  border: 2px solid var(--midnight_green);
+  background-color: var(--desaturated_blue);
   width: full;
   height: 100px;
 }
 
 .org_join_page_wrapper {
-  border: 2px solid var(--antares_emerald);
-  background-color: var(--dark_slate_grey)
+  border: 2px solid var(--midnight_green);
+  background-color: var(--mint_green_2)
 }
 
 .form_submit_button{
-  border: 2px solid var(--antares_emerald);
+  border: 2px solid var(--midnight_green);
+  background: var(--desaturated_blue);
   height: 50px;
   width: 150px;
 }
 
+.dashboard_wrapper {
+  border: 2px solid var(--midnight_green);
+  background-color: var(--mint_green_2)
+} 
 
+.accept_container {
+  border-top: 2px solid var(--midnight_green);
+  border-bottom: 2px solid var(--midnight_green);
+
+}
 .logo {
   height: 6em;
   padding: 1.5em;

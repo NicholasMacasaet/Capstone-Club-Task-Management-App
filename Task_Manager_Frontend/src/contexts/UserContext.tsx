@@ -1,6 +1,33 @@
 import { createContext,useContext,useState,useEffect, type ReactNode } from "react";
 import axios from "axios";
 
+export interface Task {
+    task_id: number;
+    club_id: number;
+    event_id: number;
+    // attachments:???
+    task_name:string;
+    description: string;
+}
+
+export interface Club {
+    club_id: number;
+    name: string;
+    description:string;
+}
+
+export interface ClubMembership {
+    user_id: number,
+    club_id: number,
+}
+
+export interface TaskAssignment {
+    assigner: number,
+    assignee: number,
+    task_id: number,
+    accepted: boolean,
+}
+
 type userContextProps = {
     //user data, note to self, replace this with the actual user data interface we need 
     user:string,

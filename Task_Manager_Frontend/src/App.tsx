@@ -10,6 +10,7 @@ import { Login } from './pages/login&register/login';
 import { OrgLandingPage } from './pages/org_register/org_landing_page';
 import { CreateOrg } from './pages/org_register/org_create';
 import { OrgJoin } from './pages/org_register/org_join';
+import { TaskDashboard } from './pages/tasks/task_dashboard';
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
               <Route path='/orgs/create' element={<CreateOrg/>}/>
               <Route path='/orgs/join' element={<OrgJoin/>}/>
             </Route>
+
+            <Route path='/home' element = {<TaskDashboard/>}/>
           </Routes>
       </Router>
     </UserContextProvider>
