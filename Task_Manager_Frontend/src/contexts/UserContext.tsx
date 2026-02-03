@@ -6,6 +6,7 @@ export interface Task {
     club_id: number;
     event_id: number;
     // attachments:???
+    due_date: string;
     task_name:string;
     description: string;
 }
@@ -26,6 +27,13 @@ export interface TaskAssignment {
     assignee: number,
     task_id: number,
     accepted: boolean,
+}
+
+export interface user {
+    user_id: number,
+    username: string,
+    email: string,
+    //add more fields as necessary
 }
 
 type userContextProps = {

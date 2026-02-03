@@ -7,6 +7,7 @@ export const testTasks: Task[]= [
         task_id:1,
         club_id:1,
         event_id:3,
+        due_date: "2026-12-31",
         task_name: "Do thing 1",
         description:"This is a test description"
     },
@@ -14,9 +15,18 @@ export const testTasks: Task[]= [
         task_id:2,
         club_id:1,
         event_id:3,
+        due_date: "2026-11-30",
         task_name: "Do thing 2",
         description:"This is a test description"
-    }
+    },
+    {
+        task_id:3,
+        club_id:1,
+        event_id:3,
+        due_date: "2026-12-31",
+        task_name: "Do thing 3",
+        description:"This is a test description"
+    },
 ]
 
 export const taskAssignments: TaskAssignment[] = [
@@ -31,6 +41,12 @@ export const taskAssignments: TaskAssignment[] = [
         assignee: 1,
         task_id: 2,
         accepted: true
+    },
+    {
+        assigner: 2,
+        assignee: 1,
+        task_id: 3,
+        accepted: false
     }
 
 ]
@@ -62,3 +78,16 @@ export const clubMemberships: ClubMembership[] = [
     }
 ]
 
+
+export const testUsers = [
+    {
+        user_id: 1,
+        username: "AssigneeUser",
+        email: ""
+    },
+    {
+        user_id: 2,
+        username: "AssignerUser",
+        email: ""
+    }
+]

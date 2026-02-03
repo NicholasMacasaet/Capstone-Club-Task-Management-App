@@ -137,6 +137,30 @@
   border-bottom: 2px solid var(--midnight_green);
 
 }
+
+.unaccepted_task_item {
+  border: 2px solid var(--midnight_green);
+  background-color: var(--desaturated_blue);
+  margin: 5px;
+  padding: 5px;
+}
+
+.task_accept_button {
+  background: var(--mint_green_2);
+  border: 2px solid var(--midnight_green);
+}
+
+.task_accept_small {
+  background: var(--mint_green_2);
+  border: 2px solid var(--midnight_green);
+  height: 25px;
+  width: fit-content;
+}
+
+.task_accept_select {
+  background: var(--mint_green_2);
+  border: 2px solid var(--midnight_green);
+}
 .logo {
   height: 6em;
   padding: 1.5em;
