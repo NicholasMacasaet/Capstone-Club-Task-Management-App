@@ -11,6 +11,7 @@ import { OrgLandingPage } from './pages/org_register/org_landing_page';
 import { CreateOrg } from './pages/org_register/org_create';
 import { OrgJoin } from './pages/org_register/org_join';
 import { TaskDashboard } from './pages/tasks/task_dashboard';
+import { TaskCreation } from './pages/tasks/task_creation';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             </Route>
 
             <Route path='/home' element = {<TaskDashboard/>}/>
+            <Route path='/new_task' element = {<TaskCreation/>}/>
           </Routes>
       </Router>
     </UserContextProvider>

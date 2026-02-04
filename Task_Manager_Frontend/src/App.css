@@ -127,6 +127,29 @@
   width: 150px;
 }
 
+
+.form_submit_normal {
+  border: 2px solid var(--midnight_green);
+  height: 50px;
+  width: 150px;
+}
+
+.file_input {
+  border:2px solid var(--midnight_green);
+  background: var(--desaturated_blue);
+  height: 50px;
+  width: fit-content;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    cursor: pointer;
+}
+
 .dashboard_wrapper {
   border: 2px solid var(--midnight_green);
   background-color: var(--mint_green_2)
@@ -161,6 +184,22 @@
   background: var(--mint_green_2);
   border: 2px solid var(--midnight_green);
 }
+
+.task_create_button {
+  background: var(--desaturated_blue);
+  border: 2px solid var(--midnight_green);
+  height: 25px;;
+  min-width: 25px;
+  max-width: 25px!important;
+ 
+}
+
+.task_creation_form_wrapper {
+  border: 2px solid var(--midnight_green);
+  background-color: var(--mint_green_2)
+}
+
+
 .logo {
   height: 6em;
   padding: 1.5em;

@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom"
 import { testTasks, taskAssignments, testUsers} from "../../assets/test_data"
 import type { Task, TaskAssignment } from "../../contexts/UserContext"
-
+import { useNavigate } from "react-router-dom"
 export const TaskDashboard = () => {
+
+    const navigate = useNavigate()
 
     //test data for testing rendering, replace this with actual data later
     //note to self, user_id=1 is our current user 
@@ -68,6 +70,10 @@ export const TaskDashboard = () => {
         return "Something went wrong";
 
     }
+
+    const goToTaskCreation = ()=>{
+        navigate('/new_task')
+    }
     
     return(<>
         <div className="w-full h-full flex flex-col justify-start items-center">
@@ -95,8 +101,7 @@ export const TaskDashboard = () => {
                         <div className="unaccepted_task_item h-fit w-7/8 rounded-xl flex flex-col sm:flex-row items-center">
                             <p className="text-sm sm:text-lg w-full sm:w-1/3 text-center sm:text-left font-bold">{task.task_name}</p>
                             <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-center sm:text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
-                            <button className="task_accept_small sm:task_accept_button sm:ml-auto text-center flex items-center justify-center">Accept</button>
-
+                            <button className="task_accept_small sm:task_accept_button sm:ml-auto text-center flex items-center justify-center rounded-xl">Accept</button>
                             {/* <button className="block sm:hidden task_accept_small ml-auto flex items-center justify-center">✓</button> */}
                         </div>
                     ))
@@ -105,7 +110,10 @@ export const TaskDashboard = () => {
                 </div>
 
                 <div className="current_tasks_container w-full grow flex flex-col">
-                    <p className="text-xl self-start ml-2 mt-1">Current Tasks</p>
+                    <div className="current_tasks_header w-full flex justify-between items-center">
+                        <p className="text-xl self-start ml-2 mt-1">Current Tasks</p>
+                        <button className="task_create_button flex justify-center items-center p-1" onClick={goToTaskCreation}>+</button>
+                    </div>
 
                     <div className="w-full h-full overflow-x-scroll flex flex-col items-center">
                         {tasks(true).map(task=>(
