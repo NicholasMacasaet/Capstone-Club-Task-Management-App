@@ -199,6 +199,16 @@ input[type="file"] {
   background-color: var(--mint_green_2)
 }
 
+.attachments_wrapper {
+  width: 250px;
+}
+
+.delete_button{
+  border: 2px solid var(--midnight_green);
+  height: 20px!important;
+  width: 20px!important;
+  padding: 0;
+}
 
 .logo {
   height: 6em;
