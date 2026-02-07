@@ -34,7 +34,7 @@ export const CreateOrg = () => {
             //     headers: {'Content-Type': 'application/json' }
             // })
 
-
+            navigate('/home')
         }catch(error){
             console.error(error)
         }

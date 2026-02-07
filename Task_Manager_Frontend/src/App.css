@@ -96,6 +96,20 @@
   width: 120px;
 }
 
+.confirm_user_changes_button {
+  border: 2px solid var(--midnight_green);
+  background-color: var(--desaturated_blue);
+  height: 50px;
+  width: fit-content;
+}
+
+.confirm_user_changes_button_disabled {
+  border: 2px solid var(--midnight_green);
+  background: var(--slate_grey);
+  height: 50px;
+  width: fit-content;
+}
+
 .org_landing_page_wrapper{
   border: 2px solid var(--midnight_green);
   background-color: var(--mint_green_2)

@@ -99,9 +99,9 @@ export const TaskDashboard = () => {
                     <div className="w-full h-full overflow-x-scroll flex flex-col items-center">
                     {tasks(false).map(task=>(
                         <div className="unaccepted_task_item h-fit w-7/8 rounded-xl flex flex-col sm:flex-row items-center">
-                            <p className="text-sm sm:text-lg w-full sm:w-1/3 text-center sm:text-left font-bold">{task.task_name}</p>
-                            <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-center sm:text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
-                            <button className="task_accept_small sm:task_accept_button sm:ml-auto text-center flex items-center justify-center rounded-xl">Accept</button>
+                            <p className="text-sm sm:text-lg w-full sm:w-1/3 text-left font-bold">{task.task_name}</p>
+                            <p className="sm:ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
+                            <button className="task_accept_small sm:task_accept_button sm:ml-auto text-center flex items-center justify-center rounded-xl mt-1">Accept</button>
                             {/* <button className="block sm:hidden task_accept_small ml-auto flex items-center justify-center">✓</button> */}
                         </div>
                     ))

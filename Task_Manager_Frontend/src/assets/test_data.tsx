@@ -1,4 +1,4 @@
-import { type Task, type Club, type ClubMembership, type TaskAssignment} from "../contexts/UserContext";
+import { type Task, type Club, type ClubMembership, type TaskAssignment, type user} from "../contexts/UserContext";
 
 
 
@@ -79,15 +79,17 @@ export const clubMemberships: ClubMembership[] = [
 ]
 
 
-export const testUsers = [
+export const testUsers: user[]= [
     {
         user_id: 1,
         username: "AssigneeUser",
-        email: ""
+        email: "AssigneeUser1@test.com",
+        phone_number: "404-404-4040"
     },
     {
         user_id: 2,
         username: "AssignerUser",
-        email: ""
+        email: "AssignerUser2@test.com",
+        phone_number: "555-555-5555"
     }
 ]

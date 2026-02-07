@@ -33,6 +33,7 @@ export interface user {
     user_id: number,
     username: string,
     email: string,
+    phone_number: string,
     //add more fields as necessary
 }
 
