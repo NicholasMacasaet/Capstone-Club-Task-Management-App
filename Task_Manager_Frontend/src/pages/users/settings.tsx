@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 
+//note to self, this might not be needed?
 export const Settings = () => {
     return(<>
         <div className="w-full h-full flex flex-col justify-start items-center">

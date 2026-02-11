@@ -87,7 +87,6 @@ export const Register = () => {
         email: email,
         phone_number: phone_number,
         password: password,
-        confirm_password: confirm_password
     }
 
     let navigate = useNavigate()
@@ -98,7 +97,7 @@ export const Register = () => {
         event.preventDefault()
 
         try {
-            console.log("hi")
+            //console.log("hi")
 
             // const data = await axios({
             //     method: 'post',
@@ -106,7 +105,8 @@ export const Register = () => {
             //     data: JSON.stringify(packaged_data),
             //     headers: {'Content-Type': 'application/json' }
             // })
-            alert("Registration Successful! Please log in")
+
+            console.log("Registration Successful! Please log in")
             navigate("/login")
 
         }catch(error){

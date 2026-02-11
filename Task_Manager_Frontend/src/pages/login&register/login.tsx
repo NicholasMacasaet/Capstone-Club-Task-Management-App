@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent } from "react"
 import { Link, useNavigate } from "react-router-dom"
 // import { Link } from "react-router-dom"
+import axios from 'axios'
 
 
 export const Login = () => {
@@ -22,9 +23,28 @@ export const Login = () => {
     const handleLogin = async (event:React.FormEvent<HTMLFormElement>)  => {
         event.preventDefault()
 
-        const user = {
+        const user_data = {
             username:username,
             password:password,
+        }
+        try{
+
+            // const {data} = await axios({
+            //     method: 'post',
+            //     url: (add api endpoint here when implemented)
+            //     data: JSON.stringify(user_data),
+            //     headers: {'Content-Type': 'application/json' }
+            // })
+            
+            // localStorage.clear();
+            // localStorage.setItem('access_token', data.access);
+            // localStorage.setItem('refresh_token', data.refresh);
+        }
+        catch(error){
+            console.error(error)
+            // if (error instanceof Error) {
+            //     setError(error.message)
+            // }
         }
 
         navigate("/orgs/landing")
