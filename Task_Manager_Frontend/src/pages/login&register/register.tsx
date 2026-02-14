@@ -83,9 +83,9 @@ export const Register = () => {
 
 
     const packaged_data ={
-        username: username,
+        // username: username,
         email: email,
-        phone_number: phone_number,
+        // phone_number: phone_number,
         password: password,
     }
 
@@ -140,33 +140,35 @@ export const Register = () => {
 
             <div className="login_form_desktop_wrapper h-full sm:h-3/4 w-full sm:w-4/5 rounded-xl mt-1 hidden sm:flex flex-col items-center">
 
-                <form className="w-full h-3/4 rounded-xl mt-1 hidden sm:grid grid-cols-2 " method="post" onSubmit={handleRegistration}>
+                <form className="w-full h-3/4 rounded-xl mt-1 hidden sm:grid grid-cols-2 grid_layout_custom auto-rows-max" method="post" onSubmit={handleRegistration}>
                  
-                    <label htmlFor="username" className="text-lg sm:text-xl self-center ml-7 sm:ml-0 justify-end text-right">Username:</label>
+                    {/* <label htmlFor="username" className="text-lg sm:text-xl self-center ml-7 sm:ml-0 justify-end text-right mt-5">Username:</label>
 
-                    <input type="text" name="username" className="form_input_modified rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center" onChange={(e)=>handleUsernameChange(e)} value={username}></input>
-
-                
-                    <label htmlFor="email" className="text-lg sm:text-xl self-center ml-7 sm:ml-0 text-right">Email:*</label>
-
-                    <input type="text" name="email" className="form_input_modified rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center" onChange={(e)=>handleEmailChange(e)} value={email}placeholder="j.smth@yee.com"></input>
-                
+                    <input type="text" name="username" className="form_input_modified rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center mt-5" onChange={(e)=>handleUsernameChange(e)} value={username}></input> */}
 
                 
-                    <label htmlFor="phone_number" className="text-1xl sm:text-xl self-center ml-7 sm:ml-0 whitespace-nowrap text-right">Phone Number:</label>
+                    <label htmlFor="email" className="text-lg sm:text-xl self-center ml-7 sm:ml-0 text-right mt-10">Email:*</label>
 
-                    <input type="text" name="phone_number" className="form_input_modified rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center" onChange={(e)=>handlePhoneNumberChange(e)} value = {phone_number} placeholder="ex:000-000-0000"></input>
+                    <input type="text" name="email" className="form_input_modified rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center mt-10" onChange={(e)=>handleEmailChange(e)} value={email}placeholder="j.smth@yee.com"></input>
+                
 
-                    <label htmlFor="password" className="text-lg sm:text-xl self-center ml-7 sm:ml-0 text-right">Password:*</label>
+                
+                    {/* <label htmlFor="phone_number" className="text-1xl sm:text-xl self-center ml-7 sm:ml-0 whitespace-nowrap text-right mt-5">Phone Number:</label>
 
-                    <input type="password" name="password" className="form_input_modified rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center" onChange={(e)=>handlePasswordChange(e)} value={password}></input>
+                    <input type="text" name="phone_number" className="form_input_modified rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center mt-5" onChange={(e)=>handlePhoneNumberChange(e)} value = {phone_number} placeholder="ex:000-000-0000"></input> */}
 
-                    <p className="text-xs col-span-2">(eight chars, one letter, one number, one special char)</p>
+                    
+
+                    <label htmlFor="password" className="text-lg sm:text-xl self-center ml-7 sm:ml-0 text-right mt-5">Password:*</label>
+
+                    <input type="password" name="password" className="form_input_modified rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center mt-5" onChange={(e)=>handlePasswordChange(e)} value={password}></input>
+
+                    <p className="text-xs col-span-2 h-fit leading-tight py-0">(eight chars, one letter, one number, one special char)</p>
                 
                  
-                    <label htmlFor="confirm_password" className="text-lg sm:text-xl wrap self-center ml-7 sm:ml-0 whitespace-nowrap text-right">Confirm Password:*</label>
+                    <label htmlFor="confirm_password" className="text-lg sm:text-xl wrap self-center ml-7 sm:ml-0 whitespace-nowrap text-right mt-5">Confirm Password:*</label>
 
-                    <input type="password" name="confirm_password" className="form_input_modified rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center" onChange={(e)=>handleConfirmPasswordChange(e)} value={confirm_password}></input>
+                    <input type="password" name="confirm_password" className="form_input_modified rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center mt-5" onChange={(e)=>handleConfirmPasswordChange(e)} value={confirm_password}></input>
 
 
                     <div className="col-span-2 flex justify-center items-center flex-col">
@@ -229,11 +231,11 @@ export const Register = () => {
 
             
             <form className="login_form h-full w-full sm:w-4/5 rounded-xl mt-1 flex justify-start sm:hidden flex-col justify-start" method="post" onSubmit={handleRegistration}>
-                <div className="form_group w-full sm:w-2/3 mt-10 flex flex-col sm:flex-row ">
+                {/* <div className="form_group w-full sm:w-2/3 mt-10 flex flex-col sm:flex-row ">
                     <label htmlFor="username" className="text-lg sm:text-xl self-start ml-7 sm:ml-0">Username:</label>
 
                     <input type="text" name="username" className="form_input rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center" onChange={(e)=>handleUsernameChange(e)} value={username}></input>
-                </div>
+                </div> */}
 
 
                 <div className="form_group w-full mt-10sm:w-2/3 mt-2 flex flex-col sm:flex-row ">
@@ -242,11 +244,11 @@ export const Register = () => {
                     <input type="text" name="email" className="form_input rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center" onChange={(e)=>handleEmailChange(e)} value={email} placeholder="j.smth@yee.com"></input>
                 </div>
 
-                <div className="form_group w-full sm:w-2/3 flex mt-2 flex-col sm:flex-row ">
+                {/* <div className="form_group w-full sm:w-2/3 flex mt-2 flex-col sm:flex-row ">
                     <label htmlFor="phone_number" className="text-1xl sm:text-xl self-start ml-7 sm:ml-0 whitespace-nowrap" >Phone Number:</label>
 
                     <input type="text" name="phone_number" className="form_input rounded-xl p-1 text-lg sm:text-xl w-4/5 sm:w-full self-center" onChange={(e)=>handlePhoneNumberChange(e)} value={phone_number} placeholder="ex:000-000-0000"></input>
-                </div>
+                </div> */}
 
 
                 <div className="form_group w-full sm:w-2/3 mt-2 flex flex-col sm:flex-row">
