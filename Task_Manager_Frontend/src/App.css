@@ -223,6 +223,9 @@ input[type="file"] {
   width: 20px!important;
   padding: 0;
 }
+/* .grid_layout_custom{
+  grid-template-rows: auto auto auto auto auto!important;
+} */
 
 .logo {
   height: 6em;

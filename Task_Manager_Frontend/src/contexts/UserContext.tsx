@@ -1,5 +1,6 @@
 import { createContext,useContext,useState,useEffect, type ReactNode } from "react";
 import axios from "axios";
+// import { supabase } from "./SupabaseClient";
 
 export interface Task {
     task_id: number;
@@ -63,7 +64,7 @@ export const useUserContext = ()=>{
 
 export const UserContextProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
-    const [user,setUser] = useState("")
+    const [user, setUser] = useState("")
     const [isLoaded, setIsLoaded] = useState(false);
 
     //check for user token
@@ -77,6 +78,27 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
             setIsLoaded(true);
         }
     },[])
+
+
+    // const registerUser = async (username:string, email:string, phone_number: string, password:string) => {
+    //     try {
+    //         const { data, error } = await supabase.auth.signUp({
+    //             email: email,
+    //             password: password,
+    //         });
+
+    //         if (error) {
+    //             console.error("Error registering user:", error.message);
+    //             return;
+    //         }
+
+    //         console.log("User registered successfully:", data);
+    //         // Optionally, you can log the user in immediately after registration
+    //         loginUser(username);
+    //     }catch(error){
+    //         console.error("Unexpected error during registration:", error);
+    //     }
+    // }
 
     const loginUser = (username: string) => {
         console.log('logged in', username)
@@ -93,8 +115,8 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
     useEffect(() => {
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
-     
     }
+    
   }, [user]);
 
 
