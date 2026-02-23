@@ -14,6 +14,8 @@ import { TaskDashboard } from './pages/tasks/task_dashboard';
 import { TaskCreation } from './pages/tasks/task_creation';
 import { UserProfile } from './pages/users/user_profile';
 import { Settings } from './pages/users/settings';
+import { OrgAdminPage } from './pages/org_register/org_admin';
+import { TaskEditing } from './pages/tasks/task_editing';
 
 function App() {
   return (
@@ -33,8 +35,17 @@ function App() {
               <Route path='/orgs/join' element={<OrgJoin/>}/>
             </Route>
 
-            <Route path='/home' element = {<TaskDashboard/>}/>
-            <Route path='/new_task' element = {<TaskCreation/>}/>
+            <Route path="/club">
+              {/* use id query param for switching between different clubs */}
+              <Route path='/club/home/:id/' element = {<TaskDashboard/>}/>
+              <Route path="/club/management/:id/" element = {<OrgAdminPage/>}/>
+            </Route>
+
+            <Route path="/tasks/">
+              <Route path='/tasks/new_task/' element = {<TaskCreation/>}/>
+              <Route path='/tasks/task_view/:id/' element = {<TaskEditing/>}/>
+            </Route>
+            
             
             <Route path="/profile" element={<UserProfile/>}/>
 

@@ -40,7 +40,7 @@ export interface user {
 
 type userContextProps = {
     //user data, note to self, replace this with the actual user data interface we need 
-    user:string,
+    currUser:user,
     //make sure we are not trying to load uninitialized stuff
     isLoaded:boolean, 
 
@@ -48,6 +48,9 @@ type userContextProps = {
 
     logoutUser: () => void
 
+    isClubPresident: boolean, 
+
+    setIsClubPresident: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const UserContext = createContext<userContextProps|undefined>(undefined)
@@ -64,14 +67,22 @@ export const useUserContext = ()=>{
 
 export const UserContextProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
-    const [user, setUser] = useState("")
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [currUser, setCurrUser] = useState({
+        user_id: 1,
+        username: "AssigneeUser",
+        email: "AssigneeUser1@test.com",
+        phone_number: "404-404-4040"
+    },)
+    const [isLoaded, setIsLoaded] = useState(true);
+
+    //do check to see if the logged in user is the club president 
+    const [isClubPresident, setIsClubPresident] = useState(true)
 
     //check for user token
     useEffect(()=>{
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            setCurrUser(JSON.parse(storedUser));
             setIsLoaded(true)
         }
         else {
@@ -102,26 +113,26 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
 
     const loginUser = (username: string) => {
         console.log('logged in', username)
-        setUser(username);
+        // setUser(username);
         setIsLoaded(true);
     };
 
     const logoutUser = () => {
         console.log('logged out')
-        setUser("");
+        // setUser("");
         setIsLoaded(true);
     };
 
     useEffect(() => {
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
+    if (currUser) {
+      localStorage.setItem('user', JSON.stringify(currUser));
     }
     
-  }, [user]);
+  }, [currUser]);
 
 
  
-    return(<UserContext.Provider value ={{user,isLoaded,loginUser,logoutUser}}>
+    return(<UserContext.Provider value ={{currUser,isLoaded,loginUser,logoutUser, isClubPresident, setIsClubPresident}}>
         {children}
     </UserContext.Provider>)
 }

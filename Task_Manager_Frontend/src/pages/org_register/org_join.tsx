@@ -31,7 +31,7 @@ export const OrgJoin = () => {
             //     data: JSON.stringify(packaged_data),
             //     headers: {'Content-Type': 'application/json' }
             // })
-
+            navigate("/home")
         }catch(error){
             console.error(error)
         }
