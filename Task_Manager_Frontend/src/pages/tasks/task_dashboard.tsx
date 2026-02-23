@@ -1,13 +1,46 @@
-import { Link } from "react-router-dom"
-import { testTasks, taskAssignments, testUsers} from "../../assets/test_data"
+import { Link, useParams } from "react-router-dom"
+import { testTasks, taskAssignments, testUsers, testTasks2} from "../../assets/test_data"
 import type { Task, TaskAssignment } from "../../contexts/UserContext"
 import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useUserContext } from "../../contexts/UserContext"
+import { retrieveAssigners } from "../../misc_utils/retrieve_assigner"
+
 export const TaskDashboard = () => {
 
     const navigate = useNavigate()
 
+    const {id} = useParams()
+
+    const {isLoaded} = useUserContext()
+
+    const [tasksToView, setTasksToView] = useState<Task[]>([])
+
+    useEffect(() => {
+        //trivial check to see if they're logged in or not 
+        if (!isLoaded){
+            navigate(`/`)
+        }
+        else {
+            //replace with an actual backend call for tasks 
+            const testTaskList: Task[] = testTasks.concat(testTasks2)
+        
+            let filteredTasksList: Task[] = []
+
+            //filter by the specific clubs tasks
+            testTaskList.map(task=>{
+                if (id && (task.club_id === parseInt(id,10))){
+                    filteredTasksList.push(task)
+                }
+            })
+            setTasksToView(filteredTasksList)
+        }
+    },[isLoaded])
+
+
     //test data for testing rendering, replace this with actual data later
     //note to self, user_id=1 is our current user 
+    //NOTE: REPLACE THIS LATER!!111!!1!1!1
     const curr_user_id:number = 1
 
     // const unacceptedTasks: Task[] = testTasks.filter(task => {
@@ -28,18 +61,18 @@ export const TaskDashboard = () => {
     // })
 
     /**
-     * retrieve tasks based on accepted status
+     * retrieve tasks based on accepted status, filters tasks to display to the user if it is assigned to them 
      * @param accepted boolean indicating whether to retrieve accepted or unaccepted tasks
      * @returns array of tasks that are either accepted or unaccepted (depending on the flag)
      */
     const tasks = (accepted:boolean)=>{
-        const unacceptedTasks: Task[] = testTasks.filter(task => {
+        const unacceptedTasks: Task[] = tasksToView.filter(task => {
             let flag:boolean = false
             taskAssignments.map(assignment => {
                 //found assignment, check if it belongs to curr user
                 if (assignment.task_id === task.task_id ){
                     if (assignment.assignee === curr_user_id){
-                        console.log(`assignment.assignee: ${assignment.assignee}, curr_user_id: ${curr_user_id}`)
+                        // console.log(`assignment.assignee: ${assignment.assignee}, curr_user_id: ${curr_user_id}`)
                         flag = accepted ? assignment.accepted: !assignment.accepted
                     }
                     else{
@@ -53,23 +86,7 @@ export const TaskDashboard = () => {
     }
     //note to self, modify later to render multiple assignees
     //retrieve the usernames of assigners for a given task
-    /**
-     * retrieve the assigner's username for a given task (assuming one assigner per task for now)
-     * @param task_id the id of the task to retrieve the assigner for
-     * @returns the username of the assigner (and multiple assigners in the future) returns "Something went wrong" if no assigner found
-     */
-    const retrieveAssigners = (task_id:number) => {
-
-        const assignment:TaskAssignment = taskAssignments.find(assignment => assignment.task_id === task_id)!;
-        //note to self the assigner could be an array of numbers at some point so i need to iterate over that to list all of the assigners
-        if (assignment) {
-            const assigner_id = assignment.assigner;
-            const assigner = testUsers.find(user => user.user_id === assigner_id);
-            return assigner ? assigner.username : "Unknown";
-        }
-        return "Something went wrong";
-
-    }
+   
 
     const goToTaskCreation = ()=>{
         navigate('/new_task')
@@ -124,6 +141,7 @@ export const TaskDashboard = () => {
                                 </div>
                                 <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
                                 <select className="task_accept_select sm:ml-auto rounded-xl text-sm">
+                                    <option value="todo">To-Do</option>
                                     <option value="in_progress">In Progress</option>
                                     <option value="completed">Completed</option>
                                 </select>

@@ -1,32 +1,70 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import { useUserContext } from "../../contexts/UserContext"
+import { useUserContext, type Task } from "../../contexts/UserContext"
+import { testTasks, testTasks2 } from "../../assets/test_data"
+import { retrieveAssigners } from "../../misc_utils/retrieve_assigner"
 // import { File } from "buffer"
 
-export const TaskCreation = () => {
+export const TaskEditing = () => {
+    //do multiple patch requests when specific information is updated 
+
     const navigate = useNavigate()
 
-    const {currUser,isLoaded}  = useUserContext()
+    const {id} = useParams()
+
+    const {currUser, isLoaded}  = useUserContext()
+
+    const [currTask, setCurrTask] = useState<Task>()
+
+    const retrieveTaskInfo = async (id:string) => {
+        try{
+            //TODO: replace with an actual api call here 
+            testTasks.concat(testTasks2).map(task=>{
+                if (id && task.task_id === parseInt(id,10)){
+                    setCurrTask(task)
+                }
+            })
+        }catch{
+            console.error("something went wrong")
+        }
+    }
 
     useEffect(()=>{
         if (!isLoaded){
             navigate("/")
         }
+
+        if (id){
+            retrieveTaskInfo(id)
+        }
     },[isLoaded])
 
-    const onCancel = ()=>{
-        navigate('/home')
-    }
+
+    useEffect(()=>{
+        if (currTask) {
+            let assigner_username:string = retrieveAssigners(currTask.task_id)
+            if (assigner_username === currUser.username){
+                assigner_username = "Self"
+            }
+            setTaskName(currTask.task_name)
+            setAssigner(assigner_username)
+            setDescription(currTask.description)
+        }
+    },[currTask])
+
+    
 
     const [taskName,setTaskName] = useState("")
     //note to self, assignee will be an array of strings later
-    const [assignee,setAssignee] = useState("None")
+    const [assignee, setAssignee] = useState("None")
+
+    const [assigner, setAssigner] = useState("")
 
     //how do you track file attachments in react? TODO: look into this later
     const [attachments, setAttachments] = useState<File[] | null>(null)
 
-    const [associatedEvent, setAssociatedEvent] = useState("None")
+    // const [associatedEvent, setAssociatedEvent] = useState("None")
 
     const [description,setDescription] = useState("")
 
@@ -39,9 +77,9 @@ export const TaskCreation = () => {
         setAssignee(e.target.value);
     }
 
-    const handleEventChange = (e: React.ChangeEvent<HTMLSelectElement>) => { 
-        setAssociatedEvent(e.target.value);
-    }
+    // const handleEventChange = (e: React.ChangeEvent<HTMLSelectElement>) => { 
+    //     setAssociatedEvent(e.target.value);
+    // }
 
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setDescription(e.target.value);
@@ -64,23 +102,8 @@ export const TaskCreation = () => {
         }
     }
 
-    const packaged_data = {
-        task_name: taskName,
-        assignee: assignee,
-        attachments: attachments,
-        associated_event: associatedEvent,
-        description: description,
-    }
-
-
-    const handleTaskCreate = async(event:React.FormEvent<HTMLFormElement>)=>{
-        event.preventDefault()
-
-        console.log("Packaged data for task creation:", packaged_data)
-    }
-
-
     return(<>
+        {currTask !== undefined &&
         <div className="w-full h-full flex flex-col justify-start items-center">
             <div className="w-full flex">
                 <Link to="/home" className="text-3xl justify-self-start self-start sm:self-center">
@@ -88,21 +111,23 @@ export const TaskCreation = () => {
                 </Link>
 
                 <h1 className="landing_page_header w-full hidden sm:block justify-self-center">
-                    Create New Task
+                    Viewing Task {currTask.task_name}
                 </h1>
             </div>
 
             <p className="landing_page_header w-full text-4xl sm:hidden">
-               Create New Task
+               Viewing Task {currTask.task_name}
             </p>
 
             <div className="task_creation_form_wrapper h-full sm:h-4/5 w-full sm:w-3/4 flex justify-start rounded-xl flex-col mt-5">
-                <form className="w-full h-full flex flex-col justify-start" onSubmit={(e)=>handleTaskCreate(e)}>
+                <form className="w-full h-full flex flex-col justify-start">
                     <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start">
                         <label className="sm:self-center self-start text-xl" htmlFor="task_name">Task Name:</label>
                         <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="task_name" name="task_name" required value={taskName} onChange={handleTaskNameChange}/>
                     </div>
 
+                    
+                    {assigner === "self" &&
                     <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
                         <label className="sm:self-center self-start text-xl" htmlFor="task_name">Assignee:</label>
                         {/* <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="assignees" name="assignees" required/> */}
@@ -112,6 +137,13 @@ export const TaskCreation = () => {
                             <option value="user2">user2</option>
                             <option value="user3">user3</option>
                         </select>
+                    </div>
+
+                    }
+
+                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
+                        <label className="sm:self-center self-start text-xl" htmlFor="task_name">Assigner:</label>
+                        <p className="sm:self-center self-start text-xl">{assigner}</p>
                     </div>
 
                     <div className="form_group flex p-1 w-full flex-col justify-center sm:justify-start self-start mt-4">
@@ -128,8 +160,8 @@ export const TaskCreation = () => {
                                     <ul className="w-full">
                                         {attachments.map((file, index) => (
                                             <li key={index} className="text-sm flex items-center">{file.name}<button className="delete_button bg-red-400 self-start ml-2 mt-1 text-center flex items-center justify-center rounded-xl" onClick={() => removeFromFileArray(index)}>
-                        -
-                    </button></li>
+                                                -
+                                            </button></li>
                                         ))}
                                     </ul>
                                 ): (
@@ -148,19 +180,18 @@ export const TaskCreation = () => {
                         </select>
                     </div> */}
 
-
                     <div className="form_group flex flex-col justify-center p-1 self-start w-full mt-4">
                         <label className="self-start text-xl" htmlFor="task_name">Description:</label>
                         <textarea className="description w-full rounded-xl p-1" id="description" name="description" value={description} onChange={handleDescriptionChange}/>
                     </div>
 
-                    <div className="w-full flex justify-around">
-                        <button className="bg-red-400 form_submit_normal self-center mt-auto mb-5" onClick={onCancel}>Cancel</button>
-                        <button className="bg-green-400 form_submit_normal self-center mt-auto mb-5" type="submit">Create</button>
-                    </div>
                 </form>
             </div>
         </div>
+        }
+        {currTask === undefined &&
+            <div>loading...</div>
+        }
     </>)
 
 }
