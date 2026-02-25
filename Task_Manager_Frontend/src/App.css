@@ -227,7 +227,27 @@ input[type="file"] {
   grid-template-rows: auto auto auto auto auto!important;
 } */
 
-.logo {
+.footer_nav {
+  height: 50px;
+  border-radius: 10px;
+  border: 2px solid var(--midnight_green);
+}
+
+.club_switch {
+  width: 500px;
+  overflow-x: scroll;
+}
+
+.club_button {
+  font-size: 12px;
+  border: 2px solid var(--midnight_green);
+}
+
+.selected_club {
+  border: 2px solid var(--desaturated_blue)!important;
+}
+
+/* .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
@@ -261,4 +281,4 @@ input[type="file"] {
 
 .read-the-docs {
   color: #888;
-}
+} */
