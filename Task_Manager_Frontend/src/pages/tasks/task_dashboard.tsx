@@ -1,10 +1,11 @@
 import { Link, useParams } from "react-router-dom"
-import { testTasks, taskAssignments, testUsers, testTasks2} from "../../assets/test_data"
-import type { Task, TaskAssignment } from "../../contexts/UserContext"
+import { testTasks, taskAssignments, testUsers, testTasks2, testClubs} from "../../assets/test_data"
+import type { Task } from "../../contexts/UserContext"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { useUserContext } from "../../contexts/UserContext"
 import { retrieveAssigners } from "../../misc_utils/retrieve_assigner"
+import { FooterNav } from "../../components/footer_nav"
 
 export const TaskDashboard = () => {
 
@@ -24,9 +25,7 @@ export const TaskDashboard = () => {
         else {
             //replace with an actual backend call for tasks 
             const testTaskList: Task[] = testTasks.concat(testTasks2)
-        
             let filteredTasksList: Task[] = []
-
             //filter by the specific clubs tasks
             testTaskList.map(task=>{
                 if (id && (task.club_id === parseInt(id,10))){
@@ -35,7 +34,7 @@ export const TaskDashboard = () => {
             })
             setTasksToView(filteredTasksList)
         }
-    },[isLoaded])
+    },[isLoaded, id])
 
 
     //test data for testing rendering, replace this with actual data later
@@ -86,7 +85,17 @@ export const TaskDashboard = () => {
     }
     //note to self, modify later to render multiple assignees
     //retrieve the usernames of assigners for a given task
-   
+
+    const retrieveClubInfo = () => {
+        //replace w/ api call later 
+        if (id){
+            const clubName: string = testClubs.find(club => club.club_id === parseInt(id,10))?.name || ""
+            return clubName
+        }
+        else {
+            return "If you see this something went wrong"
+        }
+    }
 
     const goToTaskCreation = ()=>{
         navigate('/new_task')
@@ -109,7 +118,7 @@ export const TaskDashboard = () => {
             </p>
 
             <div className="dashboard_wrapper h-full sm:h-7/8 w-full sm:w-3/4 flex justify-start rounded-xl flex-col mt-4">
-                <p className="text-3xl">My Tasks</p>
+                <p className="text-3xl">My Tasks for {retrieveClubInfo()}</p>
 
                 <div className="accept_container w-full h-1/4 flex flex-col mt-4">
                     <p className="text-xl self-start ml-2 mt-1">Tasks to Accept</p>
@@ -150,9 +159,8 @@ export const TaskDashboard = () => {
                         }
                     </div>
                 </div>
-
             </div>
-
+            <FooterNav/>
         </div>
     </>)
 }
