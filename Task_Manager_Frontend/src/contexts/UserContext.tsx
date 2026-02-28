@@ -1,6 +1,7 @@
 import { createContext,useContext,useState,useEffect, type ReactNode } from "react";
 import axios from "axios";
 // import { supabase } from "./SupabaseClient";
+import { testUsers, testTasks, testTasks2, taskAssignments, testClubs, clubMemberships} from "../assets/test_data";
 
 export interface Task {
     task_id: number;
@@ -51,6 +52,12 @@ type userContextProps = {
     isClubPresident: boolean, 
 
     setIsClubPresident: React.Dispatch<React.SetStateAction<boolean>>,
+
+    testDataLoaded: boolean,
+
+    setTestDataLoaded: React.Dispatch<React.SetStateAction<boolean>>,
+
+    consoleLogDebug: boolean,
 }
 
 const UserContext = createContext<userContextProps|undefined>(undefined)
@@ -73,10 +80,15 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
         email: "AssigneeUser1@test.com",
         phone_number: "404-404-4040"
     },)
+
     const [isLoaded, setIsLoaded] = useState(true);
 
     //do check to see if the logged in user is the club president 
     const [isClubPresident, setIsClubPresident] = useState(true)
+
+    const [testDataLoaded, setTestDataLoaded] = useState(false)
+
+    const consoleLogDebug = false
 
     //check for user token
     useEffect(()=>{
@@ -88,6 +100,17 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
         else {
             setIsLoaded(true);
         }
+    },[])
+
+    //DEMO: populate local storage with test data ONCE when the component mounts
+    useEffect(()=>{
+        localStorage.setItem("test_users", JSON.stringify(testUsers))
+        localStorage.setItem("test_tasks_org_1", JSON.stringify(testTasks))
+        localStorage.setItem("test_tasks_org_2", JSON.stringify(testTasks2))
+        localStorage.setItem("test_task_assignments", JSON.stringify(taskAssignments))
+        localStorage.setItem("test_clubs", JSON.stringify(testClubs))
+        localStorage.setItem("test_club_memberships", JSON.stringify(testClubs))
+        setTestDataLoaded(true)
     },[])
 
 
@@ -132,7 +155,7 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
 
 
  
-    return(<UserContext.Provider value ={{currUser,isLoaded,loginUser,logoutUser, isClubPresident, setIsClubPresident}}>
+    return(<UserContext.Provider value ={{currUser, isLoaded,loginUser,logoutUser, isClubPresident, setIsClubPresident, testDataLoaded, setTestDataLoaded,consoleLogDebug}}>
         {children}
     </UserContext.Provider>)
 }

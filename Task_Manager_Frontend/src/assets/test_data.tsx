@@ -9,7 +9,7 @@ export const testTasks: Task[] = [
         event_id:3,
         due_date: "2026-12-31",
         task_name: "Do thing 1",
-        description:"This is a test description"
+        description:"This is a test description for task 1 "
     },
     {
         task_id:2,
@@ -17,7 +17,7 @@ export const testTasks: Task[] = [
         event_id:3,
         due_date: "2026-11-30",
         task_name: "Do thing 2",
-        description:"This is a test description"
+        description:"This is a test description for task 2"
     },
     {
         task_id:3,
@@ -25,7 +25,7 @@ export const testTasks: Task[] = [
         event_id:3,
         due_date: "2026-12-31",
         task_name: "Do thing 3",
-        description:"This is a test description"
+        description:"This is a test description for task 3"
     },
 ]
 
@@ -37,7 +37,7 @@ export const testTasks2: Task[] = [
         event_id:3,
         due_date: "1999-12-31",
         task_name: "Do thing 4",
-        description:"This is a test description"
+        description:"This is a test description for task 4"
     },
     {
         task_id:5,
@@ -45,7 +45,7 @@ export const testTasks2: Task[] = [
         event_id:3,
         due_date: "1999-12-31",
         task_name: "Do thing 5",
-        description:"This is a test description"
+        description:"This is a test description for task 5"
     },
     {
         task_id:6,
@@ -53,7 +53,7 @@ export const testTasks2: Task[] = [
         event_id:3,
         due_date: "1999-12-31",
         task_name: "Do thing 6",
-        description:"This is a test description"
+        description:"This is a test description for task 6"
     },
 ]
 
@@ -149,3 +149,11 @@ export const testUsers: user[]= [
         phone_number: "555-555-5555"
     }
 ]
+
+// export const defaultNonLoadedUser: user = 
+//     {
+//         user_id: -1,
+//         username: "DefaultUser",
+//         email: "wrong.com",
+//         phone_number: "888-888-8888"
+//     }
