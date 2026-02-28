@@ -80,14 +80,20 @@ export const TaskCreation = () => {
     }
 
 
+
+
     return(<>
         <div className="w-full h-full flex flex-col justify-start items-center">
-            <div className="w-full flex">
-                <Link to="/home" className="text-3xl justify-self-start self-start sm:self-center">
+            <div className="w-full flex sm:justify-center">
+                {/* <Link to="/home" className="text-3xl justify-self-start self-start sm:self-center">
                         <p>←</p>
-                </Link>
+                </Link> */}
 
-                <h1 className="landing_page_header w-full hidden sm:block justify-self-center">
+                <button className="back_button text-3xl self-start sm:self-center sm:mr-auto" onClick={()=>navigate(-1)}>
+                    ←
+                </button>
+
+                <h1 className="landing_page_header w-full hidden sm:block ">
                     Create New Task
                 </h1>
             </div>

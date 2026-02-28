@@ -1,11 +1,11 @@
-import { Link, useParams } from "react-router-dom"
-import { testTasks, taskAssignments, testUsers, testTasks2, testClubs} from "../../assets/test_data"
-import type { Task } from "../../contexts/UserContext"
+import { Link, useFetcher, useParams } from "react-router-dom"
+import type { Club, Task, TaskAssignment, user } from "../../contexts/UserContext"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { useUserContext } from "../../contexts/UserContext"
 import { retrieveAssigners } from "../../misc_utils/retrieve_assigner"
 import { FooterNav } from "../../components/footer_nav"
+import editIcon from "../../assets/edit-button-svgrepo-com.svg" 
 
 export const TaskDashboard = () => {
 
@@ -13,9 +13,15 @@ export const TaskDashboard = () => {
 
     const {id} = useParams()
 
-    const {isLoaded} = useUserContext()
+    const {isLoaded, testDataLoaded, consoleLogDebug} = useUserContext()
 
-    const [tasksToView, setTasksToView] = useState<Task[]>([])
+    const [loadedTasks, setLoadedTasks] = useState<Task[]>([])
+
+    const [filteredTasksToView, setFilteredTasksToView] = useState<Task[]>([])
+
+    const [loadedTaskAssignments, setLoadedTaskAssignments] = useState<TaskAssignment[]>([])
+
+    const [loadedClubs, setLoadedClubs] = useState<Club[]>([])
 
     useEffect(() => {
         //trivial check to see if they're logged in or not 
@@ -23,18 +29,65 @@ export const TaskDashboard = () => {
             navigate(`/`)
         }
         else {
+            if (loadedTasks.length === 0) return
+
             //replace with an actual backend call for tasks 
-            const testTaskList: Task[] = testTasks.concat(testTasks2)
             let filteredTasksList: Task[] = []
             //filter by the specific clubs tasks
-            testTaskList.map(task=>{
+            loadedTasks.map(task => {
                 if (id && (task.club_id === parseInt(id,10))){
                     filteredTasksList.push(task)
                 }
             })
-            setTasksToView(filteredTasksList)
+            setFilteredTasksToView(filteredTasksList)
         }
-    },[isLoaded, id])
+    },[isLoaded, id, loadedTasks])
+
+    /**
+     * A function for simulating calling/retrieving information from the database by retrieving the test data I've made from localStorage
+     */
+    const loadFromCache = () => {
+        const raw_task_data_org_1: string | null = localStorage.getItem("test_tasks_org_1")
+        const raw_task_data_org_2: string | null = localStorage.getItem("test_tasks_org_2")
+        const raw_task_assignment_data: string | null = localStorage.getItem("task_assignments")
+        const raw_club_data: string | null = localStorage.getItem("test_clubs")
+
+        let loaded_tasks_from_db: Task[] = []
+        let loaded_task_assignments: TaskAssignment[] = []
+        let loaded_clubs: Club[] = []
+
+        if (raw_task_data_org_1 !== null && 
+            raw_task_data_org_2 !== null && 
+            raw_task_assignment_data !== null &&
+            raw_club_data !== null) {
+
+            loaded_tasks_from_db = JSON.parse(raw_task_data_org_1)
+            loaded_tasks_from_db = loaded_tasks_from_db.concat(JSON.parse(raw_task_data_org_2))
+
+            loaded_task_assignments = JSON.parse(raw_task_assignment_data)
+
+            loaded_clubs = JSON.parse(raw_club_data)
+           
+            setLoadedTasks(loaded_tasks_from_db)
+            setLoadedTaskAssignments(loaded_task_assignments)
+            setLoadedClubs(loaded_clubs)
+
+            if (consoleLogDebug){
+                console.log(`tasks loaded from "db": ${JSON.stringify(loaded_tasks_from_db,null,2)}`)
+                console.log(`loaded assignments loaded from "db": ${JSON.stringify(loaded_task_assignments,null,2)}`)
+                console.log(`loaded clubs from "db": ${JSON.stringify(loaded_clubs,null,2)}`)
+            }
+
+        }
+    }
+
+    useEffect(() => {
+
+        //DEMO: This will be replaced with a function that will actually call the db
+        //replace this later with your own function for loading information from your database
+        loadFromCache()
+
+    }, [testDataLoaded])
 
 
     //test data for testing rendering, replace this with actual data later
@@ -42,32 +95,15 @@ export const TaskDashboard = () => {
     //NOTE: REPLACE THIS LATER!!111!!1!1!1
     const curr_user_id:number = 1
 
-    // const unacceptedTasks: Task[] = testTasks.filter(task => {
-    //     let flag:boolean = false
-    //     taskAssignments.map(assignment => {
-    //         //found assignment, check if it belongs to curr user
-    //         if (assignment.task_id === task.task_id ){
-    //             if (assignment.assignee === curr_user_id){
-    //                 console.log(`assignment.assignee: ${assignment.assignee}, curr_user_id: ${curr_user_id}`)
-    //                 flag = !assignment.accepted
-    //             }
-    //             else{
-    //                 flag = false
-    //             }
-    //         }
-    //     })
-    //     return flag
-    // })
-
     /**
      * retrieve tasks based on accepted status, filters tasks to display to the user if it is assigned to them 
      * @param accepted boolean indicating whether to retrieve accepted or unaccepted tasks
      * @returns array of tasks that are either accepted or unaccepted (depending on the flag)
      */
-    const tasks = (accepted:boolean)=>{
-        const unacceptedTasks: Task[] = tasksToView.filter(task => {
-            let flag:boolean = false
-            taskAssignments.map(assignment => {
+    const tasks = (accepted: boolean)=>{
+        const unacceptedTasks: Task[] = filteredTasksToView.filter(task => {
+            let flag: boolean = false
+            loadedTaskAssignments.map(assignment => {
                 //found assignment, check if it belongs to curr user
                 if (assignment.task_id === task.task_id ){
                     if (assignment.assignee === curr_user_id){
@@ -89,7 +125,7 @@ export const TaskDashboard = () => {
     const retrieveClubInfo = () => {
         //replace w/ api call later 
         if (id){
-            const clubName: string = testClubs.find(club => club.club_id === parseInt(id,10))?.name || ""
+            const clubName: string = loadedClubs.find(club => club.club_id === parseInt(id,10))?.name || ""
             return clubName
         }
         else {
@@ -98,7 +134,11 @@ export const TaskDashboard = () => {
     }
 
     const goToTaskCreation = ()=>{
-        navigate('/new_task')
+        navigate('/tasks/new_task/')
+    }
+
+    const goToTaskEdit = (id:number)=>{
+        navigate(`/tasks/task_view/${id}/`)
     }
     
     return(<>
@@ -127,8 +167,13 @@ export const TaskDashboard = () => {
                         <div className="unaccepted_task_item h-fit w-7/8 rounded-xl flex flex-col sm:flex-row items-center">
                             <p className="text-sm sm:text-lg w-full sm:w-1/3 text-left font-bold">{task.task_name}</p>
                             <p className="sm:ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
-                            <button className="task_accept_small sm:task_accept_button sm:ml-auto text-center flex items-center justify-center rounded-xl mt-1">Accept</button>
-                            {/* <button className="block sm:hidden task_accept_small ml-auto flex items-center justify-center">✓</button> */}
+                            <div className="sm:ml-auto w-fit flex">
+                                <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1">Accept</button>
+                            
+                                <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded mt-1" onClick={()=>goToTaskEdit(task.task_id)}/>
+
+                            </div>
+                            
                         </div>
                     ))
                     }
@@ -149,11 +194,17 @@ export const TaskDashboard = () => {
                                     <p className="text-xs sm:text-sm">Due: {task.due_date}</p>
                                 </div>
                                 <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
-                                <select className="task_accept_select sm:ml-auto rounded-xl text-sm">
+
+                                <div className="sm:ml-auto flex w-fit items-center">
+                                    <select className="task_accept_select rounded-xl text-sm mr-1">
                                     <option value="todo">To-Do</option>
                                     <option value="in_progress">In Progress</option>
                                     <option value="completed">Completed</option>
-                                </select>
+                                    </select>
+
+                                    <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>
+                                </div>
+                                
                             </div>
                         ))
                         }
