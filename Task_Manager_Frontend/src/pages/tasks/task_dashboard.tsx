@@ -47,22 +47,23 @@ export const TaskDashboard = () => {
      * A function for simulating calling/retrieving information from the database by retrieving the test data I've made from localStorage
      */
     const loadFromCache = () => {
-        const raw_task_data_org_1: string | null = localStorage.getItem("test_tasks_org_1")
-        const raw_task_data_org_2: string | null = localStorage.getItem("test_tasks_org_2")
-        const raw_task_assignment_data: string | null = localStorage.getItem("task_assignments")
+
+        const raw_task_data: string | null = localStorage.getItem("total_test_tasks")
+
+
+        const raw_task_assignment_data: string | null = localStorage.getItem("test_task_assignments")
         const raw_club_data: string | null = localStorage.getItem("test_clubs")
 
         let loaded_tasks_from_db: Task[] = []
         let loaded_task_assignments: TaskAssignment[] = []
         let loaded_clubs: Club[] = []
 
-        if (raw_task_data_org_1 !== null && 
-            raw_task_data_org_2 !== null && 
+        if (raw_task_data && 
             raw_task_assignment_data !== null &&
             raw_club_data !== null) {
 
-            loaded_tasks_from_db = JSON.parse(raw_task_data_org_1)
-            loaded_tasks_from_db = loaded_tasks_from_db.concat(JSON.parse(raw_task_data_org_2))
+            loaded_tasks_from_db = JSON.parse(raw_task_data)
+            // loaded_tasks_from_db = loaded_tasks_from_db.concat(JSON.parse(raw_task_data_org_2))
 
             loaded_task_assignments = JSON.parse(raw_task_assignment_data)
 
@@ -71,6 +72,8 @@ export const TaskDashboard = () => {
             setLoadedTasks(loaded_tasks_from_db)
             setLoadedTaskAssignments(loaded_task_assignments)
             setLoadedClubs(loaded_clubs)
+            
+            localStorage.setItem("curr_club_id", JSON.stringify(loaded_clubs[0].club_id))
 
             if (consoleLogDebug){
                 console.log(`tasks loaded from "db": ${JSON.stringify(loaded_tasks_from_db,null,2)}`)

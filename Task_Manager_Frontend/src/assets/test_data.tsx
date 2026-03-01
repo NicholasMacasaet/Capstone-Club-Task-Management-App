@@ -6,7 +6,6 @@ export const testTasks: Task[] = [
     {
         task_id:1,
         club_id:1,
-        event_id:3,
         due_date: "2026-12-31",
         task_name: "Do thing 1",
         description:"This is a test description for task 1 "
@@ -14,7 +13,6 @@ export const testTasks: Task[] = [
     {
         task_id:2,
         club_id:1,
-        event_id:3,
         due_date: "2026-11-30",
         task_name: "Do thing 2",
         description:"This is a test description for task 2"
@@ -22,7 +20,6 @@ export const testTasks: Task[] = [
     {
         task_id:3,
         club_id:1,
-        event_id:3,
         due_date: "2026-12-31",
         task_name: "Do thing 3",
         description:"This is a test description for task 3"
@@ -34,7 +31,6 @@ export const testTasks2: Task[] = [
     {
         task_id:4,
         club_id:2,
-        event_id:3,
         due_date: "1999-12-31",
         task_name: "Do thing 4",
         description:"This is a test description for task 4"
@@ -42,7 +38,6 @@ export const testTasks2: Task[] = [
     {
         task_id:5,
         club_id:2,
-        event_id:3,
         due_date: "1999-12-31",
         task_name: "Do thing 5",
         description:"This is a test description for task 5"
@@ -50,12 +45,13 @@ export const testTasks2: Task[] = [
     {
         task_id:6,
         club_id:2,
-        event_id:3,
         due_date: "1999-12-31",
         task_name: "Do thing 6",
         description:"This is a test description for task 6"
     },
 ]
+
+export const testTasksTotal: Task[]= testTasks.concat(testTasks2)
 
 
 export const taskAssignments: TaskAssignment[] = [
@@ -103,12 +99,17 @@ export const testClubs: Club[] = [
     {
         club_id: 1,
         name: "Test Club 1",
-        description: "This is a test club"
+        description: "This is a test club 1"
     },
     {
         club_id: 2,
         name: "Test Club 2",
-        description: "This is a test club"
+        description: "This is a test club 2"
+    },
+    {
+        club_id: 3,
+        name: "Test Club 3",
+        description: "This is a test club 3"
     }
 
 ]
@@ -146,6 +147,12 @@ export const testUsers: user[]= [
         user_id: 2,
         username: "AssignerUser",
         email: "AssignerUser2@test.com",
+        phone_number: "555-555-5555"
+    },
+    {
+        user_id: 3,
+        username: "AnotherUser",
+        email: "AssignerUser3@test.com",
         phone_number: "555-555-5555"
     }
 ]

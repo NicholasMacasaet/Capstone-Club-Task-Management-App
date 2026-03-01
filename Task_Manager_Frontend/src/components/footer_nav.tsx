@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import type { Club } from "../contexts/UserContext"
 import { BASEURL } from "../../api/ constants"
 import { useNavigate } from "react-router-dom"
+import { useUserContext} from "../contexts/UserContext"
+
 
 export const FooterNav = () => {
     const {id} = useParams()
@@ -36,6 +38,9 @@ export const FooterNav = () => {
     }
 
     const switchClub = (idToSwitchTo: number) =>{
+        
+        localStorage.setItem("curr_club_id", JSON.stringify(idToSwitchTo))
+
         console.log("test")
         navigate(`/club/home/${idToSwitchTo}`)
     }

@@ -8,9 +8,27 @@ import type { TaskAssignment } from "../contexts/UserContext";
      */
 export const retrieveAssigners = (task_id:number) => {
 
-    const assignment:TaskAssignment = taskAssignments.find(assignment => assignment.task_id === task_id)!;
+    // const assignment:TaskAssignment = taskAssignments.find(assignment => assignment.task_id === task_id)!;
+
+
+    const raw_task_assignment_data: string | null = localStorage.getItem("test_task_assignments")
+
+    let loaded_task_assignments: TaskAssignment[] = []
+
+    if (raw_task_assignment_data !== null){
+        loaded_task_assignments = JSON.parse(raw_task_assignment_data)
+    }
+
+    const assignment:TaskAssignment = loaded_task_assignments.find(assignment => assignment.task_id === task_id)!;
+    
     //note to self the assigner could be an array of numbers at some point so i need to iterate over that to list all of the assigners
     if (assignment) {
+
+        if (assignment.assignee === assignment.assigner){
+            return "Myself"
+        }
+
+
         const assigner_id = assignment.assigner;
         const assigner = testUsers.find(user => user.user_id === assigner_id);
         return assigner ? assigner.username : "Unknown";

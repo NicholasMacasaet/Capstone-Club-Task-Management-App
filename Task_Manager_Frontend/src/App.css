@@ -57,13 +57,13 @@
   border-color: lightblue;
 }
 
-.login_form{
+.login_form {
   border: 2px solid var(--midnight_green);
   background-color: var(--mint_green_2);
   justify-content: start!important;
 }
 
-.login_form_desktop_wrapper{
+.login_form_desktop_wrapper {
   border: 2px solid var(--midnight_green);
   background-color: var(--mint_green_2)
 }
