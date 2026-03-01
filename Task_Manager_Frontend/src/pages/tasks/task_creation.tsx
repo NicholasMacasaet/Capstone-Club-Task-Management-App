@@ -14,7 +14,6 @@ export const TaskCreation = () => {
 
     const [loadedTaskAssignments, setLoadedTaskAssignments] = useState<TaskAssignment[]>([])
 
-
     const {isLoaded, testDataLoaded, currClubID, setCurrClubID}  = useUserContext()
 
     useEffect(()=>{
@@ -62,7 +61,7 @@ export const TaskCreation = () => {
                     return false
                 }
                 else{
-                    const foundMembership: ClubMembership | undefined = clubMemberships.find(membership=> membership.user_id === user.user_id && membership.club_id === loaded_curr_club_id) 
+                    const foundMembership: ClubMembership | undefined = loaded_memberships.find(membership=> membership.user_id === user.user_id && membership.club_id === loaded_curr_club_id) 
                     if (foundMembership){
                         return true
                     }
