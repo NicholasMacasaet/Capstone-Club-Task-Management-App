@@ -1,13 +1,14 @@
 import { createContext,useContext,useState,useEffect, type ReactNode } from "react";
 import axios from "axios";
 // import { supabase } from "./SupabaseClient";
-import { testUsers, testTasks, testTasks2, taskAssignments, testClubs, clubMemberships} from "../assets/test_data";
+import { testUsers, testTasks, testTasks2, taskAssignments, testClubs, clubMemberships, testTasksTotal} from "../assets/test_data";
+import { setCurrUserLocalStorage, setTestClubMemberships, setTestClubs, setTestTaskAssignments, setTestTasks, setTestUsers } from "../demo_utils/getters_and_setters";
 
 export interface Task {
     task_id: number;
     club_id: number;
-    event_id: number;
-    // attachments:???
+    // event_id: number;
+    attachments:File[] | null
     due_date: string;
     task_name:string;
     description: string;
@@ -29,6 +30,7 @@ export interface TaskAssignment {
     assignee: number,
     task_id: number,
     accepted: boolean,
+    status: string, // "to-do", "in progress", "completed"
 }
 
 export interface user {
@@ -58,6 +60,10 @@ type userContextProps = {
     setTestDataLoaded: React.Dispatch<React.SetStateAction<boolean>>,
 
     consoleLogDebug: boolean,
+
+    currClubID: number,
+
+    setCurrClubID: React.Dispatch<React.SetStateAction<number>>,
 }
 
 const UserContext = createContext<userContextProps|undefined>(undefined)
@@ -90,6 +96,8 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
 
     const consoleLogDebug = false
 
+    const [currClubID, setCurrClubID] = useState<number>(-1)
+
     //check for user token
     useEffect(()=>{
         const storedUser = localStorage.getItem('user');
@@ -104,12 +112,16 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
 
     //DEMO: populate local storage with test data ONCE when the component mounts
     useEffect(()=>{
-        localStorage.setItem("test_users", JSON.stringify(testUsers))
-        localStorage.setItem("test_tasks_org_1", JSON.stringify(testTasks))
-        localStorage.setItem("test_tasks_org_2", JSON.stringify(testTasks2))
-        localStorage.setItem("test_task_assignments", JSON.stringify(taskAssignments))
-        localStorage.setItem("test_clubs", JSON.stringify(testClubs))
-        localStorage.setItem("test_club_memberships", JSON.stringify(testClubs))
+        setTestUsers(testUsers)
+        setTestTasks(testTasksTotal)
+        setTestTaskAssignments(taskAssignments)
+        setTestClubs(testClubs)
+        setTestClubMemberships(clubMemberships)
+        // localStorage.setItem("test_users", JSON.stringify(testUsers))
+        // localStorage.setItem("total_test_tasks", JSON.stringify(testTasksTotal))
+        // localStorage.setItem("test_task_assignments", JSON.stringify(taskAssignments))
+        // localStorage.setItem("test_clubs", JSON.stringify(testClubs))
+        // localStorage.setItem("test_club_memberships", JSON.stringify(clubMemberships))
         setTestDataLoaded(true)
     },[])
 
@@ -148,14 +160,13 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
 
     useEffect(() => {
     if (currUser) {
-      localStorage.setItem('user', JSON.stringify(currUser));
+      setCurrUserLocalStorage(currUser);
     }
     
   }, [currUser]);
 
-
  
-    return(<UserContext.Provider value ={{currUser, isLoaded,loginUser,logoutUser, isClubPresident, setIsClubPresident, testDataLoaded, setTestDataLoaded,consoleLogDebug}}>
+    return(<UserContext.Provider value ={{currUser, isLoaded,loginUser,logoutUser, isClubPresident, setIsClubPresident, testDataLoaded, setTestDataLoaded, consoleLogDebug, currClubID, setCurrClubID}}>
         {children}
     </UserContext.Provider>)
 }

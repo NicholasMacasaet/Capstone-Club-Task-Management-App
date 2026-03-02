@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useFetcher, useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { useUserContext, type Task } from "../../contexts/UserContext"
 import { testTasks, testTasks2 } from "../../assets/test_data"
 import { retrieveAssigners } from "../../misc_utils/retrieve_assigner"
+import { retrieveAndParseTestTasks, setTestTasks } from "../../demo_utils/getters_and_setters"
 // import { File } from "buffer"
 
 export const TaskEditing = () => {
@@ -15,19 +16,31 @@ export const TaskEditing = () => {
 
     const {currUser, isLoaded}  = useUserContext()
 
+    const [loadedTasks, setLoadedTasks] = useState<Task[]>([])
+
     const [currTask, setCurrTask] = useState<Task>()
 
-    const retrieveTaskInfo = async (id:string) => {
-        try{
-            //TODO: replace with an actual api call here 
-            testTasks.concat(testTasks2).map(task=>{
-                if (id && task.task_id === parseInt(id,10)){
-                    setCurrTask(task)
-                }
-            })
-        }catch{
-            console.error("something went wrong")
-        }
+    // const retrieveTaskInfo = async (id:string) => {
+    //     try{
+    //         //TODO: replace with an actual api call here 
+    //         testTasks.concat(testTasks2).map(task=>{
+    //             if (id && task.task_id === parseInt(id,10)){
+    //                 setCurrTask(task)
+    //             }
+    //         })
+    //     }catch{
+    //         console.error("something went wrong")
+    //     }
+    // }
+
+    const demoRetrieveTaskInfo = (id:string) => {
+        const tasks: Task[] = retrieveAndParseTestTasks()
+        tasks.map(task=>{
+            if (id && task.task_id === parseInt(id,10)){
+                setCurrTask(task)
+            }
+        })
+        setLoadedTasks(tasks)
     }
 
     useEffect(()=>{
@@ -36,7 +49,7 @@ export const TaskEditing = () => {
         }
 
         if (id){
-            retrieveTaskInfo(id)
+            demoRetrieveTaskInfo(id)
         }
     },[isLoaded])
 
@@ -49,6 +62,7 @@ export const TaskEditing = () => {
             }
             setTaskName(currTask.task_name)
             setAssigner(assigner_username)
+            setTaskDate(currTask.due_date)
             setDescription(currTask.description)
         }
     },[currTask])
@@ -64,7 +78,7 @@ export const TaskEditing = () => {
     //how do you track file attachments in react? TODO: look into this later
     const [attachments, setAttachments] = useState<File[] | null>(null)
 
-    // const [associatedEvent, setAssociatedEvent] = useState("None")
+    const [taskDate, setTaskDate] = useState("")
 
     const [description,setDescription] = useState("")
 
@@ -77,14 +91,15 @@ export const TaskEditing = () => {
         setAssignee(e.target.value);
     }
 
-    // const handleEventChange = (e: React.ChangeEvent<HTMLSelectElement>) => { 
-    //     setAssociatedEvent(e.target.value);
-    // }
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (currTask){
+            setCurrTask({...currTask, due_date: e.target.value})
+        }
+    }
 
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setDescription(e.target.value);
     }
-
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -101,6 +116,33 @@ export const TaskEditing = () => {
             setAttachments(newFiles);
         }
     }
+
+    const demoUpdateTaskWhenLiterallyAnythingHappens = () => {
+        if (currTask){
+            const updatedTask: Task = {
+                ...currTask,
+                task_name: taskName,
+                due_date: taskDate,
+                description: description,
+                attachments: attachments
+            }
+            setCurrTask(updatedTask)
+
+            //update the loaded tasks array as well to reflect changes in the dashboard
+            let updatedTasks = loadedTasks.map(task=>{
+                if (task.task_id === currTask.task_id){
+                    return updatedTask
+                }
+                return task
+            })
+            setLoadedTasks(updatedTasks)
+            setTestTasks(updatedTasks)
+        }
+    }
+
+    useEffect(()=>{
+        demoUpdateTaskWhenLiterallyAnythingHappens()
+    },[taskName, taskDate, description, attachments])
 
     return(<>
         {currTask !== undefined &&
@@ -147,6 +189,11 @@ export const TaskEditing = () => {
                     <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
                         <label className="sm:self-center self-start text-xl" htmlFor="task_name">Assigner:</label>
                         <p className="sm:self-center self-start text-xl">{assigner}</p>
+                    </div>
+
+                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
+                        <label className="sm:self-center self-start text-xl" htmlFor="date">Date:</label>
+                        <input className="form_input sm:ml-2 rounded-xl p-1" type="date" id="task_name" name="task_name" required value={taskDate} onChange={handleDateChange}/>
                     </div>
 
                     <div className="form_group flex p-1 w-full flex-col justify-center sm:justify-start self-start mt-4">
