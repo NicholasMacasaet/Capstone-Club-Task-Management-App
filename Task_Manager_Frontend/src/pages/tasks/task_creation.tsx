@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { useUserContext, type ClubMembership, type Task, type TaskAssignment, type user } from "../../contexts/UserContext"
-import { clubMemberships } from "../../assets/test_data"
+import { retrieveAndParseCurrClubID, retrieveAndParseCurrUser, retrieveAndParseTestClubMemberships, retrieveAndParseTestTaskAssignments, retrieveAndParseTestTasks, retrieveAndParseTestUsers } from "../../demo_utils/getters_and_setters"
 // import { File } from "buffer"
 
 export const TaskCreation = () => {
@@ -23,45 +22,27 @@ export const TaskCreation = () => {
     },[isLoaded])
  
     const loadFromCache = ()=>{
-        const raw_users_data: string | null = localStorage.getItem("test_users")
-        const raw_club_membership_data: string| null = localStorage.getItem("test_club_memberships")
-        const raw_task_data: string | null = localStorage.getItem("total_test_tasks")
+        const loaded_user_data: user[] = retrieveAndParseTestUsers()
+        const loaded_club_membership_data: ClubMembership[] = retrieveAndParseTestClubMemberships()
+        const loaded_tasks: Task[] = retrieveAndParseTestTasks()
+        const loaded_task_assignments: TaskAssignment[] = retrieveAndParseTestTaskAssignments()
+        const loaded_curr_club_id: number | null = retrieveAndParseCurrClubID()
+        const loaded_curr_user: user | null = retrieveAndParseCurrUser()
 
-        const raw_task_assignment_data: string | null = localStorage.getItem("test_task_assignments")
+        if (loaded_user_data.length > 0 && 
+            loaded_club_membership_data.length > 0 && 
+            loaded_tasks.length > 0 && 
+            loaded_task_assignments.length > 0 && 
+            loaded_curr_club_id !== null && 
+            loaded_curr_user !== null){
 
-        const curr_club_id: string | null = localStorage.getItem("curr_club_id")
-        const curr_user: string | null = localStorage.getItem("curr_user")
 
-        let loaded_users: user[] = []
-        let loaded_memberships: ClubMembership[] = []
-        let loaded_curr_club_id: number = 0
-        let loaded_tasks_from_db: Task[] = []
-        let loaded_task_assignments: TaskAssignment[] = []
-        
-        if (raw_users_data !== null && 
-            raw_club_membership_data !== null &&
-            curr_club_id !==null &&
-            curr_user!==null && 
-            raw_task_data && 
-            raw_task_assignment_data !== null) {
-
-            loaded_tasks_from_db = JSON.parse(raw_task_data)
-            loaded_task_assignments = JSON.parse(raw_task_assignment_data)
-
-            loaded_memberships = JSON.parse(raw_club_membership_data)   
-            loaded_users = JSON.parse(raw_users_data)
-            loaded_curr_club_id = JSON.parse(curr_club_id)
-            const loaded_curr_user: user = JSON.parse(curr_user)
-
-            //filter out users that dont belong to this club
-            let filtered_users: user[] = []
-
-            filtered_users = loaded_users.filter(user=>{
+            let filtered_users = loaded_user_data.filter(user=>{
                 if (user.user_id === loaded_curr_user.user_id){
                     return false
                 }
                 else{
-                    const foundMembership: ClubMembership | undefined = loaded_memberships.find(membership=> membership.user_id === user.user_id && membership.club_id === loaded_curr_club_id) 
+                    const foundMembership: ClubMembership | undefined = loaded_club_membership_data.find(membership=> membership.user_id === user.user_id && membership.club_id === loaded_curr_club_id) 
                     if (foundMembership){
                         return true
                     }
@@ -71,18 +52,76 @@ export const TaskCreation = () => {
                 }
             })
 
-            // console.log(`filtered_users: ${JSON.stringify(filtered_users,null,2)}`)
-            // console.log(`memberships: ${JSON.stringify(loaded_memberships,null,2)}`)
-            console.log(`currClubID: ${loaded_curr_club_id}`)
-            console.log(`currUser: ${JSON.stringify(loaded_curr_user,null,2)}`)
-            console.log(`loaded tasks: ${JSON.stringify(loaded_tasks_from_db, null, 2)}`)
-            // console.log(`loaded task assignments: ${JSON.stringify(loadedTaskAssignments, null, 2)}`)
-            setLoadedTasks(loaded_tasks_from_db)
+            setAssigneeArray(filtered_users)
+            //---do i need these double check later---
+            setLoadedTasks(loaded_tasks)
             setLoadedTaskAssignments(loaded_task_assignments)
+            //----------------------------------------
             setCurrUser(loaded_curr_user)
             setCurrClubID(loaded_curr_club_id)
-            setAssigneeArray(filtered_users)
         }
+
+
+        // const raw_users_data: string | null = localStorage.getItem("test_users")
+        // const raw_club_membership_data: string| null = localStorage.getItem("test_club_memberships")
+        // const raw_task_data: string | null = localStorage.getItem("total_test_tasks")
+
+        // const raw_task_assignment_data: string | null = localStorage.getItem("test_task_assignments")
+
+        // const curr_club_id: string | null = localStorage.getItem("curr_club_id")
+        // const curr_user: string | null = localStorage.getItem("curr_user")
+
+        // let loaded_users: user[] = []
+        // let loaded_memberships: ClubMembership[] = []
+        // let loaded_curr_club_id: number = 0
+        // let loaded_tasks_from_db: Task[] = []
+        // let loaded_task_assignments: TaskAssignment[] = []
+        
+        // if (raw_users_data !== null && 
+        //     raw_club_membership_data !== null &&
+        //     curr_club_id !==null &&
+        //     curr_user!==null && 
+        //     raw_task_data && 
+        //     raw_task_assignment_data !== null) {
+
+        //     loaded_tasks_from_db = JSON.parse(raw_task_data)
+        //     loaded_task_assignments = JSON.parse(raw_task_assignment_data)
+
+        //     loaded_memberships = JSON.parse(raw_club_membership_data)   
+        //     loaded_users = JSON.parse(raw_users_data)
+        //     loaded_curr_club_id = JSON.parse(curr_club_id)
+        //     const loaded_curr_user: user = JSON.parse(curr_user)
+
+        //     //filter out users that don't belong to this club
+        //     let filtered_users: user[] = []
+
+        //     filtered_users = loaded_users.filter(user=>{
+        //         if (user.user_id === loaded_curr_user.user_id){
+        //             return false
+        //         }
+        //         else{
+        //             const foundMembership: ClubMembership | undefined = loaded_memberships.find(membership=> membership.user_id === user.user_id && membership.club_id === loaded_curr_club_id) 
+        //             if (foundMembership){
+        //                 return true
+        //             }
+        //             else{
+        //                 return false
+        //             }
+        //         }
+        //     })
+
+        //     // console.log(`filtered_users: ${JSON.stringify(filtered_users,null,2)}`)
+        //     // console.log(`memberships: ${JSON.stringify(loaded_memberships,null,2)}`)
+        //     console.log(`currClubID: ${loaded_curr_club_id}`)
+        //     console.log(`currUser: ${JSON.stringify(loaded_curr_user,null,2)}`)
+        //     console.log(`loaded tasks: ${JSON.stringify(loaded_tasks_from_db, null, 2)}`)
+        //     // console.log(`loaded task assignments: ${JSON.stringify(loadedTaskAssignments, null, 2)}`)
+        //     setLoadedTasks(loaded_tasks_from_db)
+        //     setLoadedTaskAssignments(loaded_task_assignments)
+        //     setCurrUser(loaded_curr_user)
+        //     setCurrClubID(loaded_curr_club_id)
+        //     setAssigneeArray(filtered_users)
+        // }
     }
 
     //replace with a backend call later
@@ -166,6 +205,7 @@ export const TaskCreation = () => {
                 club_id: currClubID,
                 due_date: packaged_data.due_date,
                 task_name: packaged_data.task_name,
+                attachments: packaged_data.attachments,
                 description: packaged_data.description
             }
 
@@ -174,6 +214,7 @@ export const TaskCreation = () => {
                 assignee: parseInt(packaged_data.assignee,10),
                 task_id: testTask.task_id,
                 //auto accept task if its us
+                status: currUser.user_id === parseInt(packaged_data.assignee,10)? "To-Do": "Needs Acceptance",
                 accepted: currUser.user_id === parseInt(packaged_data.assignee,10)? true: false,
             }
 

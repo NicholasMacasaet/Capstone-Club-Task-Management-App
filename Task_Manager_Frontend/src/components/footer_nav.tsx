@@ -5,6 +5,7 @@ import type { Club } from "../contexts/UserContext"
 import { BASEURL } from "../../api/ constants"
 import { useNavigate } from "react-router-dom"
 import { useUserContext} from "../contexts/UserContext"
+import { setCurrClubIDLocalStorage } from "../demo_utils/getters_and_setters"
 
 
 export const FooterNav = () => {
@@ -39,8 +40,8 @@ export const FooterNav = () => {
 
     const switchClub = (idToSwitchTo: number) =>{
         
-        localStorage.setItem("curr_club_id", JSON.stringify(idToSwitchTo))
-
+        // localStorage.setItem("curr_club_id", JSON.stringify(idToSwitchTo))
+        setCurrClubIDLocalStorage(idToSwitchTo)
         console.log("test")
         navigate(`/club/home/${idToSwitchTo}`)
     }

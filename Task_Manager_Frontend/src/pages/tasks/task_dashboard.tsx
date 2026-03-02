@@ -6,6 +6,7 @@ import { useUserContext } from "../../contexts/UserContext"
 import { retrieveAssigners } from "../../misc_utils/retrieve_assigner"
 import { FooterNav } from "../../components/footer_nav"
 import editIcon from "../../assets/edit-button-svgrepo-com.svg" 
+import { retrieveAndParseCurrUser, retrieveAndParseTestClubs, retrieveAndParseTestTaskAssignments, retrieveAndParseTestTasks, setTestTaskAssignments } from "../../demo_utils/getters_and_setters"
 
 export const TaskDashboard = () => {
 
@@ -15,13 +16,18 @@ export const TaskDashboard = () => {
 
     const {isLoaded, testDataLoaded, consoleLogDebug} = useUserContext()
 
+    const [currUser, setCurrUser] = useState<user>()
+    
     const [loadedTasks, setLoadedTasks] = useState<Task[]>([])
 
     const [filteredTasksToView, setFilteredTasksToView] = useState<Task[]>([])
 
+    //demo code 
     const [loadedTaskAssignments, setLoadedTaskAssignments] = useState<TaskAssignment[]>([])
 
     const [loadedClubs, setLoadedClubs] = useState<Club[]>([])
+    //end demo setters
+    
 
     useEffect(() => {
         //trivial check to see if they're logged in or not 
@@ -48,39 +54,25 @@ export const TaskDashboard = () => {
      */
     const loadFromCache = () => {
 
-        const raw_task_data: string | null = localStorage.getItem("total_test_tasks")
+        const task_data: Task[] = retrieveAndParseTestTasks()
+        const club_data: Club[] = retrieveAndParseTestClubs()
+        const task_assignment_data: TaskAssignment[] = retrieveAndParseTestTaskAssignments()
+        const curr_user: user | null= retrieveAndParseCurrUser()
 
+        if (task_data.length > 0){
+            setLoadedTasks(task_data)
+        }
 
-        const raw_task_assignment_data: string | null = localStorage.getItem("test_task_assignments")
-        const raw_club_data: string | null = localStorage.getItem("test_clubs")
+        if (club_data.length > 0){
+            setLoadedClubs(club_data)
+        }
 
-        let loaded_tasks_from_db: Task[] = []
-        let loaded_task_assignments: TaskAssignment[] = []
-        let loaded_clubs: Club[] = []
+        if (task_assignment_data.length > 0){
+            setLoadedTaskAssignments(task_assignment_data)
+        }
 
-        if (raw_task_data && 
-            raw_task_assignment_data !== null &&
-            raw_club_data !== null) {
-
-            loaded_tasks_from_db = JSON.parse(raw_task_data)
-            // loaded_tasks_from_db = loaded_tasks_from_db.concat(JSON.parse(raw_task_data_org_2))
-
-            loaded_task_assignments = JSON.parse(raw_task_assignment_data)
-
-            loaded_clubs = JSON.parse(raw_club_data)
-           
-            setLoadedTasks(loaded_tasks_from_db)
-            setLoadedTaskAssignments(loaded_task_assignments)
-            setLoadedClubs(loaded_clubs)
-            
-            localStorage.setItem("curr_club_id", JSON.stringify(loaded_clubs[0].club_id))
-
-            if (consoleLogDebug){
-                console.log(`tasks loaded from "db": ${JSON.stringify(loaded_tasks_from_db,null,2)}`)
-                console.log(`loaded assignments loaded from "db": ${JSON.stringify(loaded_task_assignments,null,2)}`)
-                console.log(`loaded clubs from "db": ${JSON.stringify(loaded_clubs,null,2)}`)
-            }
-
+        if (curr_user !== null){
+            setCurrUser(curr_user)
         }
     }
 
@@ -92,6 +84,47 @@ export const TaskDashboard = () => {
 
     }, [testDataLoaded])
 
+    const demoAcceptTask = (task_id: number) => {
+        //replace with actual api call to update the task assignment to accepted in the database
+
+        console.log("previous task assignments: ", JSON.stringify(loadedTaskAssignments, null, 2))
+        let updatedTaskAssignments: TaskAssignment[] = []
+         loadedTaskAssignments.map(assignment => {
+            const currAssignment:TaskAssignment = {...assignment}
+            if (currAssignment.task_id === task_id && currAssignment.assignee === currUser?.user_id){
+                currAssignment.accepted = true
+                currAssignment.status = "to-do"
+            }
+            updatedTaskAssignments.push(currAssignment)
+        })
+        setLoadedTaskAssignments(updatedTaskAssignments)
+        setTestTaskAssignments(updatedTaskAssignments)
+    }
+
+    const demoUpdateTaskStatus = (task_id: number, new_status: string) => {
+        //replace with actual api call to update the task assignment status in the database
+
+        let updatedTaskAssignments: TaskAssignment[] = []
+         loadedTaskAssignments.map(assignment => {
+            const currAssignment:TaskAssignment = {...assignment}
+            if (currAssignment.task_id === task_id && currAssignment.assignee === currUser?.user_id){
+                currAssignment.status = new_status
+            }
+            updatedTaskAssignments.push(currAssignment)
+        })
+        setLoadedTaskAssignments(updatedTaskAssignments)
+        setTestTaskAssignments(updatedTaskAssignments)
+    }
+
+    const demoRetrieveTaskStatus = (task_id: number): string => {
+        let status: string = "To-Do"
+        loadedTaskAssignments.map(assignment => {
+            if (assignment.task_id === task_id && assignment.assignee === currUser?.user_id){
+                status = assignment.status
+            }
+        })
+        return status
+    }
 
     //test data for testing rendering, replace this with actual data later
     //note to self, user_id=1 is our current user 
@@ -171,7 +204,7 @@ export const TaskDashboard = () => {
                             <p className="text-sm sm:text-lg w-full sm:w-1/3 text-left font-bold">{task.task_name}</p>
                             <p className="sm:ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
                             <div className="sm:ml-auto w-fit flex">
-                                <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1">Accept</button>
+                                <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1" onClick={()=>demoAcceptTask(task.task_id)}>Accept</button>
                             
                                 <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded mt-1" onClick={()=>goToTaskEdit(task.task_id)}/>
 
@@ -199,10 +232,10 @@ export const TaskDashboard = () => {
                                 <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
 
                                 <div className="sm:ml-auto flex w-fit items-center">
-                                    <select className="task_accept_select rounded-xl text-sm mr-1">
-                                    <option value="todo">To-Do</option>
-                                    <option value="in_progress">In Progress</option>
-                                    <option value="completed">Completed</option>
+                                    <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>demoUpdateTaskStatus(task.task_id,e.target.value)} value={demoRetrieveTaskStatus(task.task_id)}>
+                                    <option value="To-Do">To-Do</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
                                     </select>
 
                                     <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>

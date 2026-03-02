@@ -2,12 +2,13 @@ import { createContext,useContext,useState,useEffect, type ReactNode } from "rea
 import axios from "axios";
 // import { supabase } from "./SupabaseClient";
 import { testUsers, testTasks, testTasks2, taskAssignments, testClubs, clubMemberships, testTasksTotal} from "../assets/test_data";
+import { setCurrUserLocalStorage, setTestClubMemberships, setTestClubs, setTestTaskAssignments, setTestTasks, setTestUsers } from "../demo_utils/getters_and_setters";
 
 export interface Task {
     task_id: number;
     club_id: number;
     // event_id: number;
-    // attachments:???
+    attachments:File[] | null
     due_date: string;
     task_name:string;
     description: string;
@@ -29,6 +30,7 @@ export interface TaskAssignment {
     assignee: number,
     task_id: number,
     accepted: boolean,
+    status: string, // "to-do", "in progress", "completed"
 }
 
 export interface user {
@@ -110,14 +112,16 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
 
     //DEMO: populate local storage with test data ONCE when the component mounts
     useEffect(()=>{
-        localStorage.setItem("test_users", JSON.stringify(testUsers))
-        localStorage.setItem("total_test_tasks", JSON.stringify(testTasksTotal))
-
-        // localStorage.setItem("test_tasks_org_1", JSON.stringify(testTasks))
-        // localStorage.setItem("test_tasks_org_2", JSON.stringify(testTasks2))
-        localStorage.setItem("test_task_assignments", JSON.stringify(taskAssignments))
-        localStorage.setItem("test_clubs", JSON.stringify(testClubs))
-        localStorage.setItem("test_club_memberships", JSON.stringify(clubMemberships))
+        setTestUsers(testUsers)
+        setTestTasks(testTasksTotal)
+        setTestTaskAssignments(taskAssignments)
+        setTestClubs(testClubs)
+        setTestClubMemberships(clubMemberships)
+        // localStorage.setItem("test_users", JSON.stringify(testUsers))
+        // localStorage.setItem("total_test_tasks", JSON.stringify(testTasksTotal))
+        // localStorage.setItem("test_task_assignments", JSON.stringify(taskAssignments))
+        // localStorage.setItem("test_clubs", JSON.stringify(testClubs))
+        // localStorage.setItem("test_club_memberships", JSON.stringify(clubMemberships))
         setTestDataLoaded(true)
     },[])
 
@@ -156,7 +160,7 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
 
     useEffect(() => {
     if (currUser) {
-      localStorage.setItem('curr_user', JSON.stringify(currUser));
+      setCurrUserLocalStorage(currUser);
     }
     
   }, [currUser]);

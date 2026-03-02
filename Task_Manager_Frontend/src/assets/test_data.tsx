@@ -8,6 +8,7 @@ export const testTasks: Task[] = [
         club_id:1,
         due_date: "2026-12-31",
         task_name: "Do thing 1",
+        attachments: null,
         description:"This is a test description for task 1 "
     },
     {
@@ -15,6 +16,7 @@ export const testTasks: Task[] = [
         club_id:1,
         due_date: "2026-11-30",
         task_name: "Do thing 2",
+        attachments: null,
         description:"This is a test description for task 2"
     },
     {
@@ -22,6 +24,7 @@ export const testTasks: Task[] = [
         club_id:1,
         due_date: "2026-12-31",
         task_name: "Do thing 3",
+        attachments: null,
         description:"This is a test description for task 3"
     },
 ]
@@ -33,6 +36,7 @@ export const testTasks2: Task[] = [
         club_id:2,
         due_date: "1999-12-31",
         task_name: "Do thing 4",
+        attachments: null,
         description:"This is a test description for task 4"
     },
     {
@@ -40,6 +44,7 @@ export const testTasks2: Task[] = [
         club_id:2,
         due_date: "1999-12-31",
         task_name: "Do thing 5",
+        attachments: null,
         description:"This is a test description for task 5"
     },
     {
@@ -47,6 +52,7 @@ export const testTasks2: Task[] = [
         club_id:2,
         due_date: "1999-12-31",
         task_name: "Do thing 6",
+        attachments: null,
         description:"This is a test description for task 6"
     },
 ]
@@ -59,18 +65,21 @@ export const taskAssignments: TaskAssignment[] = [
         assigner: 2,
         assignee: 1,
         task_id: 1,
+        status: "Needs Acceptance",
         accepted: false
     },
     {
         assigner: 2,
         assignee: 1,
         task_id: 2,
+        status: "To-Do",
         accepted: true
     },
     {
         assigner: 2,
         assignee: 1,
         task_id: 3,
+        status: "Needs Acceptance",
         accepted: false
     },
 
@@ -78,18 +87,21 @@ export const taskAssignments: TaskAssignment[] = [
         assigner: 2,
         assignee: 1,
         task_id: 4,
+        status: "To-Do",
         accepted: true
     },
     {
         assigner: 2,
         assignee: 1,
         task_id: 5,
+        status: "To-Do",
         accepted: true
     },
     {
         assigner: 2,
         assignee: 1,
         task_id: 6,
+        status: "To-Do",
         accepted: true
     }
 
