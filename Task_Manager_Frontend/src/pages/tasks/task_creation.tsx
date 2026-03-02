@@ -130,7 +130,7 @@ export const TaskCreation = () => {
     },[testDataLoaded])
 
     const onCancel = ()=>{
-        navigate('/home')
+        navigate('/club/home/${currClubID}/')
     }
 
     const [taskName,setTaskName] = useState("")
@@ -232,6 +232,7 @@ export const TaskCreation = () => {
         console.log("Packaged data for task creation:", packaged_data)
 
         createTestTaskToCache()
+        navigate(`/club/home/${currClubID}/`)
     }
 
 
