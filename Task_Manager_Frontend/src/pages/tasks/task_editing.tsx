@@ -33,7 +33,7 @@ export const TaskEditing = () => {
     //     }
     // }
 
-    const demoRetrieveTaskInfo = (id:string) => {
+    const DEMORetrieveTaskInfo = (id:string) => {
         const tasks: Task[] = retrieveAndParseTestTasks()
         tasks.map(task=>{
             if (id && task.task_id === parseInt(id,10)){
@@ -49,7 +49,7 @@ export const TaskEditing = () => {
         }
 
         if (id){
-            demoRetrieveTaskInfo(id)
+            DEMORetrieveTaskInfo(id)
         }
     },[isLoaded])
 
@@ -117,7 +117,7 @@ export const TaskEditing = () => {
         }
     }
 
-    const demoUpdateTaskWhenLiterallyAnythingHappens = () => {
+    const DEMOUpdateTask = () => {
         if (currTask){
             const updatedTask: Task = {
                 ...currTask,
@@ -141,7 +141,7 @@ export const TaskEditing = () => {
     }
 
     useEffect(()=>{
-        demoUpdateTaskWhenLiterallyAnythingHappens()
+        DEMOUpdateTask()
     },[taskName, taskDate, description, attachments])
 
     return(<>
