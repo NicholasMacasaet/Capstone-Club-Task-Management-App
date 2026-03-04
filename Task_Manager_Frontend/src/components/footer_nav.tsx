@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom"
 import { testClubs, clubMemberships} from "../assets/test_data"
-import { useEffect, useState } from "react"
-import type { Club } from "../contexts/UserContext"
+import { use, useEffect, useState } from "react"
+import type { Club, user } from "../contexts/UserContext"
 import { BASEURL } from "../../api/ constants"
 import { useNavigate } from "react-router-dom"
 import { useUserContext} from "../contexts/UserContext"
-import { setCurrClubIDLocalStorage } from "../demo_utils/getters_and_setters"
+import { retrieveAndParseCurrUser, setCurrClubIDLocalStorage } from "../demo_utils/getters_and_setters"
 
 
 export const FooterNav = () => {
@@ -14,22 +14,33 @@ export const FooterNav = () => {
 
     //retrieve all orgs that the user is a part of, match that with the id in the thing, in the future this will be replaced with an api call to retrieve the clubs and club memberships
     //for now just return an array of the names since we're not sure that if we're going to have pictures in the data
+    const {isLoaded} = useUserContext()
+
+    const [currUser, setCurrUser] = useState<user>()
+
+    useEffect(()=>{
+        const curr_user: user | null = retrieveAndParseCurrUser()
+        if (curr_user){
+            setCurrUser(curr_user)
+        }
+    },[isLoaded])
     
     const [usersClubs, setUsersClubs] = useState<Club[]>([])
 
     useEffect(()=>{
-        setUsersClubs(retrieveUsersClubs())
-    },[id])
-
-    const test_user_id: number = 1
+        if (currUser){
+            const clubs = retrieveUsersClubs()
+            setUsersClubs(clubs)
+        }
+    },[id,currUser])
 
     const retrieveUsersClubs = () => {
         let clubList: Club[] = []
         if (id){
-            testClubs.map(club=>{
+            testClubs.map(club => {
             //for every club, test to see if there is a membership for user with the id of <id>
             clubMemberships.map(membership=>{
-                if (membership.user_id === test_user_id && membership.club_id === club.club_id){
+                if (membership.user_id === currUser?.user_id && membership.club_id === club.club_id){
                     clubList.push(club)
                 }
             })

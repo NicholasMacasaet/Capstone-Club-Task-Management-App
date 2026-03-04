@@ -6,7 +6,9 @@ import { useUserContext } from "../../contexts/UserContext"
 import { retrieveAssigners } from "../../misc_utils/retrieve_assigner"
 import { FooterNav } from "../../components/footer_nav"
 import editIcon from "../../assets/edit-button-svgrepo-com.svg" 
-import { retrieveAndParseCurrUser, retrieveAndParseTestClubs, retrieveAndParseTestTaskAssignments, retrieveAndParseTestTasks, setTestTaskAssignments } from "../../demo_utils/getters_and_setters"
+import { retrieveAndParseCurrUser, retrieveAndParseTestClubs, retrieveAndParseTestTaskAssignments, retrieveAndParseTestTasks, setCurrUserLocalStorage, setTestTaskAssignments } from "../../demo_utils/getters_and_setters"
+import { testUsers } from "../../assets/test_data"
+import { chronoSortTasks } from "../../misc_utils/chrono_sort_tasks"
 
 export const TaskDashboard = () => {
 
@@ -14,7 +16,7 @@ export const TaskDashboard = () => {
 
     const {id} = useParams()
 
-    const {isLoaded, testDataLoaded, consoleLogDebug} = useUserContext()
+    const {isLoaded, testDataLoaded} = useUserContext()
 
     const [currUser, setCurrUser] = useState<user>()
     
@@ -45,6 +47,7 @@ export const TaskDashboard = () => {
                     filteredTasksList.push(task)
                 }
             })
+            filteredTasksList = chronoSortTasks(filteredTasksList)
             setFilteredTasksToView(filteredTasksList)
         }
     },[isLoaded, id, loadedTasks])
@@ -52,12 +55,12 @@ export const TaskDashboard = () => {
     /**
      * A function for simulating calling/retrieving information from the database by retrieving the test data I've made from localStorage
      */
-    const loadFromCache = () => {
+    const DEMOloadFromCache = () => {
 
         const task_data: Task[] = retrieveAndParseTestTasks()
         const club_data: Club[] = retrieveAndParseTestClubs()
         const task_assignment_data: TaskAssignment[] = retrieveAndParseTestTaskAssignments()
-        const curr_user: user | null= retrieveAndParseCurrUser()
+        const curr_user: user | null = retrieveAndParseCurrUser()
 
         if (task_data.length > 0){
             setLoadedTasks(task_data)
@@ -80,11 +83,11 @@ export const TaskDashboard = () => {
 
         //DEMO: This will be replaced with a function that will actually call the db
         //replace this later with your own function for loading information from your database
-        loadFromCache()
+        DEMOloadFromCache()
 
     }, [testDataLoaded])
 
-    const demoAcceptTask = (task_id: number) => {
+    const DEMOAcceptTask = (task_id: number) => {
         //replace with actual api call to update the task assignment to accepted in the database
 
         console.log("previous task assignments: ", JSON.stringify(loadedTaskAssignments, null, 2))
@@ -101,7 +104,7 @@ export const TaskDashboard = () => {
         setTestTaskAssignments(updatedTaskAssignments)
     }
 
-    const demoUpdateTaskStatus = (task_id: number, new_status: string) => {
+    const DEMOUpdateTaskStatus = (task_id: number, new_status: string) => {
         //replace with actual api call to update the task assignment status in the database
 
         let updatedTaskAssignments: TaskAssignment[] = []
@@ -116,7 +119,7 @@ export const TaskDashboard = () => {
         setTestTaskAssignments(updatedTaskAssignments)
     }
 
-    const demoRetrieveTaskStatus = (task_id: number): string => {
+    const DEMORetrieveTaskStatus = (task_id: number): string => {
         let status: string = "To-Do"
         loadedTaskAssignments.map(assignment => {
             if (assignment.task_id === task_id && assignment.assignee === currUser?.user_id){
@@ -126,10 +129,27 @@ export const TaskDashboard = () => {
         return status
     }
 
+
+    const DEMOSwitchTestUsers = () => {
+        //replace with actual functionality to switch the logged in user in your application
+        let new_user: user|undefined = undefined
+
+        if (currUser?.user_id === 1){
+            new_user= testUsers[1]
+        }
+        else if (currUser?.user_id === 2){
+            new_user = testUsers[0]
+        }
+        
+        if (new_user){
+            setCurrUser(new_user)
+            setCurrUserLocalStorage(new_user)
+        }
+    }
+
     //test data for testing rendering, replace this with actual data later
     //note to self, user_id=1 is our current user 
     //NOTE: REPLACE THIS LATER!!111!!1!1!1
-    const curr_user_id:number = 1
 
     /**
      * retrieve tasks based on accepted status, filters tasks to display to the user if it is assigned to them 
@@ -142,7 +162,7 @@ export const TaskDashboard = () => {
             loadedTaskAssignments.map(assignment => {
                 //found assignment, check if it belongs to curr user
                 if (assignment.task_id === task.task_id ){
-                    if (assignment.assignee === curr_user_id){
+                    if (assignment.assignee === currUser?.user_id){
                         // console.log(`assignment.assignee: ${assignment.assignee}, curr_user_id: ${curr_user_id}`)
                         flag = accepted ? assignment.accepted: !assignment.accepted
                     }
@@ -180,13 +200,25 @@ export const TaskDashboard = () => {
     return(<>
         <div className="w-full h-full flex flex-col justify-start items-center">
             <div className="w-full flex">
-                <Link to="/orgs/landing" className="text-3xl justify-self-start self-start sm:self-center">
+                <Link to="/orgs/landing" className="text-3xl justify-self-start self-start sm:self-center mr-auto">
                         <p>←</p>
                 </Link>
 
                 <h1 className="landing_page_header w-full hidden sm:block justify-self-center">
                     Streamline
                 </h1>
+
+                <div className="h-1/3 w-fit flex flex-col switch_container ml-auto">
+                    <p className="text-xs text-center">
+                        Switch user
+                    </p>
+                    <label className="switch self-center">
+                        <input type="checkbox" onChange={DEMOSwitchTestUsers}>
+                        </input>
+                        <span className="slider round">
+                        </span>
+                    </label>
+                </div>
             </div>
 
             <p className="landing_page_header w-full text-4xl sm:hidden">
@@ -204,7 +236,7 @@ export const TaskDashboard = () => {
                             <p className="text-sm sm:text-lg w-full sm:w-1/3 text-left font-bold">{task.task_name}</p>
                             <p className="sm:ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
                             <div className="sm:ml-auto w-fit flex">
-                                <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1" onClick={()=>demoAcceptTask(task.task_id)}>Accept</button>
+                                <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1" onClick={()=>DEMOAcceptTask(task.task_id)}>Accept</button>
                             
                                 <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded mt-1" onClick={()=>goToTaskEdit(task.task_id)}/>
 
@@ -232,7 +264,7 @@ export const TaskDashboard = () => {
                                 <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
 
                                 <div className="sm:ml-auto flex w-fit items-center">
-                                    <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>demoUpdateTaskStatus(task.task_id,e.target.value)} value={demoRetrieveTaskStatus(task.task_id)}>
+                                    <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>DEMOUpdateTaskStatus(task.task_id,e.target.value)} value={DEMORetrieveTaskStatus(task.task_id)}>
                                     <option value="To-Do">To-Do</option>
                                     <option value="In Progress">In Progress</option>
                                     <option value="Completed">Completed</option>

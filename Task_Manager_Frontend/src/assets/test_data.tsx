@@ -42,7 +42,7 @@ export const testTasks2: Task[] = [
     {
         task_id:5,
         club_id:2,
-        due_date: "1999-12-31",
+        due_date: "1999-12-10",
         task_name: "Do thing 5",
         attachments: null,
         description:"This is a test description for task 5"
@@ -50,7 +50,7 @@ export const testTasks2: Task[] = [
     {
         task_id:6,
         club_id:2,
-        due_date: "1999-12-31",
+        due_date: "1999-12-15",
         task_name: "Do thing 6",
         attachments: null,
         description:"This is a test description for task 6"

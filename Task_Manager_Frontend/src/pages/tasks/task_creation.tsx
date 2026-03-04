@@ -21,7 +21,7 @@ export const TaskCreation = () => {
         }
     },[isLoaded])
  
-    const loadFromCache = ()=>{
+    const DEMOloadFromCache = ()=>{
         const loaded_user_data: user[] = retrieveAndParseTestUsers()
         const loaded_club_membership_data: ClubMembership[] = retrieveAndParseTestClubMemberships()
         const loaded_tasks: Task[] = retrieveAndParseTestTasks()
@@ -60,77 +60,15 @@ export const TaskCreation = () => {
             setCurrUser(loaded_curr_user)
             setCurrClubID(loaded_curr_club_id)
         }
-
-
-        // const raw_users_data: string | null = localStorage.getItem("test_users")
-        // const raw_club_membership_data: string| null = localStorage.getItem("test_club_memberships")
-        // const raw_task_data: string | null = localStorage.getItem("total_test_tasks")
-
-        // const raw_task_assignment_data: string | null = localStorage.getItem("test_task_assignments")
-
-        // const curr_club_id: string | null = localStorage.getItem("curr_club_id")
-        // const curr_user: string | null = localStorage.getItem("curr_user")
-
-        // let loaded_users: user[] = []
-        // let loaded_memberships: ClubMembership[] = []
-        // let loaded_curr_club_id: number = 0
-        // let loaded_tasks_from_db: Task[] = []
-        // let loaded_task_assignments: TaskAssignment[] = []
-        
-        // if (raw_users_data !== null && 
-        //     raw_club_membership_data !== null &&
-        //     curr_club_id !==null &&
-        //     curr_user!==null && 
-        //     raw_task_data && 
-        //     raw_task_assignment_data !== null) {
-
-        //     loaded_tasks_from_db = JSON.parse(raw_task_data)
-        //     loaded_task_assignments = JSON.parse(raw_task_assignment_data)
-
-        //     loaded_memberships = JSON.parse(raw_club_membership_data)   
-        //     loaded_users = JSON.parse(raw_users_data)
-        //     loaded_curr_club_id = JSON.parse(curr_club_id)
-        //     const loaded_curr_user: user = JSON.parse(curr_user)
-
-        //     //filter out users that don't belong to this club
-        //     let filtered_users: user[] = []
-
-        //     filtered_users = loaded_users.filter(user=>{
-        //         if (user.user_id === loaded_curr_user.user_id){
-        //             return false
-        //         }
-        //         else{
-        //             const foundMembership: ClubMembership | undefined = loaded_memberships.find(membership=> membership.user_id === user.user_id && membership.club_id === loaded_curr_club_id) 
-        //             if (foundMembership){
-        //                 return true
-        //             }
-        //             else{
-        //                 return false
-        //             }
-        //         }
-        //     })
-
-        //     // console.log(`filtered_users: ${JSON.stringify(filtered_users,null,2)}`)
-        //     // console.log(`memberships: ${JSON.stringify(loaded_memberships,null,2)}`)
-        //     console.log(`currClubID: ${loaded_curr_club_id}`)
-        //     console.log(`currUser: ${JSON.stringify(loaded_curr_user,null,2)}`)
-        //     console.log(`loaded tasks: ${JSON.stringify(loaded_tasks_from_db, null, 2)}`)
-        //     // console.log(`loaded task assignments: ${JSON.stringify(loadedTaskAssignments, null, 2)}`)
-        //     setLoadedTasks(loaded_tasks_from_db)
-        //     setLoadedTaskAssignments(loaded_task_assignments)
-        //     setCurrUser(loaded_curr_user)
-        //     setCurrClubID(loaded_curr_club_id)
-        //     setAssigneeArray(filtered_users)
-        // }
     }
 
     //replace with a backend call later
     useEffect(() => {
-        loadFromCache()
+        DEMOloadFromCache()
     },[testDataLoaded])
 
     const onCancel = ()=>{
-        navigate('/home')
+        navigate(`/club/home/${currClubID}/`)
     }
 
     const [taskName,setTaskName] = useState("")
@@ -194,10 +132,9 @@ export const TaskCreation = () => {
         description: description,
     }
 
-    const createTestTaskToCache = () => {
+    const DEMOcreateTestTaskToCache = () => {
 
-
-        const randomId = Math.floor(Math.random() * (100 - 4 + 1)) + 4;
+        const randomId = Math.floor(Math.random() * (100 - 6 + 1)) + 6;
 
         if (currUser && currClubID) {
             const testTask: Task = {
@@ -231,7 +168,8 @@ export const TaskCreation = () => {
         event.preventDefault()
         console.log("Packaged data for task creation:", packaged_data)
 
-        createTestTaskToCache()
+        DEMOcreateTestTaskToCache()
+        navigate(`/club/home/${currClubID}/`)
     }
 
 
