@@ -14,7 +14,7 @@ export const testTasks: Task[] = [
     {
         task_id:2,
         club_id:1,
-        due_date: "2026-11-30",
+        due_date: "2026-03-12",
         task_name: "Do thing 2",
         attachments: null,
         description:"This is a test description for task 2"
@@ -22,7 +22,7 @@ export const testTasks: Task[] = [
     {
         task_id:3,
         club_id:1,
-        due_date: "2026-12-31",
+        due_date: "2026-03-12",
         task_name: "Do thing 3",
         attachments: null,
         description:"This is a test description for task 3"
@@ -123,7 +123,6 @@ export const testClubs: Club[] = [
         name: "Test Club 3",
         description: "This is a test club 3"
     }
-
 ]
 
 //1 and 2 are our only users for now
@@ -132,6 +131,7 @@ export const clubMemberships: ClubMembership[] = [
     {
         user_id: 1,
         club_id: 1,
+        //subteam_assignment: finance
     },
     {
         user_id: 1,
