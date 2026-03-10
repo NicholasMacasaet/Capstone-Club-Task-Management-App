@@ -182,16 +182,20 @@ export const TaskCreation = () => {
                         <p>←</p>
                 </Link> */}
 
-                <button className="back_button text-3xl self-start sm:self-center sm:mr-auto" onClick={()=>navigate(-1)}>
+                {/* <button className="back_button text-3xl self-start sm:self-center sm:mr-auto" onClick={()=>navigate(-1)}>
                     ←
+                </button> */}
+
+                <button className="text-3xl flex items-center side-item justify-center white_text new_back_button rounded-full" onClick={()=>navigate(-1)}>
+                    <p>&lt;</p>
                 </button>
 
-                <h1 className="landing_page_header w-full hidden sm:block ">
+                <h1 className="landing_page_header w-full hidden sm:block white_text">
                     Create New Task
                 </h1>
             </div>
 
-            <p className="landing_page_header w-full text-4xl sm:hidden">
+            <p className="landing_page_header w-full text-4xl sm:hidden white_text">
                Create New Task
             </p>
 

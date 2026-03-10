@@ -14,6 +14,16 @@
   --olive_but_not_gross: #8fa091;
   --mint_green_2:	#8dc1aa;
   --desaturated_blue: #cce4e4;
+
+  /*new colors*/
+  --dark-teal: #244c4d;
+  --off_white: #FAF9F6;
+
+  --header-white: #f0f0f1;
+  --off-er-white: #f3f4f6;
+
+  --needs_attention: #f5ecec;
+  --to_be_accepted: #edf1ed;
 }
 
 .background {
@@ -27,11 +37,21 @@
   text-align: center;
   width: 100vw;
   height: 100vh;
-  background-color: var(--mint_green);
+  /* background-color: var(--mint_green); */
+  background-color: var(--dark-teal);
 }
 
 .landing_page_header {
   color: var(--43504F);
+  /* font-size: 2rem; */
+}
+
+.left_offset{
+  margin-left: 12.5%;
+}
+
+.white_text {
+  color: var(--really_light_grey)!important;
 }
 
 .landing_buttons {
@@ -53,6 +73,14 @@
   font-size: xx-large;
 }
 
+.new_back_button{
+  border: 2px solid white;
+  width: 50px!important;
+  height: 50px!important;
+  background-color: rgba(128, 128, 128, 0.5);
+  padding: 0;
+}
+
 .landing_buttons:hover {
   border-color: lightblue;
 }
@@ -65,7 +93,7 @@
 
 .login_form_desktop_wrapper {
   border: 2px solid var(--midnight_green);
-  background-color: var(--mint_green_2)
+  background-color: var(--off_white)
 }
 
 .form_group {
@@ -173,20 +201,53 @@ input[type="file"] {
 
 .dashboard_wrapper {
   border: 2px solid var(--midnight_green);
-  background-color: var(--mint_green_2)
+  background-color: var(--off_white)
 } 
 
-.accept_container {
-  border-top: 2px solid var(--midnight_green);
-  border-bottom: 2px solid var(--midnight_green);
+.section_header{
+  background-color: var(--header-white);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.section_body{
+  background-color: #f3f4f6;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.round_bottom_on_empty{
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+
+/* .accept_container {
+    border-top: 2px solid var(--midnight_green);
+    border-bottom: 2px solid var(--midnight_green);
+
+} */
+
+.needs_attention_container {
+  drop-shadow: 0 0 5px #945453;
 
 }
 
+/* .completed_tasks_container{
+  border-top: 2px solid var(--midnight_green);
+  border-bottom: 2px solid var(--midnight_green);
+} */
+
 .unaccepted_task_item {
-  border: 2px solid var(--midnight_green);
-  background-color: var(--desaturated_blue);
-  margin: 5px;
-  padding: 5px;
+  /* border: 2px solid var(--midnight_green); */
+  background-color: var(--off-er-white);
+  max-width: 800px!important;
+  width: 100%;
+}
+
+
+.task_item_border_bottom {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.5);
 }
 
 .task_accept_button {
@@ -195,10 +256,11 @@ input[type="file"] {
 }
 
 .task_accept_small {
-  background: var(--mint_green_2);
+  background: var(--off_white);
   border: 2px solid var(--midnight_green);
-  height: 25px;
-  width: fit-content;
+  height: 25px!important;
+  width: 25px!important;
+  padding: 0;
 }
 
 .task_view{
@@ -208,7 +270,7 @@ input[type="file"] {
 }
 
 .task_accept_select {
-  background: var(--mint_green_2);
+  background: var(--off_white);
   border: 2px solid var(--midnight_green);
 }
 
@@ -223,7 +285,7 @@ input[type="file"] {
 
 .task_creation_form_wrapper {
   border: 2px solid var(--midnight_green);
-  background-color: var(--mint_green_2)
+  background-color: var(--off_white)
 }
 
 .attachments_wrapper {
@@ -321,6 +383,39 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+.side-item {
+  width: 60px!important;
+}
+
+.welcome_user {
+  margin-left: 12.5%;
+}
+
+.landing_block {
+  background-color: var(--mint_green_2);
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.needs_attention {
+  background: var(--needs_attention);
+  color: #945453;
+  border: 2px solid #945453;
+}
+
+.to_be_accepted {
+  background: var(--to_be_accepted);
+  color: #5d7250;
+  border: 2px solid #5d7250;
+}
+
+.task_create_button_updated {
+  background: var(--dark-teal)
+}
 /* .logo {
   height: 6em;
   padding: 1.5em;

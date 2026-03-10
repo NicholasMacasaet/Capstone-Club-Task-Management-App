@@ -129,12 +129,12 @@ export const Register = () => {
                 <Link to="/" className="text-3xl justify-self-start self-start sm:self-center">
                     <p>←</p>
                 </Link>
-                <h1 className="landing_page_header w-full hidden sm:block justify-self-center">
+                <h1 className="landing_page_header w-full hidden sm:block justify-self-center white_text">
                     Register for Streamline
                 </h1>
             </div>
 
-            <p className="landing_page_header w-full text-4xl sm:hidden">
+            <p className="landing_page_header w-full text-4xl sm:hidden white_text">
                 Register for Streamline
             </p>
 

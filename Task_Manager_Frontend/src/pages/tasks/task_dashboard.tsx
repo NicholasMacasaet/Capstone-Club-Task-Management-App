@@ -24,12 +24,15 @@ export const TaskDashboard = () => {
 
     const [filteredTasksToView, setFilteredTasksToView] = useState<Task[]>([])
 
+    const [needsAttentionTasks, setNeedsAttentionTasks] = useState<Task[]>([])
+
+    const [completedTasks, setCompletedTasks] = useState<Task[]>([])
+
     //demo code 
     const [loadedTaskAssignments, setLoadedTaskAssignments] = useState<TaskAssignment[]>([])
 
     const [loadedClubs, setLoadedClubs] = useState<Club[]>([])
     //end demo setters
-    
 
     useEffect(() => {
         //trivial check to see if they're logged in or not 
@@ -42,12 +45,44 @@ export const TaskDashboard = () => {
             //replace with an actual backend call for tasks 
             let filteredTasksList: Task[] = []
             //filter by the specific clubs tasks
+
+            let completedTasksList: Task[] = []
             loadedTasks.map(task => {
                 if (id && (task.club_id === parseInt(id,10))){
-                    filteredTasksList.push(task)
+                    //check status, if its completed add to completed list, if not add to filtered tasks list 
+                    loadedTaskAssignments.map(assignment => {
+                        if (assignment.task_id === task.task_id && assignment.assignee === currUser?.user_id){
+                            if (assignment.status === "Completed"){
+                                completedTasks.push(task)
+                            }
+                            else{
+                                filteredTasksList.push(task)
+                            }
+                        }
+                    })
                 }
             })
+            
+            setCompletedTasks(completedTasksList)
+            console.log("completed tasks: ", JSON.stringify(completedTasks, null, 2))
+
             filteredTasksList = chronoSortTasks(filteredTasksList)
+            //filter tasks due within 3 days and not completed, add those to a separate list for tasks that need attention
+            let needsAttentionList: Task[] = []
+            const today = new Date()
+            filteredTasksList.map(task => {
+                const dueDate = new Date(task.due_date)
+                const timeDiff = dueDate.getTime() - today.getTime()
+                const dayDiff = timeDiff / (1000 * 3600 * 24)
+
+                if (dayDiff <= 3 && dayDiff >= 0){
+                    needsAttentionList.push(task)
+                }
+            })
+
+            console.log("Tasks that need attention: ", JSON.stringify(needsAttentionList, null, 2))
+
+            setNeedsAttentionTasks(needsAttentionList)
             setFilteredTasksToView(filteredTasksList)
         }
     },[isLoaded, id, loadedTasks])
@@ -108,13 +143,40 @@ export const TaskDashboard = () => {
         //replace with actual api call to update the task assignment status in the database
 
         let updatedTaskAssignments: TaskAssignment[] = []
-         loadedTaskAssignments.map(assignment => {
+        let updatedCompletedTasks: Task[] = []
+        let updatedFilteredTasks: Task[] = []
+        let updatedNeedsAttentionTasks: Task[] = []
+
+        loadedTaskAssignments.map(assignment => {
             const currAssignment:TaskAssignment = {...assignment}
             if (currAssignment.task_id === task_id && currAssignment.assignee === currUser?.user_id){
                 currAssignment.status = new_status
+                if (new_status === "Completed"){
+                    //find the task that was completed and add it to the completed tasks list 
+                    const completedTask = loadedTasks.find(task => task.task_id === task_id)
+                    if (completedTask){
+                        updatedCompletedTasks.push(completedTask)
+                        //also remove it from the filtered tasks list
+                        filteredTasksToView.map(task => {
+                            if (task.task_id !== task_id){
+                                updatedFilteredTasks.push(task)
+                            }
+                        })
+
+                        //and finally remove it from the needs attention list if its there
+                        needsAttentionTasks.map(task => {
+                            if (task.task_id !== task_id){
+                                updatedNeedsAttentionTasks.push(task)
+                            }
+                        })
+                    }
+                }
             }
             updatedTaskAssignments.push(currAssignment)
         })
+        setFilteredTasksToView(updatedFilteredTasks)
+        setCompletedTasks(prev => [...prev, ...updatedCompletedTasks])
+        setNeedsAttentionTasks(updatedNeedsAttentionTasks)
         setLoadedTaskAssignments(updatedTaskAssignments)
         setTestTaskAssignments(updatedTaskAssignments)
     }
@@ -196,8 +258,256 @@ export const TaskDashboard = () => {
     const goToTaskEdit = (id:number)=>{
         navigate(`/tasks/task_view/${id}/`)
     }
+
+
+    const [expandAttentionSection, setExpandAttentionSection] = useState<boolean>(false)
+
+    const attentionTasksToShow = expandAttentionSection
+    ? needsAttentionTasks
+    : needsAttentionTasks.slice(0, 1);
+
+    const [expandAcceptSection, setExpandAcceptSection] = useState<boolean>(false)
+
+    const acceptTasksToShow = expandAcceptSection
+    ? tasks(false)
+    : tasks(false).slice(0, 1);
+    
+    const [expandCurrentSection, setExpandCurrentSection] = useState<boolean>(false)
+
+    const currentTasksToShow = expandCurrentSection
+    ? tasks(true)
+    : tasks(true).slice(0, 1);
+
+    const [expandCompletedSection, setExpandCompletedSection] = useState<boolean>(false)
+
+    const completedTasksToShow = expandCompletedSection 
+    ? completedTasks
+    : completedTasks.slice(0, 1)
+    
+
     
     return(<>
+
+        <div className="w-full h-full flex flex-col justify-start items-center">
+            <div className="w-full flex">
+                <Link to="/orgs/landing" className="text-3xl flex items-center side-item justify-center white_text new_back_button rounded-full">
+                        <p>&lt;</p>
+                </Link>
+
+                <h1 className="landing_page_header w-full hidden sm:block justify-self-center flex items-center justify-center white_text">
+                    Streamline
+                </h1>
+
+                <p className="landing_page_header w-full block sm:hidden justify-self-center text-3xl flex items-center justify-center white_text">
+                    Streamline
+                </p>
+
+                <div className="h-1/3 flex flex-col switch_container side-item">
+                    <p className="text-xs text-center white_text">
+                        Switch user
+                    </p>
+                    <label className="switch self-center">
+                        <input type="checkbox" onChange={DEMOSwitchTestUsers}>
+                        </input>
+                        <span className="slider round">
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            {/* <p className="landing_page_header w-full text-3xl sm:hidden">
+               Streamline
+            </p> */}
+
+            <p className="text-lg sm:text-2xl welcome_user self-start mt-2 white_text hidden sm:block">Welcome {currUser?.username || "User"}</p>
+
+            <p className="text-lg sm:text-2xl self-start mt-2 white_text block sm:hidden">Welcome {currUser?.username || "User"}</p>
+
+            <div className="dashboard_wrapper h-full sm:h-7/8 w-full sm:w-3/4 flex justify-start rounded-4xl flex-col mt-4 overflow-y-scroll">
+                <p className="text-lg sm:text-2xl">My Tasks for {retrieveClubInfo()}</p>
+
+                <div className="block-row w-full h-fit flex flex-row mt-4 justify-center">
+                    <div className="landing_block rounded-xl flex flex-col needs_attention mr-5">
+                        <p>{needsAttentionTasks.length}</p>
+                        <p className="text-md">Needs Attention</p>
+                        
+                    </div>
+
+                    <div className="landing_block rounded-xl flex flex-col to_be_accepted">
+                        <p>{tasks(false).length}</p>
+                        <p className="text-md">To Be Accepted</p>
+                    </div>
+
+                    <div className="landing_block rounded-xl flex flex-col task_create_button_updated text-white ml-5" onClick={goToTaskCreation}>
+                        <p>+</p>
+                        <p>Task</p>
+                    </div>
+                </div>
+
+                <div className="needs_attention_container w-7/8 h-fit max-h-1/4 flex flex-col mt-4 self-center drop-shadow-lg"> 
+                    
+                    <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandAttentionSection(prev=>!prev)}> 
+                        <p className="ml-3">Needs Attention</p>
+
+                        <svg
+                            className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
+                                expandAttentionSection ? 'rotate-180' : ''
+                            }`}
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+
+                    <div className={"w-full h-full overflow-x-scroll flex flex-col items-center section_body" + (needsAttentionTasks.length === 0 ? " round_bottom_on_empty":"")}>
+                        {attentionTasksToShow.map((task,index)=>(
+                            <div className={`unaccepted_task_item w-full h-fit flex flex-col sm:flex-row justify-between sm:justify-start items-center mb-2 ${index !== needsAttentionTasks.length - 1 ? 'task_item_border_bottom' : ''}`}>
+                                <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start ml-3">
+                                    <p className="text-sm sm:text-lg font-bold">{task.task_name}</p>
+                                    <p className="text-xs sm:text-sm">By: {task.due_date}</p>
+                                </div>
+                                {/* <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p> */}
+
+                                <div className="sm:ml-auto flex w-fit items-center">
+                                    {/* <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>DEMOUpdateTaskStatus(task.task_id,e.target.value)} value={DEMORetrieveTaskStatus(task.task_id)}>
+                                    <option value="To-Do">To-Do</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                    </select> */}
+
+                                    <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>
+                                </div>
+                                
+                            </div>
+                        ))
+                        }
+                    </div>
+                </div>
+
+
+                <div className="accept_container w-7/8 h-fit flex flex-col mt-4 self-center drop-shadow-lg" onClick={()=>setExpandAcceptSection(prev=>!prev)}>
+                    <div className="text-xl self-start mt-1 w-full flex section_header"> 
+                        <p className="ml-3">Tasks to Accept</p>
+
+                        <svg
+                            className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
+                                expandAcceptSection ? 'rotate-180' : ''
+                            }`}
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+
+                    <div className={"w-full h-fit flex flex-col items-center section_body" + (tasks(false).length === 0 ? " round_bottom_on_empty":"")}>
+                    {acceptTasksToShow.map((task,index)=>(
+                        <div className={`unaccepted_task_item h-fit flex flex-row items-center justify-between mb-2 ${index !== tasks(false).length - 1 ? 'task_item_border_bottom' : ''}`}>
+                            <div className="flex flex-col w-fit">
+                                <p className="ml-3 text-sm sm:text-lg w-full text-left font-bold">{task.task_name}</p>
+                                <p className="ml-3 text-xs sm:text-sm w-full text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
+                            </div>
+
+                            <div className="sm:ml-auto w-fit flex">
+
+                                <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1 text-red-500" onClick={()=>DEMOAcceptTask(task.task_id)}>x</button>
+
+                                <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1 text-emerald-500" onClick={()=>DEMOAcceptTask(task.task_id)}>✓</button>
+
+                                
+                            
+                                <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded mt-1" onClick={()=>goToTaskEdit(task.task_id)}/>
+
+                            </div>
+                            
+                        </div>
+                    ))
+                    }
+                    </div>
+                </div>
+
+                <div className="current_tasks_container w-7/8 flex flex-col  h-fit self-center mt-2 drop-shadow-lg">
+                    <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandCurrentSection(prev=>!prev)}> 
+                        <p className="ml-3">Current Tasks</p>
+
+                        <svg
+                            className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
+                                expandCurrentSection ? 'rotate-180' : ''
+                            }`}
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+
+                    <div className={"w-full h-fit flex flex-col items-center section_body" + (tasks(true).length === 0 ? " round_bottom_on_empty":"")}>
+                        {currentTasksToShow.map((task,index)=>(
+                            <div className={`unaccepted_task_item w-full h-fit  flex flex-col sm:flex-row justify-between sm:justify-start items-center mb-2 ${index !== tasks(true).length - 1 ? 'task_item_border_bottom' : ''}`}>
+                                <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start ml-3">
+                                    <p className="text-sm sm:text-lg font-bold">{task.task_name}</p>
+                                    <p className="text-xs sm:text-sm">By: {task.due_date}</p>
+                                </div>
+                                {/* <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p> */}
+
+                                <div className="sm:ml-auto flex w-fit items-center">
+                                    <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>DEMOUpdateTaskStatus(task.task_id,e.target.value)} value={DEMORetrieveTaskStatus(task.task_id)}>
+                                    <option value="To-Do">To-Do</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                    </select>
+
+                                    <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>
+                                </div>
+                                
+                            </div>
+                        ))
+                        }
+                    </div>
+                </div>
+
+
+                <div className="completed_tasks_container w-7/8 flex flex-col h-fit self-center mt-2 drop-shadow-lg">
+                    <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandCompletedSection(prev=>!prev)}> 
+                        <p className="ml-3">Completed Tasks</p>
+
+                        <svg
+                            className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
+                                expandCompletedSection ? 'rotate-180' : ''
+                            }`}
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+
+                    <div className={"w-full h-fit overflow-x-scroll flex flex-col items-center section_body" + (completedTasks.length === 0 ? " round_bottom_on_empty":"")}>
+                        {completedTasksToShow.map(task=>(
+                            <div className="unaccepted_task_item w-full h-fit rounded-xl flex flex-col sm:flex-row justify-between sm:justify-start items-center mb-2">
+                                <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start ml-3">
+                                    <p className="text-sm sm:text-lg font-bold line-through opacity-50">{task.task_name}</p>
+                                    <p className="text-xs sm:text-sm text-emerald-500">Done</p>
+                                </div>
+                                {/* <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p> */}
+
+                                <div className="sm:ml-auto flex w-fit items-center opacity-50">
+                                    <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>DEMOUpdateTaskStatus(task.task_id,e.target.value)} value={DEMORetrieveTaskStatus(task.task_id)}>
+                                    <option value="To-Do">To-Do</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                    </select>
+
+                                    <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>
+                                </div>
+                                
+                            </div>
+                        ))
+                        }
+                    </div>
+                </div>
+            </div>
+            <FooterNav/>
+        </div>
+
+        {/* code for prev version, keep around just in case 
         <div className="w-full h-full flex flex-col justify-start items-center">
             <div className="w-full flex">
                 <Link to="/orgs/landing" className="text-3xl justify-self-start self-start sm:self-center mr-auto">
@@ -280,6 +590,6 @@ export const TaskDashboard = () => {
                 </div>
             </div>
             <FooterNav/>
-        </div>
+        </div> */}
     </>)
 }

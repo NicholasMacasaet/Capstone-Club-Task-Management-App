@@ -5,11 +5,11 @@ export const LandingPage = () => {
 
     return(<>
         <div className="landing_page w-full h-full flex flex-col justify-start">
-            <h1 className="landing_page_header w-full hidden sm:block">
+            <h1 className="landing_page_header w-full hidden sm:block white_text">
                 Welcome to Streamline
             </h1>
 
-            <p className="landing_page_header w-full text-4xl sm:hidden">
+            <p className="landing_page_header w-full text-4xl sm:hidden white_text">
                 Welcome to Streamline
             </p>
 
