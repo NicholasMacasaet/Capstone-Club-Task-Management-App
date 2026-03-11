@@ -186,9 +186,14 @@ export const TaskCreation = () => {
                     ←
                 </button> */}
 
-                <button className="text-3xl flex items-center side-item justify-center white_text new_back_button rounded-full" onClick={()=>navigate(-1)}>
+                {/* <button className="text-3xl flex items-center side-item justify-center white_text new_back_button rounded-full" onClick={()=>navigate(-1)}>
+                    <p>&lt;</p>
+                </button> */}
+
+                <button className="text-3xl flex items-center side-item justify-center white_text new_back_button rounded-full !w-9 !h-9" onClick={()=>navigate(-1)}>
                     <p>&lt;</p>
                 </button>
+
 
                 <h1 className="landing_page_header w-full hidden sm:block white_text">
                     Create New Task

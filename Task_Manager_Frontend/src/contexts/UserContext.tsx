@@ -7,7 +7,7 @@ import { setCurrUserLocalStorage, setTestClubMemberships, setTestClubs, setTestT
 export interface Task {
     task_id: number;
     club_id: number;
-    // event_id: number;
+    // initiative_id: number;
     attachments:File[] | null
     due_date: string;
     task_name:string;
@@ -38,6 +38,15 @@ export interface user {
     username: string,
     email: string,
     phone_number: string,
+    //add more fields as necessary
+}
+
+export interface initiative {
+    initiative_id: number,
+    club_id: number,
+    name: string,
+    description: string,
+    attachments: File[] | null,
     //add more fields as necessary
 }
 
