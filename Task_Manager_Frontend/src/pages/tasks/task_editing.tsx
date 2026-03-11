@@ -151,7 +151,8 @@ export const TaskEditing = () => {
                 {/* <Link to="/home" className="text-3xl justify-self-start self-start sm:self-center">
                         <p>←</p>
                 </Link> */}
-                <button className="text-3xl flex items-center side-item justify-center white_text new_back_button rounded-full" onClick={()=>navigate(-1)}>
+
+                <button className="text-3xl flex items-center side-item justify-center white_text new_back_button rounded-full !w-9 !h-9" onClick={()=>navigate(-1)}>
                     <p>&lt;</p>
                 </button>
 
@@ -159,12 +160,12 @@ export const TaskEditing = () => {
                         <p>&lt;</p>
                 </Link> */}
 
-                <h1 className="landing_page_header w-full hidden sm:block justify-self-center text-white">
+                <h1 className="landing_page_header w-full hidden sm:block justify-self-center white_text ">
                     Viewing Task {currTask.task_name}
                 </h1>
             </div>
 
-            <p className="landing_page_header w-full text-4xl sm:hidden text-white">
+            <p className="landing_page_header w-full text-4xl sm:hidden white_text ">
                Viewing Task {currTask.task_name}
             </p>
 

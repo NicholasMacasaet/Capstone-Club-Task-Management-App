@@ -9,6 +9,11 @@ import editIcon from "../../assets/edit-button-svgrepo-com.svg"
 import { retrieveAndParseCurrUser, retrieveAndParseTestClubs, retrieveAndParseTestTaskAssignments, retrieveAndParseTestTasks, setCurrUserLocalStorage, setTestTaskAssignments } from "../../demo_utils/getters_and_setters"
 import { testUsers } from "../../assets/test_data"
 import { chronoSortTasks } from "../../misc_utils/chrono_sort_tasks"
+import hamburgerMenuIcon from "../../assets/hamburger-menu-svgrepo-com.svg"
+import exclamationIcon from "../../assets/exclamation-mark-circle-f-svgrepo-com.svg"
+import mailOpen from "../../assets/mail-open-file-svgrepo-com.svg"
+import checkFilled from "../../assets/circle-check-filled-svgrepo-com.svg"
+import loading from "../../assets/loading-2-svgrepo-com.svg"
 
 export const TaskDashboard = () => {
 
@@ -74,8 +79,8 @@ export const TaskDashboard = () => {
                 const dueDate = new Date(task.due_date)
                 const timeDiff = dueDate.getTime() - today.getTime()
                 const dayDiff = timeDiff / (1000 * 3600 * 24)
-
-                if (dayDiff <= 3 && dayDiff >= 0){
+                //also check if due date is in the past, if so add to needs attention list as well
+                if (dayDiff <= 3 && dayDiff >= 0 || dueDate < today){
                     needsAttentionList.push(task)
                 }
             })
@@ -143,7 +148,7 @@ export const TaskDashboard = () => {
         //replace with actual api call to update the task assignment status in the database
 
         let updatedTaskAssignments: TaskAssignment[] = []
-        let updatedCompletedTasks: Task[] = []
+        let updatedCompletedTasks: Task[] = [...completedTasks]
         let updatedFilteredTasks: Task[] = []
         let updatedNeedsAttentionTasks: Task[] = []
 
@@ -171,11 +176,14 @@ export const TaskDashboard = () => {
                         })
                     }
                 }
+                //to do, add functionality to move tasks back to the filtered tasks list and needs attention list if the status is changed from completed to something else
             }
             updatedTaskAssignments.push(currAssignment)
         })
+
+        console.log("updated task assignments: ", JSON.stringify(updatedCompletedTasks, null, 2))
         setFilteredTasksToView(updatedFilteredTasks)
-        setCompletedTasks(prev => [...prev, ...updatedCompletedTasks])
+        setCompletedTasks(updatedCompletedTasks)
         setNeedsAttentionTasks(updatedNeedsAttentionTasks)
         setLoadedTaskAssignments(updatedTaskAssignments)
         setTestTaskAssignments(updatedTaskAssignments)
@@ -290,17 +298,19 @@ export const TaskDashboard = () => {
 
         <div className="w-full h-full flex flex-col justify-start items-center">
             <div className="w-full flex">
-                <Link to="/orgs/landing" className="text-3xl flex items-center side-item justify-center white_text new_back_button rounded-full">
-                        <p>&lt;</p>
-                </Link>
+                <div className="flex flex-col">
+                    <img src={hamburgerMenuIcon} alt="Hamburger Menu" className="w-8 h-8 hamburger_menu_icon" />
+                </div>
+                
+                
 
-                <h1 className="landing_page_header w-full hidden sm:block justify-self-center flex items-center justify-center white_text">
-                    Streamline
-                </h1>
-
-                <p className="landing_page_header w-full block sm:hidden justify-self-center text-3xl flex items-center justify-center white_text">
-                    Streamline
+                <p className="landing_page_header w-full justify-self-center flex items-center justify-center white_text !font-bold self-start">
+                    {currUser?.username}
                 </p>
+
+                {/* <p className="landing_page_header w-full block sm:hidden justify-self-center text-2xl flex items-center justify-center white_text !font-bold self-start">
+                    {currUser?.username}
+                </p> */}
 
                 <div className="h-1/3 flex flex-col switch_container side-item">
                     <p className="text-xs text-center white_text">
@@ -315,40 +325,58 @@ export const TaskDashboard = () => {
                 </div>
             </div>
 
+            <div className="w-full flex justify-start">
+                <button className="text-3xl flex items-center side-item justify-center white_text new_back_button rounded-full !w-9 !h-9" onClick={()=>navigate("/orgs/landing")}>
+                <p>&lt;</p>
+                </button>
+            </div>
+
             {/* <p className="landing_page_header w-full text-3xl sm:hidden">
                Streamline
             </p> */}
 
-            <p className="text-lg sm:text-2xl welcome_user self-start mt-2 white_text hidden sm:block">Welcome {currUser?.username || "User"}</p>
+            <p className="text-lg sm:text-2xl welcome_user self-start mt-2 white_text hidden sm:block font-bold">Welcome {currUser?.username || "User"}</p>
 
-            <p className="text-lg sm:text-2xl self-start mt-2 white_text block sm:hidden">Welcome {currUser?.username || "User"}</p>
+            <p className="text-lg sm:text-2xl self-start mt-2 white_text block sm:hidden bold font-bold">Welcome {currUser?.username || "User"}</p>
+
+            <p className="white_text self-start left_offset hidden sm:block opacity-50 font-bold">You have {filteredTasksToView.length} tasks for today</p>
+
+            <p className="white_text self-start block sm:hidden opacity-50 font-bold">You have {filteredTasksToView.length} tasks for today</p>
+
 
             <div className="dashboard_wrapper h-full sm:h-7/8 w-full sm:w-3/4 flex justify-start rounded-4xl flex-col mt-4 overflow-y-scroll">
                 <p className="text-lg sm:text-2xl">My Tasks for {retrieveClubInfo()}</p>
 
                 <div className="block-row w-full h-fit flex flex-row mt-4 justify-center">
                     <div className="landing_block rounded-xl flex flex-col needs_attention mr-5">
-                        <p>{needsAttentionTasks.length}</p>
-                        <p className="text-md">Needs Attention</p>
+                        <p className="landing_block_text">{needsAttentionTasks.length}</p>
+                        <p className="landing_block_text">Needs Attention</p>
                         
                     </div>
 
                     <div className="landing_block rounded-xl flex flex-col to_be_accepted">
-                        <p>{tasks(false).length}</p>
-                        <p className="text-md">To Be Accepted</p>
+                        <p className="landing_block_text">{tasks(false).length}</p>
+                        <p className="landing_block_text">To Be Accepted</p>
                     </div>
 
                     <div className="landing_block rounded-xl flex flex-col task_create_button_updated text-white ml-5" onClick={goToTaskCreation}>
-                        <p>+</p>
-                        <p>Task</p>
+                        <p className="landing_block_text">+</p>
+                        <p className="landing_block_text">Task</p>
                     </div>
                 </div>
 
-                <div className="needs_attention_container w-7/8 h-fit max-h-1/4 flex flex-col mt-4 self-center drop-shadow-lg"> 
-                    
-                    <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandAttentionSection(prev=>!prev)}> 
-                        <p className="ml-3">Needs Attention</p>
 
+                
+                <div className="w-7/8 mt-4 flex self-center justify-start font-bold">
+                    <p>Needs Attention</p>
+                </div>
+                <div className="needs_attention_container w-7/8 h-fit max-h-1/4 flex flex-col self-center drop-shadow-lg"> 
+        
+                    <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandAttentionSection(prev=>!prev)}> 
+                        <div className="flex items-center">
+                            <img src={exclamationIcon} alt="Exclamation Icon" className="w-4.5 h-4.5 ml-3" />
+                            <p className="ml-3 section_title">Urgent Action Required</p>
+                        </div>
                         <svg
                             className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
                                 expandAttentionSection ? 'rotate-180' : ''
@@ -361,8 +389,8 @@ export const TaskDashboard = () => {
 
                     <div className={"w-full h-full overflow-x-scroll flex flex-col items-center section_body" + (needsAttentionTasks.length === 0 ? " round_bottom_on_empty":"")}>
                         {attentionTasksToShow.map((task,index)=>(
-                            <div className={`unaccepted_task_item w-full h-fit flex flex-col sm:flex-row justify-between sm:justify-start items-center mb-2 ${index !== needsAttentionTasks.length - 1 ? 'task_item_border_bottom' : ''}`}>
-                                <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start ml-3">
+                            <div className={`unaccepted_task_item w-full h-fit flex flex-col sm:flex-row justify-between sm:justify-start items-center mb-2 ${(index !== attentionTasksToShow.length - 1 || attentionTasksToShow.length === 0) ? 'task_item_border_bottom' : ''}`}>
+                                <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start sm:ml-3">
                                     <p className="text-sm sm:text-lg font-bold">{task.task_name}</p>
                                     <p className="text-xs sm:text-sm">By: {task.due_date}</p>
                                 </div>
@@ -384,10 +412,17 @@ export const TaskDashboard = () => {
                     </div>
                 </div>
 
-
-                <div className="accept_container w-7/8 h-fit flex flex-col mt-4 self-center drop-shadow-lg" onClick={()=>setExpandAcceptSection(prev=>!prev)}>
+                <div className="w-7/8 mt-4 flex self-center justify-start font-bold">
+                    <p>To be Accepted</p>
+                </div>
+                <div className="accept_container w-7/8 h-fit flex flex-col self-center drop-shadow-lg" onClick={()=>setExpandAcceptSection(prev=>!prev)}>
                     <div className="text-xl self-start mt-1 w-full flex section_header"> 
-                        <p className="ml-3">Tasks to Accept</p>
+
+                        <div className="flex items-center">
+                            <img src={mailOpen} alt="Mail Open Icon" className="w-4.5 h-4.5 ml-3" />
+                            <p className="ml-3 section_title">New Assignments</p>
+                        </div>
+                        
 
                         <svg
                             className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
@@ -401,10 +436,10 @@ export const TaskDashboard = () => {
 
                     <div className={"w-full h-fit flex flex-col items-center section_body" + (tasks(false).length === 0 ? " round_bottom_on_empty":"")}>
                     {acceptTasksToShow.map((task,index)=>(
-                        <div className={`unaccepted_task_item h-fit flex flex-row items-center justify-between mb-2 ${index !== tasks(false).length - 1 ? 'task_item_border_bottom' : ''}`}>
+                        <div className={`unaccepted_task_item h-fit flex flex-row items-center justify-between mb-2 ${(index !== acceptTasksToShow.length - 1 || acceptTasksToShow.length === 0) ? 'task_item_border_bottom' : ''}`}>
                             <div className="flex flex-col w-fit">
-                                <p className="ml-3 text-sm sm:text-lg w-full text-left font-bold">{task.task_name}</p>
-                                <p className="ml-3 text-xs sm:text-sm w-full text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
+                                <p className="sm:ml-3 text-sm sm:text-lg w-full text-left font-bold">{task.task_name}</p>
+                                <p className="sm:ml-3 text-xs sm:text-sm w-full text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
                             </div>
 
                             <div className="sm:ml-auto w-fit flex">
@@ -425,9 +460,15 @@ export const TaskDashboard = () => {
                     </div>
                 </div>
 
-                <div className="current_tasks_container w-7/8 flex flex-col  h-fit self-center mt-2 drop-shadow-lg">
+                <div className="w-7/8 mt-4 flex self-center justify-start font-bold">
+                    <p>Current Tasks</p>
+                </div>
+                <div className="current_tasks_container w-7/8 flex flex-col h-fit self-center mt-2 drop-shadow-lg">
                     <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandCurrentSection(prev=>!prev)}> 
-                        <p className="ml-3">Current Tasks</p>
+                        <div className="flex items-center">
+                            <img src={loading} alt="Mail Open Icon" className="w-4.5 h-4.5 ml-3" />
+                            <p className="ml-3 section_title">In Progress</p>
+                        </div>
 
                         <svg
                             className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
@@ -441,8 +482,8 @@ export const TaskDashboard = () => {
 
                     <div className={"w-full h-fit flex flex-col items-center section_body" + (tasks(true).length === 0 ? " round_bottom_on_empty":"")}>
                         {currentTasksToShow.map((task,index)=>(
-                            <div className={`unaccepted_task_item w-full h-fit  flex flex-col sm:flex-row justify-between sm:justify-start items-center mb-2 ${index !== tasks(true).length - 1 ? 'task_item_border_bottom' : ''}`}>
-                                <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start ml-3">
+                            <div className={`unaccepted_task_item w-full h-fit  flex flex-col sm:flex-row justify-between sm:justify-start items-center mb-2 ${(index !== currentTasksToShow.length - 1 || currentTasksToShow.length === 0) ? 'task_item_border_bottom' : ''}`}>
+                                <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start sm:ml-3">
                                     <p className="text-sm sm:text-lg font-bold">{task.task_name}</p>
                                     <p className="text-xs sm:text-sm">By: {task.due_date}</p>
                                 </div>
@@ -464,10 +505,15 @@ export const TaskDashboard = () => {
                     </div>
                 </div>
 
-
+                <div className="w-7/8 mt-4 flex self-center justify-start font-bold">
+                    <p>Completed</p>
+                </div>
                 <div className="completed_tasks_container w-7/8 flex flex-col h-fit self-center mt-2 drop-shadow-lg">
                     <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandCompletedSection(prev=>!prev)}> 
-                        <p className="ml-3">Completed Tasks</p>
+                        <div className="flex items-center">
+                            <img src={checkFilled} alt="Check Icon" className="w-4.5 h-4.5 ml-3" />
+                            <p className="ml-3 section_title">Completed Tasks</p>
+                        </div>
 
                         <svg
                             className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
@@ -480,9 +526,9 @@ export const TaskDashboard = () => {
                     </div>
 
                     <div className={"w-full h-fit overflow-x-scroll flex flex-col items-center section_body" + (completedTasks.length === 0 ? " round_bottom_on_empty":"")}>
-                        {completedTasksToShow.map(task=>(
-                            <div className="unaccepted_task_item w-full h-fit rounded-xl flex flex-col sm:flex-row justify-between sm:justify-start items-center mb-2">
-                                <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start ml-3">
+                        {completedTasksToShow.map((task, index)=>(
+                            <div className={`unaccepted_task_item w-full h-fit rounded-xl flex flex-col sm:flex-row justify-between sm:justify-start items-center mb-2 ${(index !== completedTasksToShow.length - 1 || completedTasksToShow.length === 0) ? 'task_item_border_bottom' : ''}`}>
+                                <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start sm:ml-3">
                                     <p className="text-sm sm:text-lg font-bold line-through opacity-50">{task.task_name}</p>
                                     <p className="text-xs sm:text-sm text-emerald-500">Done</p>
                                 </div>
