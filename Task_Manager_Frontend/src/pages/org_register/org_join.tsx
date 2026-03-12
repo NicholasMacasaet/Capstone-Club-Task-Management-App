@@ -31,7 +31,9 @@ export const OrgJoin = () => {
             //     data: JSON.stringify(packaged_data),
             //     headers: {'Content-Type': 'application/json' }
             // })
-            navigate("/home")
+
+            //this is demo code for now, there would be an actual call to retrieve the specific id to populate the link with by calling the user's orgs/clubs they've joined and then navigating to the first one in the list or something like that, but for now we'll just navigate to the club home page with an id of 1 for testing or demo purposes
+            navigate("/club/home/1")
         }catch(error){
             console.error(error)
         }
@@ -44,12 +46,12 @@ export const OrgJoin = () => {
                         <p>←</p>
                 </Link>
 
-                <h1 className="landing_page_header w-full hidden sm:block justify-self-center">
+                <h1 className="landing_page_header w-full hidden sm:block justify-self-center white_text">
                     Streamline
                 </h1>
             </div>
 
-            <p className="landing_page_header w-full text-4xl sm:hidden">
+            <p className="landing_page_header w-full text-4xl sm:hidden white_text">
                Streamline
             </p>
             <div className="org_join_page_wrapper h-full sm:h-1/2 w-full sm:w-3/4 flex justify-start rounded-xl flex-col">

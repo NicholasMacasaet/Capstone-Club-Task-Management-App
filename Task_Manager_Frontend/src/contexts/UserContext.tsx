@@ -41,9 +41,11 @@ export interface user {
     //add more fields as necessary
 }
 
-export interface initiative {
+export interface Initiative {
     initiative_id: number,
     club_id: number,
+    //this corresponds to user id
+    lead_id: number,
     name: string,
     description: string,
     attachments: File[] | null,

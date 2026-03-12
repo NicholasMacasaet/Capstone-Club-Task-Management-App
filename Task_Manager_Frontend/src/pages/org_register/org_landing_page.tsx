@@ -10,12 +10,12 @@ export const OrgLandingPage =()=>{
                         <p>←</p>
                 </Link>
 
-                <h1 className="landing_page_header w-full hidden sm:block justify-self-center">
+                <h1 className="landing_page_header w-full hidden sm:block justify-self-center white_text">
                     Streamline
                 </h1>
             </div>
 
-            <p className="landing_page_header w-full text-4xl sm:hidden">
+            <p className="landing_page_header w-full text-4xl sm:hidden white_text">
                Streamline
             </p>
 

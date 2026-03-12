@@ -39,6 +39,7 @@ export const TaskDashboard = () => {
     const [loadedClubs, setLoadedClubs] = useState<Club[]>([])
     //end demo setters
 
+    //useffect for retreiving tasks based on the club id in the url params and filtering them based on whether they are assigned to the current user and their accepted status, also filter tasks that need attention based on due date and put those in a separate list for easier rendering in the frontend, also sort the tasks by due date with the most urgent ones first for better organization in the frontend
     useEffect(() => {
         //trivial check to see if they're logged in or not 
         if (!isLoaded){
@@ -76,15 +77,6 @@ export const TaskDashboard = () => {
             let needsAttentionList: Task[] = []
             
             filteredTasksList.map(task => {
-                // const today = new Date()
-                // const dueDate = new Date(task.due_date)
-                // const timeDiff = dueDate.getTime() - today.getTime()
-                // const dayDiff = timeDiff / (1000 * 3600 * 24)
-                // //also check if due date is in the past, if so add to needs attention list as well
-                // if (dayDiff <= 3 && dayDiff >= 0 || dueDate < today){
-                //     needsAttentionList.push(task)
-                // }
-
                 if (timeCheck(task.due_date)){
                     needsAttentionList.push(task)
                 }
@@ -214,7 +206,7 @@ export const TaskDashboard = () => {
             updatedTaskAssignments.push(currAssignment)
         })
 
-        console.log("updated task assignments: ", JSON.stringify(updatedCompletedTasks, null, 2))
+        // console.log("updated task assignments: ", JSON.stringify(updatedCompletedTasks, null, 2))
         setFilteredTasksToView(updatedFilteredTasks)
         setCompletedTasks(updatedCompletedTasks)
         setNeedsAttentionTasks(updatedNeedsAttentionTasks)
@@ -420,7 +412,7 @@ export const TaskDashboard = () => {
                         </svg>
                     </div>
 
-                    <div className={"w-full h-full overflow-x-scroll flex flex-col items-center section_body" + (needsAttentionTasks.length === 0 ? " round_bottom_on_empty":"")}>
+                    <div className={"w-full h-full flex flex-col items-center section_body" + (needsAttentionTasks.length === 0 ? " round_bottom_on_empty":"")}>
                         {attentionTasksToShow.map((task,index)=>(
                             <div className="task_item_container h-fit flex flex-col mb-2"> 
                                 <div className={`unaccepted_task_item w-full h-fit flex flex-col sm:flex-row justify-between sm:justify-start items-center`}>

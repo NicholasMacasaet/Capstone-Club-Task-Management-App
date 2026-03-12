@@ -1,6 +1,31 @@
-import { type Task, type Club, type ClubMembership, type TaskAssignment, type user} from "../contexts/UserContext";
+import { type Task, type Club, type ClubMembership, type TaskAssignment, type user, type Initiative} from "../contexts/UserContext";
 
-
+export const testInitiatives:Initiative[] = [
+    {
+        initiative_id: 1,
+        club_id: 1,
+        lead_id: 1,
+        name: "Test Initiative 1",
+        description: "This is a test initiative 1",
+        attachments: null
+    },
+    {
+        initiative_id: 2,
+        club_id: 1,
+        lead_id: 2,
+        name: "Test Initiative 2",
+        description: "This is a test initiative 2",
+        attachments: null
+    },
+    {
+        initiative_id: 3,
+        club_id: 1,
+        lead_id: 3,
+        name: "Test Initiative 3",
+        description: "This is a test initiative 3",
+        attachments: null
+    }
+]
 
 export const testTasks: Task[] = [
     {
