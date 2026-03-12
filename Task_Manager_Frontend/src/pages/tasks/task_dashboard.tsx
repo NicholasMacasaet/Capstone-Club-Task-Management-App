@@ -571,7 +571,7 @@ export const TaskDashboard = () => {
                         </svg>
                     </div>
 
-                    <div className={"w-full h-fit overflow-x-scroll flex flex-col items-center section_body" + (completedTasks.length === 0 ? " round_bottom_on_empty":"")}>
+                    <div className={"w-full h-fit overflow-y-scroll flex flex-col items-center section_body" + (completedTasks.length === 0 ? " round_bottom_on_empty":"")}>
                         {completedTasksToShow.map((task, index)=>(
 
                             <div className="task_item_container h-fit flex flex-col mb-2"> 

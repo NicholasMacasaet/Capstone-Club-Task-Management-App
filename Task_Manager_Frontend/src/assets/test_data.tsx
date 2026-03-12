@@ -7,7 +7,9 @@ export const testInitiatives:Initiative[] = [
         lead_id: 1,
         name: "Test Initiative 1",
         description: "This is a test initiative 1",
-        attachments: null
+        due_date: "2026-12-31",
+        attachments: null,
+        status:"To-Do"
     },
     {
         initiative_id: 2,
@@ -15,7 +17,9 @@ export const testInitiatives:Initiative[] = [
         lead_id: 2,
         name: "Test Initiative 2",
         description: "This is a test initiative 2",
-        attachments: null
+        due_date: "2026-12-31",
+        attachments: null,
+        status:"To-Do"
     },
     {
         initiative_id: 3,
@@ -23,7 +27,19 @@ export const testInitiatives:Initiative[] = [
         lead_id: 3,
         name: "Test Initiative 3",
         description: "This is a test initiative 3",
-        attachments: null
+        due_date: "2026-12-31",
+        attachments: null,
+        status:"To-Do"
+    },
+    {
+        initiative_id: 4,
+        club_id: 2,
+        lead_id: 1,
+        name: "Test Initiative 4",
+        description: "This is a test initiative 4",
+        due_date: "2026-12-31",
+        attachments: null,
+        status:"To-Do"
     }
 ]
 
