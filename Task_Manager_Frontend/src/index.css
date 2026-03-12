@@ -15,10 +15,38 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "TradeGothic";
+  src: url(./assets/trade_gothic_font/OldSansBlack.ttf);
+  font-weight: 400;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: "TradeGothic";
+  src: url(./assets/trade_gothic_font/BoringSansBold.ttf);
+  font-weight: 700;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url(./assets/inter_font/Inter_18pt-Regular.ttf);
+  font-weight: 400;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url(./assets/inter_font/Inter_24pt-Bold.ttf);
+  font-weight: 700;
+  font-style:normal;
+}
+
 
 :root {
   /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; */
-  font-family: JetBrainsMono;
+  font-family: Inter;
 
   line-height: 1.5;
   /* font-weight: 400; */
