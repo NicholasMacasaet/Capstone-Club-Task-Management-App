@@ -40,6 +40,16 @@ export const testInitiatives:Initiative[] = [
         due_date: "2026-12-31",
         attachments: null,
         status:"To-Do"
+    },
+    {
+        initiative_id: 5,
+        club_id: 1,
+        lead_id: 1,
+        name: "Test Initiative 5",
+        description: "This is a test initiative 4",
+        due_date: "2026-12-31",
+        attachments: null,
+        status:"Completed"
     }
 ]
 
