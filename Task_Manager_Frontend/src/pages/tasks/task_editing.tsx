@@ -170,16 +170,16 @@ export const TaskEditing = () => {
             </p>
 
             <div className="task_creation_form_wrapper h-full sm:h-4/5 w-full sm:w-3/4 flex justify-start rounded-xl flex-col mt-5">
-                <form className="w-full h-full flex flex-col justify-start">
-                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start">
-                        <label className="sm:self-center self-start text-xl" htmlFor="task_name">Task Name:</label>
+                <form className="w-full h-full flex flex-col justify-start items-center">
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 w-7/8">
+                        <label className="sm:self-center self-start text-xl font-bold" htmlFor="task_name">Task Name:</label>
                         <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="task_name" name="task_name" required value={taskName} onChange={handleTaskNameChange}/>
                     </div>
 
                     
                     {assigner === "self" &&
-                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
-                        <label className="sm:self-center self-start text-xl" htmlFor="task_name">Assignee:</label>
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1  mt-4 w-7/8">
+                        <label className="sm:self-center self-start text-xl font-bold" htmlFor="task_name">Assignee:</label>
                         {/* <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="assignees" name="assignees" required/> */}
                         <select className="form_input sm:ml-2 rounded-xl p-1" id="assignees" name="assignees" value={assignee} onChange={handleAssigneeChange}>
                             <option defaultChecked disabled>None</option>
@@ -191,23 +191,23 @@ export const TaskEditing = () => {
 
                     }
 
-                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
-                        <label className="sm:self-center self-start text-xl" htmlFor="task_name">Assigner:</label>
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1  mt-4 w-7/8">
+                        <label className="sm:self-center self-start text-xl font-bold" htmlFor="task_name">Assigner:</label>
                         <p className="sm:self-center self-start text-xl">{assigner}</p>
                     </div>
 
-                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
-                        <label className="sm:self-center self-start text-xl" htmlFor="date">Date:</label>
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 mt-4 w-7/8">
+                        <label className="sm:self-center self-start text-xl font-bold" htmlFor="date">Date:</label>
                         <input className="form_input sm:ml-2 rounded-xl p-1" type="date" id="task_name" name="task_name" required value={taskDate} onChange={handleDateChange}/>
                     </div>
 
-                    <div className="form_group flex p-1 w-full flex-col justify-center sm:justify-start self-start mt-4">
+                    <div className="form_group flex p-1 flex-col justify-center  mt-4 w-7/8">
                         {/* <label className="sm:self-center self-start text-xl" htmlFor="task_name">Attachments:</label>
                         <input className="custom-file-upload sm:ml-2 rounded-xl p-1 flex flex-col" type="file" id="files" name="files" onChange={(e)=>handleFileChange(e)}/> */}
 
                         <label className="custom-file-upload text-xl flex self-start justify-start mr-1">
                             <input type="file" onChange={(e)=>handleFileChange(e)}/>
-                            <p className="underline">Add Attachments 📎</p>
+                            <p className="underline font-bold">Add Attachments 📎</p>
                         </label>
 
                         <div className="attachments_wrapper flex flex-col form_input rounded-xl p-1">
@@ -235,9 +235,9 @@ export const TaskEditing = () => {
                         </select>
                     </div> */}
 
-                    <div className="form_group flex flex-col justify-center p-1 self-start w-full mt-4">
-                        <label className="self-start text-xl" htmlFor="task_name">Description:</label>
-                        <textarea className="description w-full rounded-xl p-1" id="description" name="description" value={description} onChange={handleDescriptionChange}/>
+                    <div className="form_group flex flex-col justify-center p-1  w-7/8 mt-4">
+                        <label className="self-start text-xl font-bold" htmlFor="task_name">Description:</label>
+                        <textarea className="description w-full self-center rounded-xl p-1" id="description" name="description" value={description} onChange={handleDescriptionChange}/>
                     </div>
 
                 </form>

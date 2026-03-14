@@ -206,6 +206,11 @@ input[type="file"] {
   background-color: var(--off_white)
 } 
 
+
+.alt_dashboard_wrapper_color {
+  background-color: white;
+}
+
 .section_header{
   background-color: var(--header-white);
   border-top-left-radius: 1rem;
@@ -293,6 +298,11 @@ input[type="file"] {
 }
 
 .task_creation_form_wrapper {
+  border: 2px solid var(--midnight_green);
+  background-color: var(--off_white)
+}
+
+.initiative_creation_form_wrapper{
   border: 2px solid var(--midnight_green);
   background-color: var(--off_white)
 }

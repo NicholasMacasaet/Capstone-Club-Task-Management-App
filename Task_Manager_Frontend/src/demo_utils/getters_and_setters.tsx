@@ -1,4 +1,4 @@
-import type { Club, ClubMembership, Task, TaskAssignment, user } from "../contexts/UserContext";
+import type { Club, ClubMembership, Initiative, Task, TaskAssignment, user } from "../contexts/UserContext";
 
 export const setTestUsers = (users: user[])=>{
     localStorage.setItem("test_users", JSON.stringify(users))
@@ -103,4 +103,19 @@ export const retrieveAndParseCurrUser = (): user | null => {
         retrieved_curr_user = JSON.parse(raw_curr_user_data)
     }
     return retrieved_curr_user
+}
+
+export const setClubInitiativesLocalStorage = ( initiatives: Initiative[]) => {
+    localStorage.setItem("test_club_initiatives", JSON.stringify(initiatives))
+}
+
+export const retrieveAndParseClubInitiatives = (): Initiative[] => {
+    const raw_club_initiatives_data: string | null = localStorage.getItem("test_club_initiatives")
+
+    let retrieved_club_initiatives: Initiative[] = []
+
+    if (raw_club_initiatives_data !== null) {
+        retrieved_club_initiatives = JSON.parse(raw_club_initiatives_data)
+    }
+    return retrieved_club_initiatives
 }
