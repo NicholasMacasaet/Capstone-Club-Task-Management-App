@@ -302,6 +302,11 @@ input[type="file"] {
   background-color: var(--off_white)
 }
 
+.initiative_creation_form_wrapper{
+  border: 2px solid var(--midnight_green);
+  background-color: var(--off_white)
+}
+
 .attachments_wrapper {
   width: 250px;
 }

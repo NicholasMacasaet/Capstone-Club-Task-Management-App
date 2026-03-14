@@ -87,7 +87,7 @@ export const TaskDashboard = () => {
             setNeedsAttentionTasks(needsAttentionList)
             setFilteredTasksToView(filteredTasksList)
         }
-    },[isLoaded, id, loadedTasks])
+    },[isLoaded, id, loadedTasks, currUser])
 
     /**
      *check to see if the due date is within 3 days OR in the past, if so return true to indicate it needs attention, otherwise return false
@@ -293,30 +293,67 @@ export const TaskDashboard = () => {
     }
 
 
-    const [expandAttentionSection, setExpandAttentionSection] = useState<boolean>(false)
+    const [isMobile, setIsMobile] = useState<boolean>(false);
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth < 768);  // 768px is Tailwind's 'sm' breakpoint; adjust if needed
+        };
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
 
-    const attentionTasksToShow = expandAttentionSection
-    ? needsAttentionTasks
-    : needsAttentionTasks.slice(0, 1);
+    useEffect(() => {
+        setExpandAttentionSection(!isMobile);
+        setExpandAcceptSection(!isMobile);
+        setExpandCurrentSection(!isMobile);
+        setExpandCompletedSection(!isMobile);
+    }, [isMobile]);
 
-    const [expandAcceptSection, setExpandAcceptSection] = useState<boolean>(false)
 
-    const acceptTasksToShow = expandAcceptSection
-    ? tasks(false)
-    : tasks(false).slice(0, 1);
+    const [expandAttentionSection, setExpandAttentionSection] = useState<boolean>(!isMobile)
+
+    // const attentionTasksToShow = expandAttentionSection
+    // ? needsAttentionTasks
+    // : needsAttentionTasks.slice(0, 1);
+
+    const attentionTasksToShow = isMobile
+    ? (expandAttentionSection ? needsAttentionTasks : needsAttentionTasks.slice(0, 1))
+    : needsAttentionTasks;  // always show all on desktop
+
+    const [expandAcceptSection, setExpandAcceptSection] = useState<boolean>(!isMobile)
+
+    // const acceptTasksToShow = expandAcceptSection
+    // ? tasks(false)
+    // : tasks(false).slice(0, 1);
+
+    const acceptTasksToShow = isMobile
+    ? (expandAcceptSection ? tasks(false) : tasks(false).slice(0, 1))
+    : tasks(false);
     
-    const [expandCurrentSection, setExpandCurrentSection] = useState<boolean>(false)
+    const [expandCurrentSection, setExpandCurrentSection] = useState<boolean>(!isMobile)
 
-    const currentTasksToShow = expandCurrentSection
-    ? tasks(true)
-    : tasks(true).slice(0, 1);
+    // const currentTasksToShow = expandCurrentSection
+    // ? tasks(true)
+    // : tasks(true).slice(0, 1);
 
-    const [expandCompletedSection, setExpandCompletedSection] = useState<boolean>(false)
+    const currentTasksToShow = isMobile
+    ? (expandCurrentSection ? tasks(true) : tasks(true).slice(0, 1))
+    : tasks(true);
 
-    const completedTasksToShow = expandCompletedSection 
-    ? completedTasks
-    : completedTasks.slice(0, 1)
+    const [expandCompletedSection, setExpandCompletedSection] = useState<boolean>(!isMobile)
+
+    // const completedTasksToShow = expandCompletedSection 
+    // ? completedTasks
+    // : completedTasks.slice(0, 1)
+
+    const completedTasksToShow = isMobile
+    ? (expandCompletedSection ? completedTasks : completedTasks.slice(0, 1))
+    : completedTasks;
     
+    const taskContainerHeaderCSSStyling: string = "w-7/8 mt-5 flex self-center font-bold opacity-50"
+
+    const taskContainerBodyCSSStyling: string = "w-7/8 h-fit flex flex-col self-center mt-2 mb-2 drop-shadow-lg"
 
     
     return(<>
@@ -391,305 +428,239 @@ export const TaskDashboard = () => {
                 </div>
 
 
-                
-                <div className="w-7/8 mt-4 flex self-center justify-start font-bold opacity-50">
-                    <p>Needs Attention</p>
-                </div>
-                <div className="needs_attention_container w-7/8 h-fit max-h-1/4 flex flex-col self-center drop-shadow-lg"> 
+                <div className="w-full h-fit flex flex-col sm:flex-row">
+                    <div className="h-fit w-full sm:w-1/2 flex flex-col items-center">
+                        <div className={`${taskContainerHeaderCSSStyling}`}>
+                            <p>Needs Attention</p>
+                        </div>
+                        <div className={`needs_attention_container ${taskContainerBodyCSSStyling}`}> 
         
-                    <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandAttentionSection(prev=>!prev)}> 
-                        <div className="flex items-center">
-                            <img src={exclamationIcon} alt="Exclamation Icon" className="w-4.5 h-4.5 ml-3" />
-                            <p className="ml-3 section_title">Urgent Action Required</p>
-                        </div>
-                        <svg
-                            className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
-                                expandAttentionSection ? 'rotate-180' : ''
-                            }`}
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </div>
-
-                    <div className={"w-full h-full flex flex-col items-center section_body" + (needsAttentionTasks.length === 0 ? " round_bottom_on_empty":"")}>
-                        {attentionTasksToShow.map((task,index)=>(
-                            <div className="task_item_container h-fit flex flex-col mb-2"> 
-                                <div className={`unaccepted_task_item w-full h-fit flex flex-col sm:flex-row justify-between sm:justify-start items-center`}>
-                                    <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start">
-                                        <p className="text-sm sm:text-lg font-bold">{task.task_name}</p>
-                                        <p className="text-xs sm:text-sm">By: {task.due_date}</p>
-                                    </div>
-                                    {/* <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p> */}
-
-                                    <div className="sm:ml-auto flex w-fit items-center">
-                                        {/* <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>DEMOUpdateTaskStatus(task.task_id,e.target.value)} value={DEMORetrieveTaskStatus(task.task_id)}>
-                                        <option value="To-Do">To-Do</option>
-                                        <option value="In Progress">In Progress</option>
-                                        <option value="Completed">Completed</option>
-                                        </select> */}
-
-                                        <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>
-                                    </div>
-                                    
+                            <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandAttentionSection(prev=>!prev)}> 
+                                <div className="flex items-center">
+                                    <img src={exclamationIcon} alt="Exclamation Icon" className="w-4.5 h-4.5 ml-3" />
+                                    <p className="ml-3 section_title">Urgent Action Required</p>
                                 </div>
-                               
-
-                                <div className={`divider_bar w-full self-center ${(index !== attentionTasksToShow.length - 1 || attentionTasksToShow.length === 0) ? 'task_item_border_bottom' : 'hidden'}`}></div> 
-                                
-                            </div>
-                        ))
-                        }
-                    </div>
-                </div>
-
-                <div className="w-7/8 mt-4 flex self-center justify-start font-bold opacity-50">
-                    <p>To be Accepted</p>
-                </div>
-                <div className="accept_container w-7/8 h-fit flex flex-col self-center drop-shadow-lg" onClick={()=>setExpandAcceptSection(prev=>!prev)}>
-                    <div className="text-xl self-start mt-1 w-full flex section_header"> 
-
-                        <div className="flex items-center">
-                            <img src={mailOpen} alt="Mail Open Icon" className="w-4.5 h-4.5 ml-3" />
-                            <p className="ml-3 section_title">New Assignments</p>
-                        </div>
-                        
-
-                        <svg
-                            className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
-                                expandAcceptSection ? 'rotate-180' : ''
-                            }`}
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </div>
-
-                    <div className={"w-full h-fit flex flex-col items-center section_body" + (tasks(false).length === 0 ? " round_bottom_on_empty":"")}>
-                    {acceptTasksToShow.map((task,index)=>(
-                        <div className="task_item_container h-fit flex flex-col mb-2"> 
-                            <div className={`unaccepted_task_item w-full h-fit flex flex-row items-center justify-between`}>
-                                <div className="flex flex-col w-fit">
-                                    <p className=" text-sm sm:text-lg w-full text-left font-bold">{task.task_name}</p>
-                                    <p className=" text-xs sm:text-sm w-full text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
-                                </div>
-
-                                <div className="sm:ml-auto w-fit flex">
-
-                                    <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1 text-red-500" onClick={()=>DEMOAcceptTask(task.task_id)}>x</button>
-
-                                    <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1 text-emerald-500" onClick={()=>DEMOAcceptTask(task.task_id)}>✓</button>
-
-                                    
-                                
-                                    <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded mt-1" onClick={()=>goToTaskEdit(task.task_id)}/>
-
-                                </div>
-                                
+                                {isMobile&&
+                                <svg
+                                    className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
+                                        expandAttentionSection ? 'rotate-180' : ''
+                                    }`}
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>}
                             </div>
 
-                            <div className={`divider_bar w-full self-center ${(index !== acceptTasksToShow.length - 1 || acceptTasksToShow.length === 0) ? 'task_item_border_bottom' : 'hidden'}`}></div>
-                        </div>
-                    ))
-                    }
-                    </div>
-                </div>
+                            <div className={"w-full h-full flex flex-col items-center section_body" + (needsAttentionTasks.length === 0 ? " round_bottom_on_empty":"")}>
+                                {attentionTasksToShow.map((task,index)=>(
+                                    <div className="task_item_container h-fit flex flex-col mb-2"> 
+                                        <div className={`unaccepted_task_item w-full h-fit flex flex-col sm:flex-row justify-between sm:justify-start items-center`}>
+                                            <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-fit justify-between sm:justify-start">
+                                                <p className="text-sm sm:text-lg font-bold">{task.task_name}</p>
+                                                <p className="text-xs sm:text-sm">By: {task.due_date}</p>
+                                            </div>
+                                            {/* <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p> */}
 
-                <div className="w-7/8 mt-4 flex self-center justify-start font-bold opacity-50">
-                    <p>Current Tasks</p>
-                </div>
-                <div className="current_tasks_container w-7/8 flex flex-col h-fit self-center mt-2 drop-shadow-lg">
-                    <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandCurrentSection(prev=>!prev)}> 
-                        <div className="flex items-center">
-                            <img src={loading} alt="Mail Open Icon" className="w-4.5 h-4.5 ml-3" />
-                            <p className="ml-3 section_title">In Progress</p>
-                        </div>
+                                            <div className="ml-auto flex w-fit items-center">
+                                                {/* <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>DEMOUpdateTaskStatus(task.task_id,e.target.value)} value={DEMORetrieveTaskStatus(task.task_id)}>
+                                                <option value="To-Do">To-Do</option>
+                                                <option value="In Progress">In Progress</option>
+                                                <option value="Completed">Completed</option>
+                                                </select> */}
 
-                        <svg
-                            className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
-                                expandCurrentSection ? 'rotate-180' : ''
-                            }`}
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </div>
-
-                    <div className={"w-full h-fit flex flex-col items-center section_body" + (tasks(true).length === 0 ? " round_bottom_on_empty":"")}>
-                        {currentTasksToShow.map((task,index)=>(
-
-                            <div className="task_item_container h-fit flex flex-col mb-2"> 
-
-                                <div className={`unaccepted_task_item w-full h-fit  flex flex-col sm:flex-row justify-between sm:justify-start items-center`}>
-                                    <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start">
-                                        <p className="text-sm sm:text-lg font-bold">{task.task_name}</p>
-                                        <p className="text-xs sm:text-sm">By: {task.due_date}</p>
-                                    </div>
-                                    {/* <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p> */}
-
-                                    <div className="sm:ml-auto flex w-fit items-center">
-                                        <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>DEMOUpdateTaskStatus(task.task_id,e.target.value)} value={DEMORetrieveTaskStatus(task.task_id)}>
-                                        <option value="To-Do">To-Do</option>
-                                        <option value="In Progress">In Progress</option>
-                                        <option value="Completed">Completed</option>
-                                        </select>
-
-                                        <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>
-                                    </div>
-
-                                    {/* <div className={`divider_bar w-7/8 ${(index !== currentTasksToShow.length - 1 || currentTasksToShow.length === 0) ? 'task_item_border_bottom' : ''}`}></div> */}
+                                                <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>
+                                            </div>
+                                            
+                                        </div>
                                     
+
+                                        <div className={`divider_bar w-full self-center ${(index !== attentionTasksToShow.length - 1 || attentionTasksToShow.length === 0) ? 'task_item_border_bottom' : 'hidden'}`}></div> 
+                                        
+                                    </div>
+                                ))
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="h-fit w-full sm:w-1/2 flex flex-col items-center">
+                        <div className={`${taskContainerHeaderCSSStyling}`}>
+                            <p>To be Accepted</p>
+                        </div>
+                        <div className={`accept_container ${taskContainerBodyCSSStyling}`}>
+                            <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandAcceptSection(prev=>!prev)}> 
+
+                                <div className="flex items-center">
+                                    <img src={mailOpen} alt="Mail Open Icon" className="w-4.5 h-4.5 ml-3" />
+                                    <p className="ml-3 section_title">New Assignments</p>
                                 </div>
+                                {isMobile&&
+                                <svg
+                                    className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
+                                        expandAcceptSection ? 'rotate-180' : ''
+                                    }`}
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
 
+                                }
+                            </div>
 
-                                <div className={`divider_bar w-full self-center ${(index !== currentTasksToShow.length - 1 || currentTasksToShow.length === 0) ? 'task_item_border_bottom' : 'hidden'}`}></div> 
+                            <div className={"w-full h-fit flex flex-col items-center section_body" + (tasks(false).length === 0 ? " round_bottom_on_empty":"")}>
+                                {acceptTasksToShow.map((task,index)=>(
+                                    <div className="task_item_container h-fit flex flex-col mb-2"> 
+                                        <div className={`unaccepted_task_item w-full h-fit flex flex-row items-center justify-between`}>
+                                            <div className="flex flex-col w-fit">
+                                                <p className=" text-sm sm:text-lg w-full text-left font-bold">{task.task_name}</p>
+                                                <p className=" text-xs sm:text-sm w-full text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
+                                            </div>
+
+                                            <div className="sm:ml-auto w-fit flex">
+
+                                                <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1 text-red-500" onClick={()=>DEMOAcceptTask(task.task_id)}>x</button>
+
+                                                <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1 text-emerald-500" onClick={()=>DEMOAcceptTask(task.task_id)}>✓</button>
+
+                                                
+                                            
+                                                <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded mt-1" onClick={()=>goToTaskEdit(task.task_id)}/>
+
+                                            </div>
+                                            
+                                        </div>
+
+                                        <div className={`divider_bar w-full self-center ${(index !== acceptTasksToShow.length - 1 || acceptTasksToShow.length === 0) ? 'task_item_border_bottom' : 'hidden'}`}></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                
+                <div className="w-full h-fit flex flex-col sm:flex-row">
+                    <div className="h-fit w-full sm:w-1/2 flex flex-col items-center">
+                        <div className={`${taskContainerHeaderCSSStyling}`}>
+                            <p>Current Tasks</p>
+                        </div>
+                        <div className={`current_tasks_container ${taskContainerBodyCSSStyling}`}>
+                            <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandCurrentSection(prev=>!prev)}> 
+                                <div className="flex items-center">
+                                    <img src={loading} alt="Mail Open Icon" className="w-4.5 h-4.5 ml-3" />
+                                    <p className="ml-3 section_title">In Progress</p>
+                                </div>
+                                {isMobile &&
+                                    <svg
+                                    className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
+                                        expandCurrentSection ? 'rotate-180' : ''
+                                    }`}
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                                }
                                 
-
                             </div>
-                        ))
-                        }
-                    </div>
-                </div>
 
-                <div className="w-7/8 mt-4 flex self-center justify-start font-bold opacity-50">
-                    <p>Completed</p>
-                </div>
-                <div className="completed_tasks_container w-7/8 flex flex-col h-fit self-center mt-2 drop-shadow-lg">
-                    <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandCompletedSection(prev=>!prev)}> 
-                        <div className="flex items-center">
-                            <img src={checkFilled} alt="Check Icon" className="w-4.5 h-4.5 ml-3" />
-                            <p className="ml-3 section_title">Completed Tasks</p>
+                            <div className={"w-full h-fit flex flex-col items-center section_body" + (tasks(true).length === 0 ? " round_bottom_on_empty":"")}>
+                                {currentTasksToShow.map((task,index)=>(
+
+                                    <div className="task_item_container h-fit flex flex-col mb-2"> 
+
+                                        <div className={`unaccepted_task_item w-full h-fit  flex flex-col sm:flex-row justify-between sm:justify-start items-center`}>
+                                            <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-fit justify-between sm:justify-start">
+                                                <p className="text-sm sm:text-lg font-bold">{task.task_name}</p>
+                                                <p className="text-xs sm:text-sm">By: {task.due_date}</p>
+                                            </div>
+                                            {/* <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p> */}
+
+                                            <div className="ml-auto flex w-fit items-center">
+                                                <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>DEMOUpdateTaskStatus(task.task_id,e.target.value)} value={DEMORetrieveTaskStatus(task.task_id)}>
+                                                <option value="To-Do">To-Do</option>
+                                                <option value="In Progress">In Progress</option>
+                                                <option value="Completed">Completed</option>
+                                                </select>
+
+                                                <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>
+                                            </div>
+
+                                            {/* <div className={`divider_bar w-7/8 ${(index !== currentTasksToShow.length - 1 || currentTasksToShow.length === 0) ? 'task_item_border_bottom' : ''}`}></div> */}
+                                            
+                                        </div>
+
+
+                                        <div className={`divider_bar w-full self-center ${(index !== currentTasksToShow.length - 1 || currentTasksToShow.length === 0) ? 'task_item_border_bottom' : 'hidden'}`}></div> 
+                                        
+
+                                    </div>
+                                ))
+                                }
+                            </div>
                         </div>
-
-                        <svg
-                            className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
-                                expandCompletedSection ? 'rotate-180' : ''
-                            }`}
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                d="M19 9l-7 7-7-7" />
-                        </svg>
                     </div>
 
-                    <div className={"w-full h-fit overflow-y-scroll flex flex-col items-center section_body" + (completedTasks.length === 0 ? " round_bottom_on_empty":"")}>
-                        {completedTasksToShow.map((task, index)=>(
-
-                            <div className="task_item_container h-fit flex flex-col mb-2"> 
-
-                                <div className={`unaccepted_task_item w-full h-fit rounded-xl flex flex-col sm:flex-row justify-between sm:justify-start items-center`}>
-                                    <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start">
-                                        <p className="text-sm sm:text-lg font-bold line-through opacity-50">{task.task_name}</p>
-                                        <p className="text-xs sm:text-sm text-emerald-500">Done</p>
-                                    </div>
-                                    {/* <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p> */}
-
-                                    <div className="sm:ml-auto flex w-fit items-center opacity-50">
-                                        <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>DEMOUpdateTaskStatus(task.task_id,e.target.value)} value={DEMORetrieveTaskStatus(task.task_id)}>
-                                        <option value="To-Do">To-Do</option>
-                                        <option value="In Progress">In Progress</option>
-                                        <option value="Completed">Completed</option>
-                                        </select>
-
-                                        <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>
-                                    </div>
-                                    
+                    <div className="h-fit w-full sm:w-1/2 flex flex-col items-center">
+                        <div className={`${taskContainerHeaderCSSStyling}`}>
+                            <p>Completed</p>
+                        </div>
+                        <div className={`completed_tasks_container ${taskContainerBodyCSSStyling}`}>
+                            <div className="text-xl self-start mt-1 w-full flex section_header" onClick={()=>setExpandCompletedSection(prev=>!prev)}> 
+                                <div className="flex items-center">
+                                    <img src={checkFilled} alt="Check Icon" className="w-4.5 h-4.5 ml-3" />
+                                    <p className="ml-3 section_title">Completed Tasks</p>
                                 </div>
 
+                                {isMobile&&
+                                <svg
+                                    className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
+                                        expandCompletedSection ? 'rotate-180' : ''
+                                    }`}
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
 
-                                <div className={`divider_bar w-full self-center ${(index !== completedTasksToShow.length - 1 || completedTasksToShow.length === 0) ? 'task_item_border_bottom' : 'hidden'}`}></div> 
-
+                                }
                             </div>
-                        ))
-                        }
+
+                            <div className={"w-full h-fit overflow-y-scroll flex flex-col items-center section_body" + (completedTasks.length === 0 ? " round_bottom_on_empty":"")}>
+                                {completedTasksToShow.map((task, index)=>(
+
+                                    <div className="task_item_container h-fit flex flex-col mb-2"> 
+
+                                        <div className={`unaccepted_task_item w-full h-fit rounded-xl flex flex-col sm:flex-row justify-between sm:justify-start items-center`}>
+                                            <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start">
+                                                <p className="text-sm sm:text-lg font-bold line-through opacity-50">{task.task_name}</p>
+                                                <p className="text-xs sm:text-sm text-emerald-500">Done</p>
+                                            </div>
+                                            {/* <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p> */}
+
+                                            <div className="sm:ml-auto flex w-fit items-center opacity-50">
+                                                <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>DEMOUpdateTaskStatus(task.task_id,e.target.value)} value={DEMORetrieveTaskStatus(task.task_id)}>
+                                                <option value="To-Do">To-Do</option>
+                                                <option value="In Progress">In Progress</option>
+                                                <option value="Completed">Completed</option>
+                                                </select>
+
+                                                <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>
+                                            </div>
+                                            
+                                        </div>
+
+
+                                        <div className={`divider_bar w-full self-center ${(index !== completedTasksToShow.length - 1 || completedTasksToShow.length === 0) ? 'task_item_border_bottom' : 'hidden'}`}></div> 
+
+                                    </div>
+                                ))
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <FooterNav/>
+            <FooterNav setting="Tasks"/>
         </div>
-
-        {/* code for prev version, keep around just in case 
-        <div className="w-full h-full flex flex-col justify-start items-center">
-            <div className="w-full flex">
-                <Link to="/orgs/landing" className="text-3xl justify-self-start self-start sm:self-center mr-auto">
-                        <p>←</p>
-                </Link>
-
-                <h1 className="landing_page_header w-full hidden sm:block justify-self-center">
-                    Streamline
-                </h1>
-
-                <div className="h-1/3 w-fit flex flex-col switch_container ml-auto">
-                    <p className="text-xs text-center">
-                        Switch user
-                    </p>
-                    <label className="switch self-center">
-                        <input type="checkbox" onChange={DEMOSwitchTestUsers}>
-                        </input>
-                        <span className="slider round">
-                        </span>
-                    </label>
-                </div>
-            </div>
-
-            <p className="landing_page_header w-full text-4xl sm:hidden">
-               Streamline
-            </p>
-
-            <div className="dashboard_wrapper h-full sm:h-7/8 w-full sm:w-3/4 flex justify-start rounded-xl flex-col mt-4">
-                <p className="text-3xl">My Tasks for {retrieveClubInfo()}</p>
-
-                <div className="accept_container w-full h-1/4 flex flex-col mt-4">
-                    <p className="text-xl self-start ml-2 mt-1">Tasks to Accept</p>
-                    <div className="w-full h-full overflow-x-scroll flex flex-col items-center">
-                    {tasks(false).map(task=>(
-                        <div className="unaccepted_task_item h-fit w-7/8 rounded-xl flex flex-col sm:flex-row items-center">
-                            <p className="text-sm sm:text-lg w-full sm:w-1/3 text-left font-bold">{task.task_name}</p>
-                            <p className="sm:ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
-                            <div className="sm:ml-auto w-fit flex">
-                                <button className="task_accept_small sm:task_accept_button text-center flex items-center justify-center rounded-xl mt-1 mr-1" onClick={()=>DEMOAcceptTask(task.task_id)}>Accept</button>
-                            
-                                <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded mt-1" onClick={()=>goToTaskEdit(task.task_id)}/>
-
-                            </div>
-                            
-                        </div>
-                    ))
-                    }
-                    </div>
-                </div>
-
-                <div className="current_tasks_container w-full grow flex flex-col">
-                    <div className="current_tasks_header w-full flex justify-between items-center">
-                        <p className="text-xl self-start ml-2 mt-1">Current Tasks</p>
-                        <button className="task_create_button flex justify-center items-center p-1" onClick={goToTaskCreation}>+</button>
-                    </div>
-
-                    <div className="w-full h-full overflow-x-scroll flex flex-col items-center">
-                        {tasks(true).map(task=>(
-                            <div className="unaccepted_task_item w-7/8 h-1/4 sm:h-fit rounded-xl flex flex-col sm:flex-row justify-between sm:justify-start items-center">
-                                <div className="flex flex-row sm:flex-col items-center sm:items-start w-full sm:w-1/3 justify-between sm:justify-start">
-                                    <p className="text-sm sm:text-lg font-bold">{task.task_name}</p>
-                                    <p className="text-xs sm:text-sm">Due: {task.due_date}</p>
-                                </div>
-                                <p className="ml-3 text-xs sm:text-sm w-full sm:w-1/3 text-left">Assigned by {retrieveAssigners(task.task_id)}</p>
-
-                                <div className="sm:ml-auto flex w-fit items-center">
-                                    <select className="task_accept_select rounded-xl text-sm mr-1" onChange={(e)=>DEMOUpdateTaskStatus(task.task_id,e.target.value)} value={DEMORetrieveTaskStatus(task.task_id)}>
-                                    <option value="To-Do">To-Do</option>
-                                    <option value="In Progress">In Progress</option>
-                                    <option value="Completed">Completed</option>
-                                    </select>
-
-                                    <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>goToTaskEdit(task.task_id)}/>
-                                </div>
-                                
-                            </div>
-                        ))
-                        }
-                    </div>
-                </div>
-            </div>
-            <FooterNav/>
-        </div> */}
     </>)
 }

@@ -29,23 +29,43 @@ export const InitiativesDashboard = () => {
 
     const [completedInitiatives, setCompletedInitiatives] = useState<Initiative[]>([])
 
-    const [expandOpenInitiatives, setExpandOpenInitiatives] = useState(false)
 
-    const [expandCompletedInitiatives, setExpandCompletedInitiatives] = useState(false)
+    const [isMobile, setIsMobile] = useState<boolean>(false);
 
-    const openInitiativesToShow = expandOpenInitiatives ? openInitiatives: openInitiatives.slice(0,1)
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth < 768);  // 768px is Tailwind's 'sm' breakpoint; adjust if needed
+        };
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
 
-    const completedInitiativesToShow = expandCompletedInitiatives ?completedInitiatives: completedInitiatives.slice(0,1)
+    const [expandOpenInitiatives, setExpandOpenInitiatives] = useState(!isMobile)
+
+    const [expandCompletedInitiatives, setExpandCompletedInitiatives] = useState(!isMobile)
+
+    useEffect(() => {
+        setExpandOpenInitiatives(!isMobile);
+        setExpandCompletedInitiatives(!isMobile);
+    }, [isMobile]);
+
+    const openInitiativesToShow = isMobile? (expandOpenInitiatives ? openInitiatives: openInitiatives.slice(0,1)):openInitiatives
+
+    const completedInitiativesToShow = isMobile? (expandCompletedInitiatives ? completedInitiatives: completedInitiatives.slice(0,1)):completedInitiatives
 
     useEffect(()=>{
         if (!isLoaded){
             navigate(`/`)
         }
-    },[isLoaded, id])
+        else{
+            DEMOloadFromCache()
+        }
+    },[isLoaded, id, testDataLoaded, currUser])
 
-    useEffect(()=>{
-        DEMOloadFromCache()
-    },[testDataLoaded])
+    // useEffect(()=>{
+    //     DEMOloadFromCache()
+    // },[testDataLoaded])
 
     const DEMOSwitchTestUsers = () => {
         //replace with actual functionality to switch the logged i user in your application
@@ -155,6 +175,10 @@ export const InitiativesDashboard = () => {
         return loadedUsers.find(user => user.user_id === user_id)?.username
     }
 
+    const DEMONavigateInitiativesCreation = ()=>{
+        navigate("/initiatives/new_initiative/")
+    }
+
     return(<>
         <div className="w-full h-full flex flex-col justify-start items-center">
             <div className="w-full flex">
@@ -206,6 +230,11 @@ export const InitiativesDashboard = () => {
                         <p className="landing_block_text">{completedInitiatives.length}</p>
                         <p className="landing_block_text">Completed Initiatives</p>
                     </div>
+
+                    <div className="landing_block rounded-xl flex flex-col task_create_button_updated text-white ml-5" onClick={DEMONavigateInitiativesCreation}>
+                        <p className="landing_block_text">+</p>
+                        <p className="landing_block_text">Initiative</p>
+                    </div>
                 </div>
 
                 <div className="open_initiatives_container w-7/8 h-fit max-h-1/3 flex flex-col self-center drop-shadow-lg mt-4">
@@ -214,6 +243,7 @@ export const InitiativesDashboard = () => {
                         <div className="flex items-center">
                             <p className="ml-3 section_title">Initiatives to do</p>
                         </div>
+                        {isMobile&&
                         <svg
                             className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
                                 expandOpenInitiatives ? 'rotate-180' : ''
@@ -221,7 +251,7 @@ export const InitiativesDashboard = () => {
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                 d="M19 9l-7 7-7-7" />
-                        </svg>
+                        </svg>}
                     </div>
 
                     <div className={`w-full h-full flex flex-col items-center section_body overflow-y-scroll`}>
@@ -261,6 +291,7 @@ export const InitiativesDashboard = () => {
                         <div className="flex items-center">
                             <p className="ml-3 section_title">Completed Initiatives</p>
                         </div>
+                        {isMobile&&
                         <svg
                             className={`w-5 h-5 ml-auto mr-3 transform transition-transform duration-300 ${
                                 expandCompletedInitiatives ? 'rotate-180' : ''
@@ -268,7 +299,7 @@ export const InitiativesDashboard = () => {
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                 d="M19 9l-7 7-7-7" />
-                        </svg>
+                        </svg>}
                     </div>
                     <div className={`w-full h-full flex flex-col items-center section_body overflow-y-scroll`}>
                             {completedInitiativesToShow.map((initiative,index)=>(
@@ -306,7 +337,7 @@ export const InitiativesDashboard = () => {
             </div>
 
 
-            <FooterNav/>
+            <FooterNav setting="Initiatives"/>
         </div>
     </>)
 }
