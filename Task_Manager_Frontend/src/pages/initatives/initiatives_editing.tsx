@@ -1,20 +1,21 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { retrieveAndParseClubInitiatives, retrieveAndParseCurrClubID, retrieveAndParseCurrUser, retrieveAndParseTestClubMemberships, retrieveAndParseTestTaskAssignments, retrieveAndParseTestTasks, retrieveAndParseTestUsers, setClubInitiativesLocalStorage, setTestTaskAssignments, setTestTasks } from "../../demo_utils/getters_and_setters"
 import { useUserContext, type ClubMembership, type Initiative, type Task, type TaskAssignment, type user } from "../../contexts/UserContext"
 import { useEffect, useState } from "react"
-import { taskAssignments } from "../../assets/test_data"
 
-export const InitiativeCreation = () => {
-
+export const InitiativesEditing = () => {
     const navigate = useNavigate()
+    const { id } = useParams()  // Assuming route is /initiatives/initiative/:id/
 
-    const {isLoaded, testDataLoaded}  = useUserContext()
+    const { testDataLoaded}  = useUserContext()
 
     const [leadArr, setLeadArr] = useState<user[]>([])
 
     const [currUser, setCurrUser] = useState<user>()
 
     const [currClubID, setCurrClubID] = useState(-1)
+
+    const [currentInitiative, setCurrentInitiative] = useState<Initiative | null>(null)
 
     const [DEMOLoadedInitiatives, setDEMOLoadedIntitiatives] = useState<Initiative[]>([])
 
@@ -42,8 +43,6 @@ export const InitiativeCreation = () => {
     const [initiativeTasks, setIntitiativeTasks] = useState<Task[]>([])
 
     const [initiativeTaskAssignments, setInitiativeTaskAssignments ] = useState<TaskAssignment[]>([])
-
-    const DEMORandomInititiveID: number = Math.floor(Math.random() * (100 - 6 + 1)) + 6
     /**
      * things that need to bet set for these tasks:
      * task_id
@@ -56,7 +55,7 @@ export const InitiativeCreation = () => {
         {
             task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
             club_id: currClubID,
-            initiative_id: DEMORandomInititiveID,
+            initiative_id: -1,
             task_name:"Hold Exec Elections",
             due_date: "",
             attachments: null,
@@ -64,7 +63,7 @@ export const InitiativeCreation = () => {
         },
         {
             task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            initiative_id: DEMORandomInititiveID,
+            initiative_id: -1,
             club_id: currClubID,
             task_name:"Debrief responsibilities to new Exec",
             due_date: "",
@@ -73,7 +72,7 @@ export const InitiativeCreation = () => {
         },
         {
             task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            initiative_id: DEMORandomInititiveID,
+            initiative_id: -1,
             club_id: currClubID,
             task_name:"Introduce to other Execs",
             due_date: "",
@@ -87,7 +86,7 @@ export const InitiativeCreation = () => {
             task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
             club_id: currClubID,
             task_name:"Contact Event Space",
-            initiative_id: DEMORandomInititiveID,
+            initiative_id: -1,
             due_date: "",
             attachments: null,
             description:""
@@ -96,7 +95,7 @@ export const InitiativeCreation = () => {
             task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
             club_id: currClubID,
             task_name:"Meet with food vendor",
-            initiative_id: DEMORandomInititiveID,
+            initiative_id: -1,
             due_date: "",
             attachments: null,
             description:""
@@ -105,7 +104,7 @@ export const InitiativeCreation = () => {
             task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
             club_id: currClubID,
             task_name:"Send invites",
-            initiative_id: DEMORandomInititiveID,
+            initiative_id: -1,
             due_date: "",
             attachments: null,
             description:""
@@ -113,7 +112,7 @@ export const InitiativeCreation = () => {
         {
             task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
             club_id: currClubID,
-            initiative_id: DEMORandomInititiveID,
+            initiative_id: -1,
             task_name:"Confirm attendance and logistics",
             due_date: "",
             attachments: null,
@@ -125,7 +124,7 @@ export const InitiativeCreation = () => {
         {
             task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
             club_id: currClubID,
-            initiative_id: DEMORandomInititiveID,
+            initiative_id: -1,
             task_name:"Prepare successorship document",
             due_date: "",
             attachments: null,
@@ -134,7 +133,7 @@ export const InitiativeCreation = () => {
         {
             task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
             club_id: currClubID,
-            initiative_id: DEMORandomInititiveID,
+            initiative_id: -1,
             task_name:"Advertise Exec opening",
             due_date: "",
             attachments: null,
@@ -143,7 +142,7 @@ export const InitiativeCreation = () => {
         {
             task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
             club_id: currClubID,
-            initiative_id: DEMORandomInititiveID,
+            initiative_id: -1,
             task_name:"Prepare for student voting",
             due_date: "",
             attachments: null,
@@ -180,15 +179,16 @@ export const InitiativeCreation = () => {
         setInitiativeTaskAssignments(updatedAssignments)
     },[lead])
 
-    useEffect(()=>{
-        handleInitiativeTypeSelection(initiativeType)
-    },[initiativeType])
+    // useEffect(()=>{
+    //     handleInitiativeTypeSelection(initiativeType)
+    // },[initiativeType])
 
 
     const DEMOLoadFromCache = ()=>{
 
 
         const loaded_user_data: user[] = retrieveAndParseTestUsers()
+
         const loaded_club_membership_data: ClubMembership[] = retrieveAndParseTestClubMemberships()
 
         const loaded_curr_club_id: number | null = retrieveAndParseCurrClubID()
@@ -204,18 +204,75 @@ export const InitiativeCreation = () => {
 
         if (loaded_user_data.length>0 && 
             loaded_club_membership_data.length > 0&& 
-            loaded_initiatives.length > 0&&
-            loaded_assignments.length>0 &&
+            loaded_initiatives && loaded_initiatives.length > 0 &&
+            loaded_assignments && loaded_assignments.length>0 &&
+            loaded_tasks && loaded_tasks.length > 0 &&
             loaded_curr_user !== null&& 
-            loaded_tasks.length>0&&
             loaded_curr_club_id !== null){
 
-            //console.log(`curr club id: ${loaded_curr_club_id}`)
             setCurrClubID(loaded_curr_club_id)
             setCurrUser(loaded_curr_user)
             setDEMOLoadedIntitiatives(loaded_initiatives)
             setDEMOLoadedTaskAssignments(loaded_assignments)
             setDEMOLoadedTasks(loaded_tasks)
+            
+            // Find the current initiative by id
+            const currentInit = loaded_initiatives.find(init => init.initiative_id === Number(id))
+            if (currentInit) {
+                setCurrentInitiative(currentInit)
+                console.log(`curr init ${JSON.stringify(currentInit,null,2)}`)
+                // Populate form fields
+                setInitiativeName(currentInit.name)
+                setLead(currentInit.lead_id.toString())
+                setDescription(currentInit.description || "")
+                setStartDate(currentInit.start_date)
+                setEndDate(currentInit.due_date)
+                setInitiativeType(currentInit.initiative_type)
+                // Note: attachments would need special handling if stored as files
+
+                // Filter tasks for this initiative
+                const initTasks = loaded_tasks.filter(task => task.initiative_id === Number(id))
+                // Set default due_date to initiative's due_date if task's due_date is empty
+                const initTasksWithDefaults = initTasks.map(task => ({
+                    ...task,
+                    due_date: task.due_date || currentInit.due_date
+                }))
+                setIntitiativeTasks(initTasksWithDefaults)
+
+
+                console.log(`TEST: Initiative tasks: ${JSON.stringify(initTasksWithDefaults,null,2)}`)
+                
+
+                // Filter assignments for these tasks
+                let initAssignments = loaded_assignments.filter(assignment => 
+                    initTasks.some(task => task.task_id === assignment.task_id)
+                )
+
+                setInitiativeTaskAssignments(initAssignments)
+
+                console.log(`TEST Initiative assignments: ${JSON.stringify(initAssignments,null,2)}`)
+                // // Ensure each task has an assignment
+                // const assignmentsMap = new Map(initAssignments.map(a => [a.task_id, a]))
+                // const completeAssignments = initTasksWithDefaults.map(task => {
+                //     if (assignmentsMap.has(task.task_id)) {
+                //         return assignmentsMap.get(task.task_id)!
+                //     } else {
+                //         // Create default assignment
+                //         return {
+                //             assigner: parseInt(currentInit.lead_id.toString(), 10),
+                //             assignee: -1,
+                //             task_id: task.task_id,
+                //             status: "Needs Acceptance",
+                //             accepted: false
+                //         }
+                //     }
+                // })
+                // setInitiativeTaskAssignments(completeAssignments)
+            } else {
+                // Initiative not found
+                setInitiativeName("Initiative not found")
+                setDescription("The requested initiative could not be found.")
+            }
             
             let filtered_users = loaded_user_data.filter(user=>{
                 if (user.user_id === loaded_curr_user.user_id){
@@ -257,6 +314,9 @@ export const InitiativeCreation = () => {
     }
 
     const handleInitiativeTypeSelection = (initType:string)=>{
+        // For editing, don't overwrite existing tasks
+        if (initiativeTasks.length > 0) return;
+
         let updatedInitTasks: Task[] = []
 
         if (initType === "Onboarding"){
@@ -301,6 +361,17 @@ export const InitiativeCreation = () => {
         let updatedTasks:Task[] = [...initiativeTasks]
         let updatedAssignments: TaskAssignment[] = [...initiativeTaskAssignments]
 
+        // Ensure assignment exists
+        while (updatedAssignments.length <= index) {
+            updatedAssignments.push({
+                assigner: parseInt(lead, 10),
+                assignee: -1,
+                task_id: updatedTasks[index]?.task_id || Math.floor(Math.random() * 100),
+                status: "Needs Acceptance",
+                accepted: false
+            })
+        }
+
         updatedTasks.map((task,ind)=>{
             if (ind === index){
                 if (modified_field === "Name"){
@@ -329,7 +400,7 @@ export const InitiativeCreation = () => {
         const newTask: Task = {
             task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
             club_id: currClubID,
-            initiative_id: DEMORandomInititiveID,
+            initiative_id: Number(id),
             task_name:"",
             due_date: "",
             attachments: null,
@@ -390,40 +461,42 @@ export const InitiativeCreation = () => {
 
     },[initiativeTasks,initiativeTaskAssignments])
 
-    const DEMOInitiativeCreation = async(event:React.FormEvent<HTMLFormElement>) => {
+    const DEMOInitiativeUpdate = async(event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        const randomId = Math.floor(Math.random() * (100 - 6 + 1)) + 6;
+        if (!currentInitiative) return;
 
-        const new_initiative: Initiative = {
-            initiative_id: randomId,
-            club_id: currClubID,
+        const updated_initiative: Initiative = {
+            ...currentInitiative,
             lead_id: parseInt(lead,10),
             name: initiativeName,
             initiative_type: initiativeType,
             attachments:attachments,
-            status: "To-Do",
             start_date: startDate,
             due_date: endDate,
             description: description,
         }
 
-        // Update tasks to have the correct initiative_id
-        const updatedTasks = initiativeTasks.map(task => ({
-            ...task,
-            initiative_id: randomId
-        }))
-
-        let updatedInits: Initiative[] = [...DEMOLoadedInitiatives, new_initiative]
+        // Update the initiative in the list
+        let updatedInits: Initiative[] = DEMOLoadedInitiatives.map(init => 
+            init.initiative_id === currentInitiative.initiative_id ? updated_initiative : init
+        )
 
         console.log(`updated inits: ${JSON.stringify(updatedInits,null,2)}`)
 
-        if (updatedTasks.length>0 && initiativeTaskAssignments.length>0){
-            let allTasks:Task[]= [...DEMOLoadedTasks].concat(updatedTasks)
-            let updatedAssignments:TaskAssignment[] = [...DEMOLoadedTaskAssignments].concat(initiativeTaskAssignments)
-            setTestTaskAssignments(updatedAssignments)
-            setTestTasks(allTasks)
-        }
+        // Update tasks and assignments
+        // Remove old tasks and assignments for this initiative
+        let updatedTasks: Task[] = DEMOLoadedTasks.filter(task => task.initiative_id !== currentInitiative.initiative_id)
+        let updatedAssignments: TaskAssignment[] = DEMOLoadedTaskAssignments.filter(assignment => 
+            !initiativeTasks.some(task => task.task_id === assignment.task_id)
+        )
+
+        // Add updated tasks and assignments
+        updatedTasks = updatedTasks.concat(initiativeTasks)
+        updatedAssignments = updatedAssignments.concat(initiativeTaskAssignments)
+
+        setTestTaskAssignments(updatedAssignments)
+        setTestTasks(updatedTasks)
         setClubInitiativesLocalStorage(updatedInits)
 
         navigate(`/initiatives/dashboard/${currClubID}/`)
@@ -439,19 +512,19 @@ export const InitiativeCreation = () => {
 
 
                 <h1 className="landing_page_header w-full hidden sm:block white_text">
-                    Create New Initiative
+                    Edit Initiative
                 </h1>
             </div>
 
             <p className="landing_page_header w-full text-4xl sm:hidden white_text">
-               Create New Initiative
+               Edit Initiative
             </p>
 
             <div className="initiative_creation_form_wrapper h-full sm:h-4/5 w-full sm:w-3/4 flex justify-start rounded-xl flex-col mt-5 overflow-y-scroll">
-                <form className="w-full h-full flex flex-col justify-start items-center" onSubmit={DEMOInitiativeCreation}>
+                <form className="w-full h-full flex flex-col justify-start items-center" onSubmit={DEMOInitiativeUpdate}>
                     <div className="form_group flex flex-col sm:flex-row justify-start p-1 w-7/8 self-start sm:self-center">
                         <label className="sm:self-center self-start text-xl font-bold" htmlFor="task_name">Initiative Name:</label>
-                        <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="task_name" name="task_name" required onChange={(e)=>setInitiativeName(e.target.value)}/>
+                        <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="task_name" name="task_name" required onChange={(e)=>setInitiativeName(e.target.value)} value={initiativeName}/>
                     </div>
 
 
@@ -515,17 +588,17 @@ export const InitiativeCreation = () => {
                         </select>
                     </div>
 
+                    {initiativeTasks.length >0 &&
                     <div className="form_group flex flex-col w-7/8 self-center init_task_window min-h-1/4 rounded-xl overflow-y-scroll items-center">
-                        {initiativeTasks.map((task,index)=>(
+                        {
+                        initiativeTasks.map((task,index)=>(
                                 <div className="task_item_container h-fit flex flex-col mb-2"> 
                                     <div className={`unaccepted_task_item w-full h-fit flex flex-col sm:flex-row sm:items-center justify-between`}>
                                         <div className="flex flex-col w-fit sm:w-1/3 sm:mt-0">
                                             <input className="form_input sm:ml-2 rounded-xl p-1 text-sm" type="text" id="task_name" name="task_name" placeholder="task name" value={task.task_name} onChange={(e)=>handleTaskAssignmentModification(index,"Name",e.target.value)}/>
                                         </div>
 
-                                    
-
-                                         <select className="form_input sm:ml-2 rounded-xl p-1 w-fit mt-1 sm:mt-0 text-sm" value={initiativeTaskAssignments[index].assignee} onChange={(e)=>handleTaskAssignmentModification(index, "Assignee", e.target.value)}>
+                                         <select className="form_input sm:ml-2 rounded-xl p-1 w-fit mt-1 sm:mt-0 text-sm" value={initiativeTaskAssignments[index]?.assignee ?? -1} onChange={(e)=>handleTaskAssignmentModification(index, "Assignee", e.target.value)}>
 
                                             <option value="-1" disabled>None</option>
                                             <option value={currUser?.user_id}>myself</option>
@@ -547,6 +620,7 @@ export const InitiativeCreation = () => {
                                 </div>
                             ))}
                     </div>
+                    }   
 
                     <div className="form_group flex flex-col sm:flex-row justify-start self-center w-7/8 mt-4">
                         <button className="bg-green-400 new_task_button text-white p-1" onClick={handleNewTask}>
@@ -563,7 +637,7 @@ export const InitiativeCreation = () => {
 
                     <div className="w-full flex justify-around">
                         <button className="bg-red-400 form_submit_normal self-center mt-auto mb-5" onClick={onCancel}>Cancel</button>
-                        <button className="bg-green-400 form_submit_normal self-center mt-auto mb-5" type="submit">Create</button>
+                        <button className="bg-green-400 form_submit_normal self-center mt-auto mb-5" type="submit">Confirm</button>
                     </div>
                 </form>
             </div>

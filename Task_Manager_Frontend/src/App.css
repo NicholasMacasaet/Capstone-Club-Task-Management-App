@@ -470,6 +470,17 @@ input:checked + .slider:before {
   width:90%
 }
 
+.init_task_window{
+  background-color: var(--off-er-white);
+  /* height: fit-content; */
+  max-height: 500px;
+}
+
+.new_task_button {
+  background-color: var(--dark-teal);
+  padding: 5px;
+}
+
 /* .logo {
   height: 6em;
   padding: 1.5em;

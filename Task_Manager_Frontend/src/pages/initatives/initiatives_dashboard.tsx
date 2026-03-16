@@ -61,11 +61,11 @@ export const InitiativesDashboard = () => {
         else{
             DEMOloadFromCache()
         }
-    },[isLoaded, id, testDataLoaded, currUser])
+    },[isLoaded, id])
 
-    // useEffect(()=>{
-    //     DEMOloadFromCache()
-    // },[testDataLoaded])
+    useEffect(()=>{
+        DEMOloadFromCache()
+    },[testDataLoaded])
 
     const DEMOSwitchTestUsers = () => {
         //replace with actual functionality to switch the logged i user in your application
@@ -179,6 +179,10 @@ export const InitiativesDashboard = () => {
         navigate("/initiatives/new_initiative/")
     }
 
+    const DEMONavigateIntitiativesView = (init_id:number) =>{
+        navigate(`/initiatives/initiative/${init_id}`)
+    }
+
     return(<>
         <div className="w-full h-full flex flex-col justify-start items-center">
             <div className="w-full flex">
@@ -271,7 +275,7 @@ export const InitiativesDashboard = () => {
                                             <option value="In Progress">In Progress</option>
                                             <option value="Completed">Completed</option>
                                         </select>
-                                            <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" />
+                                            <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>DEMONavigateIntitiativesView(initiative.initiative_id)}/>
                                         </div>
                                     
                                         <p className="text-xs sm:text-sm">Due: {initiative.due_date}</p>
@@ -320,7 +324,7 @@ export const InitiativesDashboard = () => {
                                             <option value="In Progress">In Progress</option>
                                             <option value="Completed">Completed</option>
                                         </select>
-                                            <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" />
+                                            <img src={editIcon} className="task_view p-0.5 rounded text-center flex items-center justify-center rounded" onClick={()=>DEMONavigateIntitiativesView(initiative.initiative_id)}/>
                                         </div>
                                     
                                         <p className="text-xs sm:text-sm">Due: {initiative.due_date}</p>

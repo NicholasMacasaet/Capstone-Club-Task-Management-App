@@ -7,7 +7,7 @@ import { setClubInitiativesLocalStorage, setCurrUserLocalStorage, setTestClubMem
 export interface Task {
     task_id: number;
     club_id: number;
-    // initiative_id: number;
+    initiative_id: number;
     attachments:File[] | null
     due_date: string;
     task_name:string;
@@ -45,8 +45,10 @@ export interface Initiative {
     initiative_id: number,
     club_id: number,
     //this corresponds to user id
+    start_date: string,
     due_date: string,
     lead_id: number,
+    initiative_type:string,
     name: string,
     description: string,
     attachments: File[] | null,

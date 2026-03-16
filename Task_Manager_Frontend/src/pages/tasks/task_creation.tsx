@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useUserContext, type ClubMembership, type Task, type TaskAssignment, type user } from "../../contexts/UserContext"
-import { retrieveAndParseCurrClubID, retrieveAndParseCurrUser, retrieveAndParseTestClubMemberships, retrieveAndParseTestTaskAssignments, retrieveAndParseTestTasks, retrieveAndParseTestUsers } from "../../demo_utils/getters_and_setters"
+import { retrieveAndParseCurrClubID, retrieveAndParseCurrUser, retrieveAndParseTestClubMemberships, retrieveAndParseTestTaskAssignments, retrieveAndParseTestTasks, retrieveAndParseTestUsers, retrieveAndParseClubInitiatives} from "../../demo_utils/getters_and_setters"
 // import { File } from "buffer"
 
 export const TaskCreation = () => {
@@ -14,6 +14,8 @@ export const TaskCreation = () => {
     const [loadedTaskAssignments, setLoadedTaskAssignments] = useState<TaskAssignment[]>([])
 
     const {isLoaded, testDataLoaded, currClubID, setCurrClubID}  = useUserContext()
+
+    const [loadedInitiatives, setLoadedInitiatives] = useState<Initiative[]>([])
 
     useEffect(()=>{
         if (!isLoaded){
@@ -28,11 +30,13 @@ export const TaskCreation = () => {
         const loaded_task_assignments: TaskAssignment[] = retrieveAndParseTestTaskAssignments()
         const loaded_curr_club_id: number | null = retrieveAndParseCurrClubID()
         const loaded_curr_user: user | null = retrieveAndParseCurrUser()
+        const loaded_initiatives: Initiative[]|null = retrieveAndParseClubInitiatives()
 
         if (loaded_user_data.length > 0 && 
             loaded_club_membership_data.length > 0 && 
             loaded_tasks.length > 0 && 
             loaded_task_assignments.length > 0 && 
+            loaded_initiatives > 0 &&
             loaded_curr_club_id !== null && 
             loaded_curr_user !== null){
 
@@ -51,6 +55,8 @@ export const TaskCreation = () => {
                     }
                 }
             })
+
+            let filteredInitiatives: Initiative[] = []
 
             setAssigneeArray(filtered_users)
             //---do i need these double check later---
@@ -141,6 +147,7 @@ export const TaskCreation = () => {
                 task_id: randomId,
                 club_id: currClubID,
                 due_date: packaged_data.due_date,
+                initiative_id: -1,
                 task_name: packaged_data.task_name,
                 attachments: packaged_data.attachments,
                 description: packaged_data.description
@@ -265,6 +272,16 @@ export const TaskCreation = () => {
                             <option value="event3">event3</option>
                         </select>
                     </div> */}
+
+                    <div className="form_group flex flex-col justify-center p-1 self-start sm:self-center w-7/8 mt-4">
+                        <label className="self-start text-xl font-bold" htmlFor="task_name">Initiative:</label>
+                        <select className="form_input sm:ml-2 rounded-xl p-1" id="associated_event" name="associated_event">
+                            <option defaultChecked disabled>None</option>
+                            <option value="event1">event1</option>
+                            <option value="event2">event2</option>
+                            <option value="event3">event3</option>
+                        </select>
+                    </div>
 
 
                     <div className="form_group flex flex-col justify-center p-1 self-start sm:self-center w-7/8 mt-4">
