@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { Link, useFetcher, useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import { useUserContext, type Task } from "../../contexts/UserContext"
+import { useUserContext, type Initiative, type Task } from "../../contexts/UserContext"
 import { testTasks, testTasks2 } from "../../assets/test_data"
 import { retrieveAssigners } from "../../misc_utils/retrieve_assigner"
-import { retrieveAndParseTestTasks, setTestTasks } from "../../demo_utils/getters_and_setters"
+import { retrieveAndParseClubInitiatives, retrieveAndParseCurrClubID, retrieveAndParseTestTasks, setTestTasks } from "../../demo_utils/getters_and_setters"
 // import { File } from "buffer"
 
 export const TaskEditing = () => {
@@ -16,7 +16,11 @@ export const TaskEditing = () => {
 
     const {currUser, isLoaded}  = useUserContext()
 
+    // const [currClubID, setCurrClubID] = useState(-1)
+
     const [loadedTasks, setLoadedTasks] = useState<Task[]>([])
+
+    const [loadedInitiatives, setLoadedInitiatives] = useState<Initiative[]>([])
 
     const [currTask, setCurrTask] = useState<Task>()
 
@@ -43,6 +47,24 @@ export const TaskEditing = () => {
         setLoadedTasks(tasks)
     }
 
+    const DEMORetrieveInitiatives = () =>{
+        const loaded_curr_club_id: number | null = retrieveAndParseCurrClubID()
+        const loaded_initiatives: Initiative[]|null = retrieveAndParseClubInitiatives()
+
+        if (loaded_initiatives.length>0 && loaded_curr_club_id){
+            let filteredInitiatives: Initiative[] = loaded_initiatives.filter(init=>{
+                if (init.club_id === loaded_curr_club_id){
+                    return true
+                }
+                else{
+                    return false
+                }
+            })
+            setLoadedInitiatives(filteredInitiatives)
+            // setCurrClubID(loaded_curr_club_id)
+        }
+    }
+
     useEffect(()=>{
         if (!isLoaded){
             navigate("/")
@@ -50,6 +72,7 @@ export const TaskEditing = () => {
 
         if (id){
             DEMORetrieveTaskInfo(id)
+            DEMORetrieveInitiatives()
         }
     },[isLoaded])
 
@@ -64,6 +87,7 @@ export const TaskEditing = () => {
             setAssigner(assigner_username)
             setTaskDate(currTask.due_date)
             setDescription(currTask.description)
+            setSelectedInit(currTask.initiative_id.toString())
         }
     },[currTask])
 
@@ -81,6 +105,8 @@ export const TaskEditing = () => {
     const [taskDate, setTaskDate] = useState("")
 
     const [description,setDescription] = useState("")
+
+    const [selectedInit, setSelectedInit] = useState("None")
 
 
     const handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {  
@@ -124,6 +150,7 @@ export const TaskEditing = () => {
                 task_name: taskName,
                 due_date: taskDate,
                 description: description,
+                initiative_id: parseInt(selectedInit,10),
                 attachments: attachments
             }
             setCurrTask(updatedTask)
@@ -142,7 +169,7 @@ export const TaskEditing = () => {
 
     useEffect(()=>{
         DEMOUpdateTask()
-    },[taskName, taskDate, description, attachments])
+    },[taskName, taskDate, description, attachments, selectedInit])
 
     return(<>
         {currTask !== undefined &&
@@ -234,6 +261,20 @@ export const TaskEditing = () => {
                             <option value="event3">event3</option>
                         </select>
                     </div> */}
+
+
+                    <div className="form_group flex flex-col justify-center p-1 self-start sm:self-center w-7/8 mt-4">
+                        <label className="self-start text-xl font-bold" htmlFor="task_name">Initiative:</label>
+                        <select className="form_input rounded-xl p-1 w-fit" id="associated_event" name="associated_event" value={selectedInit} onChange={(e)=>setSelectedInit(e.target.value)}>
+                            <option defaultChecked>None</option>
+                            {loadedInitiatives.map(init=>(
+                                <option value={init.initiative_id}>
+                                    {init.name}
+                                </option>
+                            ))
+                            }
+                        </select>
+                    </div>
 
                     <div className="form_group flex flex-col justify-center p-1  w-7/8 mt-4">
                         <label className="self-start text-xl font-bold" htmlFor="task_name">Description:</label>
