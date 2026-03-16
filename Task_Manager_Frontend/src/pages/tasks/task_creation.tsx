@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useUserContext, type ClubMembership, type Task, type TaskAssignment, type user } from "../../contexts/UserContext"
-import { retrieveAndParseCurrClubID, retrieveAndParseCurrUser, retrieveAndParseTestClubMemberships, retrieveAndParseTestTaskAssignments, retrieveAndParseTestTasks, retrieveAndParseTestUsers } from "../../demo_utils/getters_and_setters"
+import { useUserContext, type ClubMembership, type Task, type TaskAssignment, type user, type Initiative} from "../../contexts/UserContext"
+import { retrieveAndParseCurrClubID, retrieveAndParseCurrUser, retrieveAndParseTestClubMemberships, retrieveAndParseTestTaskAssignments, retrieveAndParseTestTasks, retrieveAndParseTestUsers, retrieveAndParseClubInitiatives} from "../../demo_utils/getters_and_setters"
 // import { File } from "buffer"
 
 export const TaskCreation = () => {
@@ -14,6 +14,9 @@ export const TaskCreation = () => {
     const [loadedTaskAssignments, setLoadedTaskAssignments] = useState<TaskAssignment[]>([])
 
     const {isLoaded, testDataLoaded, currClubID, setCurrClubID}  = useUserContext()
+
+    const [loadedInitiatives, setLoadedInitiatives] = useState<Initiative[]>([])
+
 
     useEffect(()=>{
         if (!isLoaded){
@@ -29,10 +32,13 @@ export const TaskCreation = () => {
         const loaded_curr_club_id: number | null = retrieveAndParseCurrClubID()
         const loaded_curr_user: user | null = retrieveAndParseCurrUser()
 
+        const loaded_initiatives: Initiative[]|null = retrieveAndParseClubInitiatives()
+
         if (loaded_user_data.length > 0 && 
             loaded_club_membership_data.length > 0 && 
             loaded_tasks.length > 0 && 
             loaded_task_assignments.length > 0 && 
+            loaded_initiatives.length > 0 &&
             loaded_curr_club_id !== null && 
             loaded_curr_user !== null){
 
@@ -52,6 +58,17 @@ export const TaskCreation = () => {
                 }
             })
 
+            let filteredInitiatives: Initiative[] = loaded_initiatives.filter(init=>{
+                if (init.club_id === loaded_curr_club_id){
+                    return true
+                }
+                else{
+                    return false
+                }
+            })
+            // console.log(`loaded Initiatives: ${JSON.stringify(filteredInitiatives,null,2)}`)
+
+            setLoadedInitiatives(filteredInitiatives)
             setAssigneeArray(filtered_users)
             //---do i need these double check later---
             setLoadedTasks(loaded_tasks)
@@ -85,6 +102,8 @@ export const TaskCreation = () => {
     const [date, setDate] = useState("")
 
     const [description,setDescription] = useState("")
+
+    const [selectedInit, setSelectedInit] = useState("None")
 
 
     const handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {  
@@ -141,6 +160,7 @@ export const TaskCreation = () => {
                 task_id: randomId,
                 club_id: currClubID,
                 due_date: packaged_data.due_date,
+                initiative_id: selectedInit==="None"? -1:parseInt(selectedInit,10),
                 task_name: packaged_data.task_name,
                 attachments: packaged_data.attachments,
                 description: packaged_data.description
@@ -205,14 +225,14 @@ export const TaskCreation = () => {
             </p>
 
             <div className="task_creation_form_wrapper h-full sm:h-4/5 w-full sm:w-3/4 flex justify-start rounded-xl flex-col mt-5">
-                <form className="w-full h-full flex flex-col justify-start" onSubmit={(e)=>handleTaskCreate(e)}>
-                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start">
-                        <label className="sm:self-center self-start text-xl" htmlFor="task_name">Task Name:</label>
+                <form className="w-full h-full flex flex-col justify-start items-center" onSubmit={(e)=>handleTaskCreate(e)}>
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 w-7/8 self-start sm:self-center">
+                        <label className="sm:self-center self-start text-xl font-bold" htmlFor="task_name">Task Name:</label>
                         <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="task_name" name="task_name" required value={taskName} onChange={handleTaskNameChange}/>
                     </div>
 
-                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
-                        <label className="sm:self-center self-start text-xl" htmlFor="task_name">Assignee:</label>
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 self-start sm:self-center mt-4 w-7/8">
+                        <label className="sm:self-center self-start text-xl font-bold" htmlFor="task_name">Assignee:</label>
                         {/* <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="assignees" name="assignees" required/> */}
                         <select className="form_input sm:ml-2 rounded-xl p-1" id="assignees" name="assignees" value={assignee} onChange={handleAssigneeChange}>
                             <option defaultChecked disabled>None</option>
@@ -227,18 +247,18 @@ export const TaskCreation = () => {
                         </select>
                     </div>
 
-                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
-                        <label className="sm:self-center self-start text-xl" htmlFor="date">Date:</label>
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 self-start sm:self-center mt-4 w-7/8">
+                        <label className="sm:self-center self-start text-xl font-bold" htmlFor="date">Date:</label>
                         <input className="form_input sm:ml-2 rounded-xl p-1" type="date" id="task_name" name="task_name" required value={date} onChange={(e)=>handleDateChange(e)}/>
                     </div>
 
-                    <div className="form_group flex p-1 w-full flex-col justify-center sm:justify-start self-start mt-4">
+                    <div className="form_group flex p-1 w-7/8 flex-col justify-center sm:justify-start self-start mt-4 self-start sm:self-center">
                         {/* <label className="sm:self-center self-start text-xl" htmlFor="task_name">Attachments:</label>
                         <input className="custom-file-upload sm:ml-2 rounded-xl p-1 flex flex-col" type="file" id="files" name="files" onChange={(e)=>handleFileChange(e)}/> */}
 
                         <label className="custom-file-upload text-xl flex self-start justify-start mr-1">
                             <input type="file" onChange={(e)=>handleFileChange(e)}/>
-                            <p className="underline">Add Attachments 📎</p>
+                            <p className="underline font-bold">Add Attachments 📎</p>
                         </label>
 
                         <div className="attachments_wrapper flex flex-col form_input rounded-xl p-1">
@@ -266,9 +286,23 @@ export const TaskCreation = () => {
                         </select>
                     </div> */}
 
+                    <div className="form_group flex flex-col justify-center p-1 self-start sm:self-center w-7/8 mt-4">
+                        <label className="self-start text-xl font-bold" htmlFor="task_name">Initiative:</label>
+                        <select className="form_input rounded-xl p-1 w-fit" id="associated_event" name="associated_event" value={selectedInit} onChange={(e)=>setSelectedInit(e.target.value)}>
+                            <option defaultChecked>None</option>
+                            {loadedInitiatives.map(init=>(
+                                <option value={init.initiative_id}>
+                                    {init.name}
+                                </option>
+                            ))
 
-                    <div className="form_group flex flex-col justify-center p-1 self-start w-full mt-4">
-                        <label className="self-start text-xl" htmlFor="task_name">Description:</label>
+                            }
+                        </select>
+                    </div>
+
+
+                    <div className="form_group flex flex-col justify-center p-1 self-start sm:self-center w-7/8 mt-4">
+                        <label className="self-start text-xl font-bold" htmlFor="task_name">Description:</label>
                         <textarea className="description w-full rounded-xl p-1" id="description" name="description" value={description} onChange={handleDescriptionChange}/>
                     </div>
 

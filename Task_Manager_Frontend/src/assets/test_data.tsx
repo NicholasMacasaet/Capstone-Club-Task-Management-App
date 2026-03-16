@@ -1,11 +1,73 @@
-import { type Task, type Club, type ClubMembership, type TaskAssignment, type user} from "../contexts/UserContext";
+import { type Task, type Club, type ClubMembership, type TaskAssignment, type user, type Initiative} from "../contexts/UserContext";
 
-
+export const testInitiatives:Initiative[] = [
+    {
+        initiative_id: 1,
+        club_id: 1,
+        lead_id: 1,
+        name: "Test Initiative 1",
+        description: "This is a test initiative 1",
+        start_date:"",
+        due_date: "2026-12-31",
+        initiative_type: "General",
+        attachments: null,
+        status:"To-Do"
+    },
+    {
+        initiative_id: 2,
+        club_id: 1,
+        lead_id: 2,
+        name: "Test Initiative 2",
+        description: "This is a test initiative 2",
+        start_date:"",
+        due_date: "2026-12-31",
+        initiative_type: "General",
+        attachments: null,
+        status:"To-Do"
+    },
+    {
+        initiative_id: 3,
+        club_id: 1,
+        lead_id: 3,
+        name: "Test Initiative 3",
+        description: "This is a test initiative 3",
+        start_date:"",
+        due_date: "2026-12-31",
+        initiative_type: "General",
+        attachments: null,
+        status:"To-Do"
+    },
+    {
+        initiative_id: 4,
+        club_id: 2,
+        lead_id: 1,
+        name: "Test Initiative 4",
+        description: "This is a test initiative 4",
+        start_date:"",
+        due_date: "2026-12-31",
+        initiative_type: "General",
+        attachments: null,
+        status:"To-Do"
+    },
+    {
+        initiative_id: 5,
+        club_id: 1,
+        lead_id: 1,
+        name: "Test Initiative 5",
+        description: "This is a test initiative 4",
+        start_date:"",
+        due_date: "2026-12-31",
+        initiative_type: "General",
+        attachments: null,
+        status:"Completed"
+    }
+]
 
 export const testTasks: Task[] = [
     {
         task_id:1,
         club_id:1,
+        initiative_id: -1,
         due_date: "2026-12-31",
         task_name: "Do thing 1",
         attachments: null,
@@ -14,6 +76,7 @@ export const testTasks: Task[] = [
     {
         task_id:2,
         club_id:1,
+        initiative_id: -1,
         due_date: "2026-03-12",
         task_name: "Do thing 2",
         attachments: null,
@@ -22,6 +85,7 @@ export const testTasks: Task[] = [
     {
         task_id:3,
         club_id:1,
+        initiative_id: -1,
         due_date: "2026-03-12",
         task_name: "Do thing 3",
         attachments: null,
@@ -34,6 +98,7 @@ export const testTasks2: Task[] = [
     {
         task_id:4,
         club_id:2,
+        initiative_id: -1,
         due_date: "1999-12-31",
         task_name: "Do thing 4",
         attachments: null,
@@ -42,6 +107,7 @@ export const testTasks2: Task[] = [
     {
         task_id:5,
         club_id:2,
+        initiative_id: -1,
         due_date: "1999-12-10",
         task_name: "Do thing 5",
         attachments: null,
@@ -50,6 +116,7 @@ export const testTasks2: Task[] = [
     {
         task_id:6,
         club_id:2,
+        initiative_id: -1,
         due_date: "1999-12-15",
         task_name: "Do thing 6",
         attachments: null,

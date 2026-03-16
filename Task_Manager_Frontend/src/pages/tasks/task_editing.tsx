@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { Link, useFetcher, useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import { useUserContext, type Task } from "../../contexts/UserContext"
+import { useUserContext, type Initiative, type Task } from "../../contexts/UserContext"
 import { testTasks, testTasks2 } from "../../assets/test_data"
 import { retrieveAssigners } from "../../misc_utils/retrieve_assigner"
-import { retrieveAndParseTestTasks, setTestTasks } from "../../demo_utils/getters_and_setters"
+import { retrieveAndParseClubInitiatives, retrieveAndParseCurrClubID, retrieveAndParseTestTasks, setTestTasks } from "../../demo_utils/getters_and_setters"
 // import { File } from "buffer"
 
 export const TaskEditing = () => {
@@ -16,7 +16,11 @@ export const TaskEditing = () => {
 
     const {currUser, isLoaded}  = useUserContext()
 
+    // const [currClubID, setCurrClubID] = useState(-1)
+
     const [loadedTasks, setLoadedTasks] = useState<Task[]>([])
+
+    const [loadedInitiatives, setLoadedInitiatives] = useState<Initiative[]>([])
 
     const [currTask, setCurrTask] = useState<Task>()
 
@@ -43,6 +47,24 @@ export const TaskEditing = () => {
         setLoadedTasks(tasks)
     }
 
+    const DEMORetrieveInitiatives = () =>{
+        const loaded_curr_club_id: number | null = retrieveAndParseCurrClubID()
+        const loaded_initiatives: Initiative[]|null = retrieveAndParseClubInitiatives()
+
+        if (loaded_initiatives.length>0 && loaded_curr_club_id){
+            let filteredInitiatives: Initiative[] = loaded_initiatives.filter(init=>{
+                if (init.club_id === loaded_curr_club_id){
+                    return true
+                }
+                else{
+                    return false
+                }
+            })
+            setLoadedInitiatives(filteredInitiatives)
+            // setCurrClubID(loaded_curr_club_id)
+        }
+    }
+
     useEffect(()=>{
         if (!isLoaded){
             navigate("/")
@@ -50,6 +72,7 @@ export const TaskEditing = () => {
 
         if (id){
             DEMORetrieveTaskInfo(id)
+            DEMORetrieveInitiatives()
         }
     },[isLoaded])
 
@@ -64,6 +87,7 @@ export const TaskEditing = () => {
             setAssigner(assigner_username)
             setTaskDate(currTask.due_date)
             setDescription(currTask.description)
+            setSelectedInit(currTask.initiative_id.toString())
         }
     },[currTask])
 
@@ -81,6 +105,8 @@ export const TaskEditing = () => {
     const [taskDate, setTaskDate] = useState("")
 
     const [description,setDescription] = useState("")
+
+    const [selectedInit, setSelectedInit] = useState("None")
 
 
     const handleTaskNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {  
@@ -124,6 +150,7 @@ export const TaskEditing = () => {
                 task_name: taskName,
                 due_date: taskDate,
                 description: description,
+                initiative_id: parseInt(selectedInit,10),
                 attachments: attachments
             }
             setCurrTask(updatedTask)
@@ -142,7 +169,7 @@ export const TaskEditing = () => {
 
     useEffect(()=>{
         DEMOUpdateTask()
-    },[taskName, taskDate, description, attachments])
+    },[taskName, taskDate, description, attachments, selectedInit])
 
     return(<>
         {currTask !== undefined &&
@@ -170,16 +197,16 @@ export const TaskEditing = () => {
             </p>
 
             <div className="task_creation_form_wrapper h-full sm:h-4/5 w-full sm:w-3/4 flex justify-start rounded-xl flex-col mt-5">
-                <form className="w-full h-full flex flex-col justify-start">
-                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start">
-                        <label className="sm:self-center self-start text-xl" htmlFor="task_name">Task Name:</label>
+                <form className="w-full h-full flex flex-col justify-start items-center">
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 w-7/8">
+                        <label className="sm:self-center self-start text-xl font-bold" htmlFor="task_name">Task Name:</label>
                         <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="task_name" name="task_name" required value={taskName} onChange={handleTaskNameChange}/>
                     </div>
 
                     
                     {assigner === "self" &&
-                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
-                        <label className="sm:self-center self-start text-xl" htmlFor="task_name">Assignee:</label>
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1  mt-4 w-7/8">
+                        <label className="sm:self-center self-start text-xl font-bold" htmlFor="task_name">Assignee:</label>
                         {/* <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="assignees" name="assignees" required/> */}
                         <select className="form_input sm:ml-2 rounded-xl p-1" id="assignees" name="assignees" value={assignee} onChange={handleAssigneeChange}>
                             <option defaultChecked disabled>None</option>
@@ -191,23 +218,23 @@ export const TaskEditing = () => {
 
                     }
 
-                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
-                        <label className="sm:self-center self-start text-xl" htmlFor="task_name">Assigner:</label>
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1  mt-4 w-7/8">
+                        <label className="sm:self-center self-start text-xl font-bold" htmlFor="task_name">Assigner:</label>
                         <p className="sm:self-center self-start text-xl">{assigner}</p>
                     </div>
 
-                    <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
-                        <label className="sm:self-center self-start text-xl" htmlFor="date">Date:</label>
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 mt-4 w-7/8">
+                        <label className="sm:self-center self-start text-xl font-bold" htmlFor="date">Date:</label>
                         <input className="form_input sm:ml-2 rounded-xl p-1" type="date" id="task_name" name="task_name" required value={taskDate} onChange={handleDateChange}/>
                     </div>
 
-                    <div className="form_group flex p-1 w-full flex-col justify-center sm:justify-start self-start mt-4">
+                    <div className="form_group flex p-1 flex-col justify-center  mt-4 w-7/8">
                         {/* <label className="sm:self-center self-start text-xl" htmlFor="task_name">Attachments:</label>
                         <input className="custom-file-upload sm:ml-2 rounded-xl p-1 flex flex-col" type="file" id="files" name="files" onChange={(e)=>handleFileChange(e)}/> */}
 
                         <label className="custom-file-upload text-xl flex self-start justify-start mr-1">
                             <input type="file" onChange={(e)=>handleFileChange(e)}/>
-                            <p className="underline">Add Attachments 📎</p>
+                            <p className="underline font-bold">Add Attachments 📎</p>
                         </label>
 
                         <div className="attachments_wrapper flex flex-col form_input rounded-xl p-1">
@@ -235,9 +262,23 @@ export const TaskEditing = () => {
                         </select>
                     </div> */}
 
-                    <div className="form_group flex flex-col justify-center p-1 self-start w-full mt-4">
-                        <label className="self-start text-xl" htmlFor="task_name">Description:</label>
-                        <textarea className="description w-full rounded-xl p-1" id="description" name="description" value={description} onChange={handleDescriptionChange}/>
+
+                    <div className="form_group flex flex-col justify-center p-1 self-start sm:self-center w-7/8 mt-4">
+                        <label className="self-start text-xl font-bold" htmlFor="task_name">Initiative:</label>
+                        <select className="form_input rounded-xl p-1 w-fit" id="associated_event" name="associated_event" value={selectedInit} onChange={(e)=>setSelectedInit(e.target.value)}>
+                            <option defaultChecked>None</option>
+                            {loadedInitiatives.map(init=>(
+                                <option value={init.initiative_id}>
+                                    {init.name}
+                                </option>
+                            ))
+                            }
+                        </select>
+                    </div>
+
+                    <div className="form_group flex flex-col justify-center p-1  w-7/8 mt-4">
+                        <label className="self-start text-xl font-bold" htmlFor="task_name">Description:</label>
+                        <textarea className="description w-full self-center rounded-xl p-1" id="description" name="description" value={description} onChange={handleDescriptionChange}/>
                     </div>
 
                 </form>

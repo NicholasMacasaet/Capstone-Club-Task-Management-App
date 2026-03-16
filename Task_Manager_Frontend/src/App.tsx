@@ -17,6 +17,8 @@ import { Settings } from './pages/users/settings';
 import { OrgAdminPage } from './pages/org_register/org_admin';
 import { TaskEditing } from './pages/tasks/task_editing';
 import { InitiativesDashboard } from './pages/initatives/initiatives_dashboard';
+import { InitiativeCreation } from './pages/initatives/initiatives_creation';
+import { InitiativesEditing } from './pages/initatives/initiatives_editing';
 
 function App() {
   return (
@@ -49,6 +51,10 @@ function App() {
 
             <Route path="/initiatives/">
               <Route path='/initiatives/dashboard/:id/' element = {<InitiativesDashboard/>}/>
+
+              <Route path="/initiatives/new_initiative/" element={<InitiativeCreation/>
+              }/>
+              <Route path="/initiatives/initiative/:id/" element={<InitiativesEditing/>}/>
             </Route>
             
             <Route path="/profile" element={<UserProfile/>}/>

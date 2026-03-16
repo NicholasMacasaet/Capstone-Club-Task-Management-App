@@ -7,8 +7,11 @@ import { useNavigate } from "react-router-dom"
 import { useUserContext} from "../contexts/UserContext"
 import { retrieveAndParseCurrUser, setCurrClubIDLocalStorage } from "../demo_utils/getters_and_setters"
 
+interface FooterProps {
+    setting: string
+}
 
-export const FooterNav = () => {
+export const FooterNav = ({setting}:FooterProps) => {
     const {id} = useParams()
     const navigate = useNavigate()
 
@@ -54,7 +57,14 @@ export const FooterNav = () => {
         // localStorage.setItem("curr_club_id", JSON.stringify(idToSwitchTo))
         setCurrClubIDLocalStorage(idToSwitchTo)
         console.log("test")
-        navigate(`/club/home/${idToSwitchTo}`)
+
+        if (setting === "Tasks"){
+            navigate(`/club/home/${idToSwitchTo}`)
+        }
+        else if (setting === "Initiatives"){
+            navigate(`/initiatives/dashboard/${idToSwitchTo}`)
+        }
+        
     }
 
     return(<>

@@ -1,13 +1,13 @@
 import { createContext,useContext,useState,useEffect, type ReactNode } from "react";
 import axios from "axios";
 // import { supabase } from "./SupabaseClient";
-import { testUsers, testTasks, testTasks2, taskAssignments, testClubs, clubMemberships, testTasksTotal} from "../assets/test_data";
-import { setCurrUserLocalStorage, setTestClubMemberships, setTestClubs, setTestTaskAssignments, setTestTasks, setTestUsers } from "../demo_utils/getters_and_setters";
+import { testUsers, testTasks, testTasks2, taskAssignments, testClubs, clubMemberships, testTasksTotal, testInitiatives} from "../assets/test_data";
+import { setClubInitiativesLocalStorage, setCurrUserLocalStorage, setTestClubMemberships, setTestClubs, setTestTaskAssignments, setTestTasks, setTestUsers } from "../demo_utils/getters_and_setters";
 
 export interface Task {
     task_id: number;
     club_id: number;
-    // initiative_id: number;
+    initiative_id: number;
     attachments:File[] | null
     due_date: string;
     task_name:string;
@@ -41,12 +41,18 @@ export interface user {
     //add more fields as necessary
 }
 
-export interface initiative {
+export interface Initiative {
     initiative_id: number,
     club_id: number,
+    //this corresponds to user id
+    start_date: string,
+    due_date: string,
+    lead_id: number,
+    initiative_type:string,
     name: string,
     description: string,
     attachments: File[] | null,
+    status:string,
     //add more fields as necessary
 }
 
@@ -126,6 +132,7 @@ export const UserContextProvider: React.FC<{children: ReactNode}> = ({children})
         setTestTaskAssignments(taskAssignments)
         setTestClubs(testClubs)
         setTestClubMemberships(clubMemberships)
+        setClubInitiativesLocalStorage(testInitiatives)
         // localStorage.setItem("test_users", JSON.stringify(testUsers))
         // localStorage.setItem("total_test_tasks", JSON.stringify(testTasksTotal))
         // localStorage.setItem("test_task_assignments", JSON.stringify(taskAssignments))
