@@ -141,16 +141,18 @@ export const UserProfile = () => {
     return(<>
         <div className="w-full h-full flex flex-col justify-start items-center">
             <div className="w-full flex">
-                <Link to="/home" className="text-3xl justify-self-start self-start sm:self-center">
-                        <p>←</p>
-                </Link>
+                <button className="text-3xl flex items-center side-item justify-center white_text new_back_button rounded-full !w-9 !h-9" onClick={()=>navigate(-1)}>
+                    <p>&lt;</p>
+                </button>
 
-                <h1 className="landing_page_header w-full hidden sm:block justify-self-center">
+                <h1 className="landing_page_header w-full hidden sm:block justify-self-center white_text">
                     Profile
                 </h1>
             </div>
 
-            <p className="landing_page_header w-full text-4xl sm:hidden">
+            
+
+            <p className="landing_page_header w-full text-4xl sm:hidden white_text">
                Profile
             </p>
 

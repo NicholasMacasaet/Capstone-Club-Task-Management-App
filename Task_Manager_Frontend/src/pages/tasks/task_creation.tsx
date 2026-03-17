@@ -226,12 +226,12 @@ export const TaskCreation = () => {
 
             <div className="task_creation_form_wrapper h-full sm:h-4/5 w-full sm:w-3/4 flex justify-start rounded-xl flex-col mt-5">
                 <form className="w-full h-full flex flex-col justify-start items-center" onSubmit={(e)=>handleTaskCreate(e)}>
-                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 w-7/8 self-start sm:self-center">
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 w-7/8">
                         <label className="sm:self-center self-start text-xl font-bold" htmlFor="task_name">Task Name:</label>
                         <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="task_name" name="task_name" required value={taskName} onChange={handleTaskNameChange}/>
                     </div>
 
-                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 self-start sm:self-center mt-4 w-7/8">
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1  mt-4 w-7/8">
                         <label className="sm:self-center self-start text-xl font-bold" htmlFor="task_name">Assignee:</label>
                         {/* <input className="form_input sm:ml-2 rounded-xl p-1" type="text" id="assignees" name="assignees" required/> */}
                         <select className="form_input sm:ml-2 rounded-xl p-1" id="assignees" name="assignees" value={assignee} onChange={handleAssigneeChange}>
@@ -247,12 +247,12 @@ export const TaskCreation = () => {
                         </select>
                     </div>
 
-                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 self-start sm:self-center mt-4 w-7/8">
+                    <div className="form_group flex flex-col sm:flex-row justify-start p-1 mt-4 w-7/8">
                         <label className="sm:self-center self-start text-xl font-bold" htmlFor="date">Date:</label>
                         <input className="form_input sm:ml-2 rounded-xl p-1" type="date" id="task_name" name="task_name" required value={date} onChange={(e)=>handleDateChange(e)}/>
                     </div>
 
-                    <div className="form_group flex p-1 w-7/8 flex-col justify-center sm:justify-start self-start mt-4 self-start sm:self-center">
+                    <div className="form_group flex flex-col  justify-start p-1 mt-4 w-7/8">
                         {/* <label className="sm:self-center self-start text-xl" htmlFor="task_name">Attachments:</label>
                         <input className="custom-file-upload sm:ml-2 rounded-xl p-1 flex flex-col" type="file" id="files" name="files" onChange={(e)=>handleFileChange(e)}/> */}
 
@@ -286,7 +286,7 @@ export const TaskCreation = () => {
                         </select>
                     </div> */}
 
-                    <div className="form_group flex flex-col justify-center p-1 self-start sm:self-center w-7/8 mt-4">
+                    <div className="form_group flex flex-col justify-center p-1  w-7/8 mt-4">
                         <label className="self-start text-xl font-bold" htmlFor="task_name">Initiative:</label>
                         <select className="form_input rounded-xl p-1 w-fit" id="associated_event" name="associated_event" value={selectedInit} onChange={(e)=>setSelectedInit(e.target.value)}>
                             <option defaultChecked>None</option>
@@ -301,7 +301,7 @@ export const TaskCreation = () => {
                     </div>
 
 
-                    <div className="form_group flex flex-col justify-center p-1 self-start sm:self-center w-7/8 mt-4">
+                    <div className="form_group flex flex-col justify-center p-1  w-7/8 mt-4">
                         <label className="self-start text-xl font-bold" htmlFor="task_name">Description:</label>
                         <textarea className="description w-full rounded-xl p-1" id="description" name="description" value={description} onChange={handleDescriptionChange}/>
                     </div>

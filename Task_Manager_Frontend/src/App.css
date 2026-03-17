@@ -323,8 +323,9 @@ input[type="file"] {
 
 .footer_nav {
   height: 50px;
-  border-radius: 10px;
-  border: 2px solid var(--midnight_green);
+  /* border-radius: 10px; */
+  background-color: var(--off-er-white);
+  /* border: 2px solid var(--midnight_green); */
 }
 
 .club_switch {
@@ -334,6 +335,7 @@ input[type="file"] {
 
 .club_button {
   font-size: 12px;
+  background-color: var(--dark-teal);
   border: 2px solid var(--midnight_green);
 }
 

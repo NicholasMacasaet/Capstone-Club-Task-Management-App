@@ -355,13 +355,91 @@ export const TaskDashboard = () => {
 
     const taskContainerBodyCSSStyling: string = "w-7/8 h-fit flex flex-col self-center mt-2 mb-2 drop-shadow-lg"
 
+    // State for hamburger menu dropdown
+    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+
+    // Toggle dropdown visibility
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
+
+    // Close dropdown when clicking outside (optional enhancement)
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Element;
+            if (!target.closest('.hamburger-menu-container')) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        if (isDropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isDropdownOpen]);
     
     return(<>
 
         <div className="w-full h-full flex flex-col justify-start items-center">
             <div className="w-full flex">
-                <div className="flex flex-col">
-                    <img src={hamburgerMenuIcon} alt="Hamburger Menu" className="w-8 h-8 hamburger_menu_icon" />
+                <div className="hamburger-menu-container relative flex flex-col">
+                    <button 
+                        onClick={toggleDropdown}
+                        className="flex items-center justify-center p-2 hover:bg-gray-700 rounded-md transition-colors"
+                    >
+                        <img src={hamburgerMenuIcon} alt="Hamburger Menu" className="w-8 h-8 hamburger_menu_icon" />
+                    </button>
+                    
+                    {/* Dropdown Menu */}
+                    {isDropdownOpen && (
+                        <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+                            <div className="py-1">
+                                <button 
+                                    onClick={() => {
+                                        navigate("/profile");
+                                        setIsDropdownOpen(false);
+                                    }}
+                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                >
+                                    👤 Profile
+                                </button>
+                                {id && (
+                                    <button 
+                                        onClick={() => {
+                                            navigate(`/club/home/${id}`);
+                                            setIsDropdownOpen(false);
+                                        }}
+                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                    >
+                                        🏢 Tasks
+                                    </button>
+                                )}
+                                <button 
+                                    onClick={() => {
+                                        navigate(`/initiatives/dashboard/${id}`);
+                                        setIsDropdownOpen(false);
+                                    }}
+                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                >
+                                    🎯 Initiatives
+                                </button>
+                                <div className="border-t border-gray-200 my-1"></div>
+                                <button 
+                                    onClick={() => {
+                                        // Add logout logic here
+                                        navigate("/");
+                                        setIsDropdownOpen(false);
+                                    }}
+                                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                >
+                                    🚪 Logout
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 
                 

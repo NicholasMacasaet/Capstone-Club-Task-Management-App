@@ -68,10 +68,10 @@ export const FooterNav = ({setting}:FooterProps) => {
     }
 
     return(<>
-    <div className="footer_nav w-full sm:w-3/4 mt-1 flex justify-center p-1">
+    <div className="footer_nav w-full sm:w-3/4 mt-1 flex justify-center p-1 rounded-3xl">
         <div className="club_switch">
         {usersClubs.map(club=>(
-            <button className={`text-white club_button rounded-xl mr-0.5 ml-0.5 ${id && club.club_id === parseInt(id,10)? "selected_club":""}`} onClick={()=>switchClub(club.club_id)}>
+            <button className={`text-white club_button rounded-2xl mr-0.5 ml-0.5 ${id && club.club_id === parseInt(id,10)? "selected_club":""}`} onClick={()=>switchClub(club.club_id)}>
                 {club.name}
             </button>
         ))
