@@ -228,7 +228,7 @@ export const TaskEditing = () => {
                         <input className="form_input sm:ml-2 rounded-xl p-1" type="date" id="task_name" name="task_name" required value={taskDate} onChange={handleDateChange}/>
                     </div>
 
-                    <div className="form_group flex p-1 flex-col justify-center  mt-4 w-7/8">
+                    <div className="form_group flex flex-col  justify-start p-1 mt-4 w-7/8">
                         {/* <label className="sm:self-center self-start text-xl" htmlFor="task_name">Attachments:</label>
                         <input className="custom-file-upload sm:ml-2 rounded-xl p-1 flex flex-col" type="file" id="files" name="files" onChange={(e)=>handleFileChange(e)}/> */}
 
@@ -252,18 +252,9 @@ export const TaskEditing = () => {
                         </div>
                     </div>
 
-                    {/* <div className="form_group flex flex-col sm:flex-row justify-center p-1 self-start mt-4">
-                        <label className="sm:self-center self-start text-xl" htmlFor="task_name">Associated Event:</label>
-                        <select className="form_input sm:ml-2 rounded-xl p-1" id="associated_event" name="associated_event" value={associatedEvent} onChange={handleEventChange}>
-                            <option defaultChecked disabled>None</option>
-                            <option value="event1">event1</option>
-                            <option value="event2">event2</option>
-                            <option value="event3">event3</option>
-                        </select>
-                    </div> */}
 
 
-                    <div className="form_group flex flex-col justify-center p-1 self-start sm:self-center w-7/8 mt-4">
+                    <div className="form_group flex flex-col justify-center p-1  w-7/8 mt-4">
                         <label className="self-start text-xl font-bold" htmlFor="task_name">Initiative:</label>
                         <select className="form_input rounded-xl p-1 w-fit" id="associated_event" name="associated_event" value={selectedInit} onChange={(e)=>setSelectedInit(e.target.value)}>
                             <option defaultChecked>None</option>

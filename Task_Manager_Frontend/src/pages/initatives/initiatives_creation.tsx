@@ -514,7 +514,7 @@ export const InitiativeCreation = () => {
                             <option value={"Event"}>Event</option>
                         </select>
                     </div>
-
+                    {initiativeTasks.length >0 &&
                     <div className="form_group flex flex-col w-7/8 self-center init_task_window min-h-1/4 rounded-xl overflow-y-scroll items-center">
                         {initiativeTasks.map((task,index)=>(
                                 <div className="task_item_container h-fit flex flex-col mb-2"> 
@@ -547,6 +547,7 @@ export const InitiativeCreation = () => {
                                 </div>
                             ))}
                     </div>
+                    }
 
                     <div className="form_group flex flex-col sm:flex-row justify-start self-center w-7/8 mt-4">
                         <button className="bg-green-400 new_task_button text-white p-1" onClick={handleNewTask}>
