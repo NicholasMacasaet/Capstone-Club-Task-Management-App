@@ -230,7 +230,7 @@ export const Register = () => {
             </div>
 
             
-            <form className="login_form h-full w-full sm:w-4/5 rounded-xl mt-1 flex justify-start sm:hidden flex-col justify-start" method="post" onSubmit={handleRegistration}>
+            <form className="login_form_desktop_wrapper h-full w-full sm:w-4/5 rounded-xl mt-1 flex justify-start sm:hidden flex-col justify-start" method="post" onSubmit={handleRegistration}>
                 {/* <div className="form_group w-full sm:w-2/3 mt-10 flex flex-col sm:flex-row ">
                     <label htmlFor="username" className="text-lg sm:text-xl self-start ml-7 sm:ml-0">Username:</label>
 

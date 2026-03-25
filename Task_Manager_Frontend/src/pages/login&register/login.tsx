@@ -93,7 +93,7 @@ export const Login = () => {
             </div>
             
 
-            <form className="login_form h-full w-full sm:w-4/5 rounded-xl mt-1 flex sm:hidden flex-col items-center" method="post" onSubmit={(e)=>handleLogin(e)}>
+            <form className="login_form_desktop_wrapper h-full w-full sm:w-4/5 rounded-xl mt-1 flex sm:hidden flex-col items-center" method="post" onSubmit={(e)=>handleLogin(e)}>
                 <div className="form_group w-full sm:w-2/3 mt-20 flex flex-col sm:flex-row ">
                     <label htmlFor="username" className="text-xl sm:text-2xl self-start ml-7 sm:ml-0">Email:</label>
 

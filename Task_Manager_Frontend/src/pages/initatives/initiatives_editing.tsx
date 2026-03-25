@@ -168,16 +168,28 @@ export const InitiativesEditing = () => {
         DEMOLoadFromCache()
     },[testDataLoaded])
 
-    useEffect(()=>{
-        
-        let updatedAssignments: TaskAssignment[] = [...initiativeTaskAssignments]
+    // Before (buggy):
+    // useEffect(() => {
+    //     let updatedAssignments: TaskAssignment[] = [...initiativeTaskAssignments]
+    //     updatedAssignments.map(init => {
+    //         init.assigner = parseInt(lead, 10)
+    //     })
+    //     setInitiativeTaskAssignments(updatedAssignments)
+    // }, [lead])
 
-        updatedAssignments.map(init=>{
-            init.assigner = parseInt(lead,10)
-        })
-
-        setInitiativeTaskAssignments(updatedAssignments)
-    },[lead])
+    // After (fixed):
+    useEffect(() => {
+        if (lead && initiativeTaskAssignments.length > 0) {
+            let updatedAssignments: TaskAssignment[] = [...initiativeTaskAssignments]
+            updatedAssignments.map(init => {
+                init.assigner = parseInt(lead, 10)
+            })
+            setInitiativeTaskAssignments(updatedAssignments)
+            
+            console.log(`set lead: ${lead}`)
+            console.log(`updated Initiative assignments: ${JSON.stringify(initiativeTaskAssignments,null,2)}`)
+        }
+    }, [lead])
 
     // useEffect(()=>{
     //     handleInitiativeTypeSelection(initiativeType)
@@ -455,11 +467,11 @@ export const InitiativesEditing = () => {
 
     
 
-    useEffect(()=>{
-        console.log(`Initiative tasks: ${JSON.stringify(initiativeTasks,null,2)}`)
-        console.log(`Initiative assignments: ${JSON.stringify(initiativeTaskAssignments,null,2)}`)
+    // useEffect(()=>{
+    //     console.log(`Initiative tasks: ${JSON.stringify(initiativeTasks,null,2)}`)
+    //     console.log(`Initiative assignments: ${JSON.stringify(initiativeTaskAssignments,null,2)}`)
 
-    },[initiativeTasks,initiativeTaskAssignments])
+    // },[initiativeTasks,initiativeTaskAssignments])
 
     const DEMOInitiativeUpdate = async(event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -598,7 +610,7 @@ export const InitiativesEditing = () => {
                                             <input className="form_input sm:ml-2 rounded-xl p-1 text-sm" type="text" id="task_name" name="task_name" placeholder="task name" value={task.task_name} onChange={(e)=>handleTaskAssignmentModification(index,"Name",e.target.value)}/>
                                         </div>
 
-                                         <select className="form_input sm:ml-2 rounded-xl p-1 w-fit mt-1 sm:mt-0 text-sm" value={initiativeTaskAssignments[index]?.assignee ?? -1} onChange={(e)=>handleTaskAssignmentModification(index, "Assignee", e.target.value)}>
+                                         <select className="form_input sm:ml-2 rounded-xl p-1 w-fit mt-1 sm:mt-0 text-sm" value={initiativeTaskAssignments[index].assignee ?? -1} onChange={(e)=>handleTaskAssignmentModification(index, "Assignee", e.target.value)}>
 
                                             <option value="-1" disabled>None</option>
                                             <option value={currUser?.user_id}>myself</option>
