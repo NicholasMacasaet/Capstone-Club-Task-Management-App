@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import {BASEURL} from '../../../api/ constants'
+// import {BASEURL} from '../../../api/ constants'
 
 export const OrgLandingPage =()=>{
 

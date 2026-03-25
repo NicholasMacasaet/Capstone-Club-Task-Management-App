@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react"
+// import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import { useUserContext } from "../../contexts/UserContext"
+// import { useUserContext } from "../../contexts/UserContext"
 
 export const OrgJoin = () => {
     //TODO: login checks when thats implemented 
@@ -14,11 +14,11 @@ export const OrgJoin = () => {
     //     }
     // },[user,isLoaded])
 
-    const [orgJoinCode, setOrgJoinCode] = useState("")
+    // const [orgJoinCode, setOrgJoinCode] = useState("")
 
-    const packaged_data = {
-        org_join_code: orgJoinCode
-    }
+    // const packaged_data = {
+    //     org_join_code: orgJoinCode
+    // }
 
     const handleOrgJoin = async(event:React.FormEvent<HTMLFormElement>)=>{
 

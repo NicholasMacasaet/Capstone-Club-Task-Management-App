@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent } from "react"
 import { Link, useNavigate } from "react-router-dom"
 // import { Link } from "react-router-dom"
-import axios from 'axios'
+// import axios from 'axios'
 
 
 export const Login = () => {
@@ -23,10 +23,10 @@ export const Login = () => {
     const handleLogin = async (event:React.FormEvent<HTMLFormElement>)  => {
         event.preventDefault()
 
-        const user_data = {
-            username:username,
-            password:password,
-        }
+        // const user_data = {
+        //     username:username,
+        //     password:password,
+        // }
         try{
 
             // const {data} = await axios({
@@ -74,12 +74,12 @@ export const Login = () => {
                 
                     <label htmlFor="username" className="text-xl sm:text-2xl self-center ml-7 sm:ml-0 text-end">Email:</label>
 
-                    <input type="text" name="username" className="form_input_modified rounded-xl p-1 text-2xl sm:text-3xl w-4/5 sm:w-full self-center" onChange={(e)=>handleUsernameChange(e)}></input>
+                    <input type="text" name="username" className="form_input_modified rounded-xl p-1 text-2xl sm:text-3xl w-4/5 sm:w-full self-center" onChange={(e)=>handleUsernameChange(e)} value={username}></input>
 
                 
                     <label htmlFor="username" className="text-xl sm:text-2xl self-center ml-7 sm:ml-0 text-end mt-2">Password:</label>
 
-                    <input type="password" name="password" className="form_input_modified rounded-xl p-1 text-2xl sm:text-3xl w-4/5 sm:w-full self-center mt-2" onChange={(e)=>handlePasswordChange(e)}></input>
+                    <input type="password" name="password" className="form_input_modified rounded-xl p-1 text-2xl sm:text-3xl w-4/5 sm:w-full self-center mt-2" onChange={(e)=>handlePasswordChange(e)} value={password}></input>
 
 
                 <div className="col-span-2 flex justify-center items-center flex-col mt-2">
@@ -97,14 +97,14 @@ export const Login = () => {
                 <div className="form_group w-full sm:w-2/3 mt-20 flex flex-col sm:flex-row ">
                     <label htmlFor="username" className="text-xl sm:text-2xl self-start ml-7 sm:ml-0">Email:</label>
 
-                    <input type="text" name="username" className="form_input rounded-xl p-1 text-2xl sm:text-3xl w-4/5 sm:w-full self-center" onChange={(e)=>handleUsernameChange(e)}></input>
+                    <input type="text" name="username" className="form_input rounded-xl p-1 text-2xl sm:text-3xl w-4/5 sm:w-full self-center" onChange={(e)=>handleUsernameChange(e)} value={username}></input>
                 </div>
 
 
                 <div className="form_group w-full sm:w-2/3 mt-10 flex flex-col sm:flex-row">
                     <label htmlFor="username" className="text-xl sm:text-2xl self-start ml-7 sm:ml-0">Password:</label>
 
-                    <input type="password" name="password" className="form_input rounded-xl p-1 text-2xl sm:text-3xl w-4/5 sm:w-full self-center" onChange={(e)=>handlePasswordChange(e)}></input>
+                    <input type="password" name="password" className="form_input rounded-xl p-1 text-2xl sm:text-3xl w-4/5 sm:w-full self-center" onChange={(e)=>handlePasswordChange(e)} value={password}></input>
                 </div>
 
 

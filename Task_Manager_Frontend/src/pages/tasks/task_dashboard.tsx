@@ -1,4 +1,4 @@
-import { Link, useFetcher, useParams } from "react-router-dom"
+import {useParams } from "react-router-dom"
 import type { Club, Task, TaskAssignment, user } from "../../contexts/UserContext"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"

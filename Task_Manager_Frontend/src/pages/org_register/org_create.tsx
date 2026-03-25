@@ -1,4 +1,4 @@
-import { use, useState } from "react"
+// import {useState } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 
@@ -16,13 +16,13 @@ export const CreateOrg = () => {
 
 
 
-    const [orgName, setOrgName] = useState("")
-    const [orgDescription, setOrgDescription] = useState("")
+    // const [orgName, setOrgName] = useState("")
+    // const [orgDescription, setOrgDescription] = useState("")
 
-    const packaged_data = {
-        org_name: orgName,
-        org_description: orgDescription
-    }
+    // const packaged_data = {
+    //     org_name: orgName,
+    //     org_description: orgDescription
+    // }
 
     const handleOrgCreate = async(event:React.FormEvent<HTMLFormElement>)=>{
         event.preventDefault()

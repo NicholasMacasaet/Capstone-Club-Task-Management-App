@@ -51,104 +51,104 @@ export const InitiativesEditing = () => {
      * Also need to automatically populate assignment objects 
      */
 
-    const defaultOnboardingTasks: Task[]=[
-        {
-            task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            club_id: currClubID,
-            initiative_id: -1,
-            task_name:"Hold Exec Elections",
-            due_date: "",
-            attachments: null,
-            description:""
-        },
-        {
-            task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            initiative_id: -1,
-            club_id: currClubID,
-            task_name:"Debrief responsibilities to new Exec",
-            due_date: "",
-            attachments: null,
-            description:""
-        },
-        {
-            task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            initiative_id: -1,
-            club_id: currClubID,
-            task_name:"Introduce to other Execs",
-            due_date: "",
-            attachments: null,
-            description:""
-        }
-    ]
+    // const defaultOnboardingTasks: Task[]=[
+    //     {
+    //         task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
+    //         club_id: currClubID,
+    //         initiative_id: -1,
+    //         task_name:"Hold Exec Elections",
+    //         due_date: "",
+    //         attachments: null,
+    //         description:""
+    //     },
+    //     {
+    //         task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
+    //         initiative_id: -1,
+    //         club_id: currClubID,
+    //         task_name:"Debrief responsibilities to new Exec",
+    //         due_date: "",
+    //         attachments: null,
+    //         description:""
+    //     },
+    //     {
+    //         task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
+    //         initiative_id: -1,
+    //         club_id: currClubID,
+    //         task_name:"Introduce to other Execs",
+    //         due_date: "",
+    //         attachments: null,
+    //         description:""
+    //     }
+    // ]
 
-     const defaultEventTasks: Task[]=[
-        {
-            task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            club_id: currClubID,
-            task_name:"Contact Event Space",
-            initiative_id: -1,
-            due_date: "",
-            attachments: null,
-            description:""
-        },
-        {
-            task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            club_id: currClubID,
-            task_name:"Meet with food vendor",
-            initiative_id: -1,
-            due_date: "",
-            attachments: null,
-            description:""
-        },
-        {
-            task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            club_id: currClubID,
-            task_name:"Send invites",
-            initiative_id: -1,
-            due_date: "",
-            attachments: null,
-            description:""
-        },
-        {
-            task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            club_id: currClubID,
-            initiative_id: -1,
-            task_name:"Confirm attendance and logistics",
-            due_date: "",
-            attachments: null,
-            description:""
-        }
-    ]
+    //  const defaultEventTasks: Task[]=[
+    //     {
+    //         task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
+    //         club_id: currClubID,
+    //         task_name:"Contact Event Space",
+    //         initiative_id: -1,
+    //         due_date: "",
+    //         attachments: null,
+    //         description:""
+    //     },
+    //     {
+    //         task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
+    //         club_id: currClubID,
+    //         task_name:"Meet with food vendor",
+    //         initiative_id: -1,
+    //         due_date: "",
+    //         attachments: null,
+    //         description:""
+    //     },
+    //     {
+    //         task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
+    //         club_id: currClubID,
+    //         task_name:"Send invites",
+    //         initiative_id: -1,
+    //         due_date: "",
+    //         attachments: null,
+    //         description:""
+    //     },
+    //     {
+    //         task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
+    //         club_id: currClubID,
+    //         initiative_id: -1,
+    //         task_name:"Confirm attendance and logistics",
+    //         due_date: "",
+    //         attachments: null,
+    //         description:""
+    //     }
+    // ]
 
-    const defaultOffboardingTasks: Task[]=[
-        {
-            task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            club_id: currClubID,
-            initiative_id: -1,
-            task_name:"Prepare successorship document",
-            due_date: "",
-            attachments: null,
-            description:""
-        },
-        {
-            task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            club_id: currClubID,
-            initiative_id: -1,
-            task_name:"Advertise Exec opening",
-            due_date: "",
-            attachments: null,
-            description:""
-        },
-        {
-            task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
-            club_id: currClubID,
-            initiative_id: -1,
-            task_name:"Prepare for student voting",
-            due_date: "",
-            attachments: null,
-            description:""
-        }
-    ]
+    // const defaultOffboardingTasks: Task[]=[
+    //     {
+    //         task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
+    //         club_id: currClubID,
+    //         initiative_id: -1,
+    //         task_name:"Prepare successorship document",
+    //         due_date: "",
+    //         attachments: null,
+    //         description:""
+    //     },
+    //     {
+    //         task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
+    //         club_id: currClubID,
+    //         initiative_id: -1,
+    //         task_name:"Advertise Exec opening",
+    //         due_date: "",
+    //         attachments: null,
+    //         description:""
+    //     },
+    //     {
+    //         task_id: Math.floor(Math.random() * (100 - 6 + 1)) + 6,
+    //         club_id: currClubID,
+    //         initiative_id: -1,
+    //         task_name:"Prepare for student voting",
+    //         due_date: "",
+    //         attachments: null,
+    //         description:""
+    //     }
+    // ]
 
     
 
@@ -325,42 +325,42 @@ export const InitiativesEditing = () => {
         }
     }
 
-    const handleInitiativeTypeSelection = (initType:string)=>{
-        // For editing, don't overwrite existing tasks
-        if (initiativeTasks.length > 0) return;
+    // const handleInitiativeTypeSelection = (initType:string)=>{
+    //     // For editing, don't overwrite existing tasks
+    //     if (initiativeTasks.length > 0) return;
 
-        let updatedInitTasks: Task[] = []
+    //     let updatedInitTasks: Task[] = []
 
-        if (initType === "Onboarding"){
-            updatedInitTasks = defaultOnboardingTasks
-        }
-        else if (initType === "Event") {
-            updatedInitTasks = defaultEventTasks
-        }
+    //     if (initType === "Onboarding"){
+    //         updatedInitTasks = defaultOnboardingTasks
+    //     }
+    //     else if (initType === "Event") {
+    //         updatedInitTasks = defaultEventTasks
+    //     }
 
-        else if (initType === "Offboarding") {
-            updatedInitTasks = defaultOffboardingTasks
-        }
-        //its general
-        else {
-            updatedInitTasks = []
-        }
+    //     else if (initType === "Offboarding") {
+    //         updatedInitTasks = defaultOffboardingTasks
+    //     }
+    //     //its general
+    //     else {
+    //         updatedInitTasks = []
+    //     }
 
-        let autoPopulatedAssignments: TaskAssignment[] = []
+    //     let autoPopulatedAssignments: TaskAssignment[] = []
 
-        updatedInitTasks.map(task=>{
-            const newAssignment:TaskAssignment= {
-                assigner:parseInt(lead,10),
-                assignee: -1,
-                task_id: task.task_id,
-                status: "Needs Acceptance",
-                accepted: false
-            }
-            autoPopulatedAssignments.push(newAssignment)
-        })
-        setInitiativeTaskAssignments(autoPopulatedAssignments)
-        setIntitiativeTasks(updatedInitTasks)
-    }
+    //     updatedInitTasks.map(task=>{
+    //         const newAssignment:TaskAssignment= {
+    //             assigner:parseInt(lead,10),
+    //             assignee: -1,
+    //             task_id: task.task_id,
+    //             status: "Needs Acceptance",
+    //             accepted: false
+    //         }
+    //         autoPopulatedAssignments.push(newAssignment)
+    //     })
+    //     setInitiativeTaskAssignments(autoPopulatedAssignments)
+    //     setIntitiativeTasks(updatedInitTasks)
+    // }
 
     /**
      * 

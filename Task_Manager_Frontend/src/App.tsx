@@ -2,7 +2,7 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { DefaultPage } from './default_page';
-import { Test } from './test';
+// import { Test } from './test';
 import { UserContextProvider} from './contexts/UserContext';
 import { LandingPage } from './landing_page';
 import { Register } from './pages/login&register/register';

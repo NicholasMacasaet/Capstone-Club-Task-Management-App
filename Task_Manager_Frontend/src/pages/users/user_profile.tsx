@@ -1,6 +1,6 @@
 
-import { useState, useEffect, type ChangeEvent, use } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, type ChangeEvent} from "react";
+import { useNavigate } from "react-router-dom";
 import { testUsers } from "../../assets/test_data";
 import {type user} from "../../contexts/UserContext";
 /**
@@ -98,13 +98,13 @@ export const UserProfile = () => {
     const[error, setError] = useState("")
 
 
-    const packaged_data ={
-        username: username,
-        email: email,
-        phone_number: phone_number,
-        password: password,
-        confirm_password: confirm_password
-    }
+    // const packaged_data ={
+    //     username: username,
+    //     email: email,
+    //     phone_number: phone_number,
+    //     password: password,
+    //     confirm_password: confirm_password
+    // }
 
     let navigate = useNavigate()
 

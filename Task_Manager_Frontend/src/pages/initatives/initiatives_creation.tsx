@@ -2,13 +2,13 @@ import { useNavigate } from "react-router-dom"
 import { retrieveAndParseClubInitiatives, retrieveAndParseCurrClubID, retrieveAndParseCurrUser, retrieveAndParseTestClubMemberships, retrieveAndParseTestTaskAssignments, retrieveAndParseTestTasks, retrieveAndParseTestUsers, setClubInitiativesLocalStorage, setTestTaskAssignments, setTestTasks } from "../../demo_utils/getters_and_setters"
 import { useUserContext, type ClubMembership, type Initiative, type Task, type TaskAssignment, type user } from "../../contexts/UserContext"
 import { useEffect, useState } from "react"
-import { taskAssignments } from "../../assets/test_data"
+// import { taskAssignments } from "../../assets/test_data"
 
 export const InitiativeCreation = () => {
 
     const navigate = useNavigate()
 
-    const {isLoaded, testDataLoaded}  = useUserContext()
+    const {testDataLoaded}  = useUserContext()
 
     const [leadArr, setLeadArr] = useState<user[]>([])
 

@@ -1,18 +1,18 @@
-import  axios  from 'axios';
+// import  axios  from 'axios';
 import { useEffect, useState, type ChangeEvent} from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { BASEURL } from '../../../api/ constants';
+// import { BASEURL } from '../../../api/ constants';
 
 export const Register = () => {
 
 
-    const[username, setUsername] = useState("");
+    // const[username, setUsername] = useState("");
 
     const[email, setEmail] = useState("");
     const[validEmail, setValidEmail] = useState(true)
 
-    const[phone_number, setPhoneNumber] = useState("");
-    const[validPhoneNo, setValidPhoneNo] = useState(true)
+    // const[phone_number, setPhoneNumber] = useState("");
+    // const[validPhoneNo, setValidPhoneNo] = useState(true)
 
     const[password, setPassword] = useState("");
     const[validPassword,setValidPassword] = useState(true)
@@ -24,7 +24,7 @@ export const Register = () => {
     const email_regex: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
     //https://webrockstar.net/2017/08/regex-north-american-phone-number/
-    const phone_no_regex: RegExp = /[\s\(]*((?!1)\d{1})((?!11)\d{2})[-\s\).,]*((?!1)\d{1})\d{2}[-\s.,]*\d{4}[\s]*/;
+    // const phone_no_regex: RegExp = /[\s\(]*((?!1)\d{1})((?!11)\d{2})[-\s\).,]*((?!1)\d{1})\d{2}[-\s.,]*\d{4}[\s]*/;
 
     // Source - https://stackoverflow.com/a
     // Posted by Srinivas, modified by community. See post 'Timeline' for change history
@@ -34,17 +34,17 @@ export const Register = () => {
 
 
 
-    const handleUsernameChange = (event:ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault();
-        setUsername(event.target.value);
-    }
+    // const handleUsernameChange = (event:ChangeEvent<HTMLInputElement>) => {
+    //     event.preventDefault();
+    //     setUsername(event.target.value);
+    // }
     const handleEmailChange = (event:ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
     }
  
-    const handlePhoneNumberChange = (event:ChangeEvent<HTMLInputElement>) => {
-        setPhoneNumber(event.target.value);
-    }
+    // const handlePhoneNumberChange = (event:ChangeEvent<HTMLInputElement>) => {
+    //     setPhoneNumber(event.target.value);
+    // }
 
     const handlePasswordChange = (event:ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
@@ -61,11 +61,11 @@ export const Register = () => {
     },[email])
 
 
-    useEffect(()=>{
-        if (phone_number !==""){
-            setValidPhoneNo(phone_no_regex.test(phone_number))
-        }
-    },[phone_number])
+    // useEffect(()=>{
+    //     if (phone_number !==""){
+    //         setValidPhoneNo(phone_no_regex.test(phone_number))
+    //     }
+    // },[phone_number])
 
     useEffect(()=>{
         if (password !== ""){
@@ -82,12 +82,12 @@ export const Register = () => {
     const[error, setError] = useState("")
 
 
-    const packaged_data ={
-        // username: username,
-        email: email,
-        // phone_number: phone_number,
-        password: password,
-    }
+    // const packaged_data ={
+    //     // username: username,
+    //     email: email,
+    //     // phone_number: phone_number,
+    //     password: password,
+    // }
 
     let navigate = useNavigate()
 
@@ -120,7 +120,7 @@ export const Register = () => {
 
     let all_filled = email && password && confirm_password
 
-    let checks_cleared = validEmail && validPhoneNo && validPassword && passwordMatches
+    let checks_cleared = validEmail && validPassword && passwordMatches
 
 
     return(<>
@@ -182,12 +182,12 @@ export const Register = () => {
                             </div>
 
                             }
-                            {!validPhoneNo&&
+                            {/* {!validPhoneNo&&
                             phone_number!==""&&
                             <div className="text-rose-400 flex justify-center">
                                 Error: invalid phone number format
                             </div>
-                            }
+                            } */}
 
                             {!validPassword&&
                             password!==""&&
@@ -275,12 +275,12 @@ export const Register = () => {
                     </div>
 
                     }
-                    {!validPhoneNo&&
+                    {/* {!validPhoneNo&&
                     phone_number!==""&&
                     <div className="text-rose-400 flex justify-center">
                         Error: invalid phone number format
                     </div>
-                    }
+                    } */}
 
                     {!validPassword&&
                     password!==""&&
