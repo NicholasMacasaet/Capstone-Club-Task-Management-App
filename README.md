@@ -1,4 +1,4 @@
-# This is the initial simulated proof of concept for the Streamline Task Management App done for the APS490/CSC494 Capstone Course
+# This is the initial simulated proof of concept for the Streamline Task Management App for the APS490/CSC494 Capstone Course
 
 ## Project Setup Instructions
 
