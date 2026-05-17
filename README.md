@@ -1,4 +1,4 @@
-# This is the initial simulated proof of concept for the Streamline Task Management App for the APS490/CSC494 Capstone Course
+# This is the simulated prototype for the Streamline Task Management App for the APS490/CSC494 Capstone Course
 
 ## Demo Instructions
 - link to demo: https://streamline-simulated-demo.netlify.app
